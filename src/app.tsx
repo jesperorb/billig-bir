@@ -9,6 +9,7 @@ import {
   MantineProvider,
   Modal,
   RangeSlider,
+  Space,
   Stack,
   Text,
   Title,
@@ -107,10 +108,17 @@ const App = () => {
         <Text>
           GitHub:{" "}
           <Anchor
-            href="https://github.com/jesperorb/intl-explorer"
+            href="https://github.com/jesperorb/billig-bir"
             target="_blank"
           >
             https://github.com/jesperorb/billig-bir
+          </Anchor>
+        </Text>
+        <Space />
+        <Text>
+          Lägg till nya ställen genom att redigera:{" "}
+          <Anchor href="https://github.com/jesperorb/billig-bir/blob/main/src/db/index.ts">
+            src/db/index.ts
           </Anchor>
         </Text>
       </Modal>
