@@ -1,4 +1,13 @@
-import { Badge, HoverCard, Text, Anchor, Space } from "@mantine/core";
+import {
+  Badge,
+  HoverCard,
+  Text,
+  Anchor,
+  Group,
+  List,
+  Divider,
+  Paper,
+} from "@mantine/core";
 import { memo } from "react";
 // eslint-disable-next-line import/no-unresolved
 import Map, { Marker } from "react-map-gl/mapbox";
@@ -6,8 +15,8 @@ import Map, { Marker } from "react-map-gl/mapbox";
 import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "./constants";
 
 import { BeerLocation } from "../types/beerLocation";
-
 import "mapbox-gl/dist/mapbox-gl.css";
+import { getPriceAdjustedFor40cl } from "../utils";
 
 interface Props {
   beerLocations: BeerLocation[];
@@ -30,22 +39,50 @@ const MapContainer = ({ beerLocations }: Props) => {
         >
           <HoverCard>
             <HoverCard.Target>
-              <Badge color="dark">{location.price}</Badge>
+              <Paper color="dark" p="xs" shadow="lg">
+                <Text size="xs" fw={700}>
+                  {location.price}{" "}
+                  <Text component="span" c="dimmed">
+                    kr/ {location.centiliters}
+                    cl
+                  </Text>
+                </Text>
+              </Paper>
             </HoverCard.Target>
             <HoverCard.Dropdown>
-              <Text>{location.name}</Text>
-              <Text c="gray">Uppdaterad: {location.updated}</Text>
-              {location.mapsUrl && (
-                <Anchor href={location.mapsUrl} target="_blank">
-                  Google Maps
-                </Anchor>
-              )}
-              <Space />
-              {location.websiteUrl && (
-                <Anchor href={location.websiteUrl} target="_blank">
-                  Hemsida
-                </Anchor>
-              )}
+              <Group justify="space-between">
+                <Text fw={500}>{location.name}</Text>
+                <Badge color="orange">
+                  {location.centiliters !== 40
+                    ? `${getPriceAdjustedFor40cl(
+                        location.price,
+                        location.centiliters,
+                      )} kr / 40 cl`
+                    : `${location.price.toString()} kr / ${location.centiliters.toString()} cl`}
+                </Badge>
+              </Group>
+              <Group justify="space-between">
+                <Text c="dimmed">Typ: {location.beerBrand ?? "N/A"}</Text>
+              </Group>
+              <Divider mt="sm" variant="dotted" />
+              <List mt="sm" mb="sm">
+                {location.mapsUrl && (
+                  <List.Item>
+                    <Anchor href={location.mapsUrl} target="_blank">
+                      Google Maps
+                    </Anchor>
+                  </List.Item>
+                )}
+                {location.websiteUrl && (
+                  <List.Item>
+                    <Anchor href={location.websiteUrl} target="_blank">
+                      Hemsida
+                    </Anchor>
+                  </List.Item>
+                )}
+              </List>
+              <Divider variant="dotted" mb="sm" />
+              <Text c="dimmed">Uppdaterad: {location.updated}</Text>
             </HoverCard.Dropdown>
           </HoverCard>
         </Marker>

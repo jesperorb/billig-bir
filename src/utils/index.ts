@@ -10,3 +10,6 @@ export const getPriceMin = (locations: BeerLocation[]) =>
 
 export const getPriceSteps = (locations: BeerLocation[]) =>
   Array.from(new Set(locations.map(getPrice))).sort((a, b) => a - b);
+
+export const getPriceAdjustedFor40cl = (price: number, centiliters: number) =>
+  Number((price / centiliters) * 40).toFixed(0);
