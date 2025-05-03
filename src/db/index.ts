@@ -1,5 +1,4 @@
 import { type BeerLocation } from "../types/beerLocation";
-import { getPriceMax, getPriceMin, getPriceSteps } from "../utils";
 
 export const defaultBeerLocations: BeerLocation[] = [
   {
@@ -32,9 +31,9 @@ export const defaultBeerLocations: BeerLocation[] = [
     name: "O'learys",
     latitude: 59.33076489403867,
     longitude: 18.059353141557526,
-    price: 2000,
+    price: 114,
     centiliters: 60,
-    beerBrand: "Dyr jävel",
+    beerBrand: "Vet inte",
     outdoorSeating: true,
     afternoonSun: false,
     updated: "2025-05-03",
@@ -95,18 +94,11 @@ export const defaultBeerLocations: BeerLocation[] = [
   },
 ];
 
-export const priceMax = getPriceMax(defaultBeerLocations);
-
-export const priceMin = getPriceMin(defaultBeerLocations);
-
-export const priceSteps = getPriceSteps(defaultBeerLocations);
-
-export const priceStepsMinMax = [0, priceMax] as [number, number];
-
 export const priceStepsMarks: { value: number; label: number }[] = [
   { value: 0, label: 0 },
-  ...priceSteps.map((step) => ({
-    value: step,
-    label: step,
-  })),
+  { value: 50, label: 50 },
+  { value: 100, label: 100 },
 ];
+
+export const priceStepsMarkMax =
+  priceStepsMarks[priceStepsMarks.length - 1].value;
