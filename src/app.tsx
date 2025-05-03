@@ -8,7 +8,7 @@ import {
   Group,
   MantineProvider,
   Modal,
-  RangeSlider,
+  Slider,
   Space,
   Stack,
   Text,
@@ -17,9 +17,10 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { useMemo, useState } from "react";
 
-import { defaultBeerLocations, priceStepsMarks, priceStepsMinMax } from "./db";
+import { defaultBeerLocations, priceStepsMarkMax, priceStepsMarks } from "./db";
 import MapContainer from "./map/map";
 import { theme } from "./theme";
+import { getStandardAWAdjustedPrice } from "./utils";
 
 import "@mantine/core/styles.css";
 
@@ -29,18 +30,15 @@ const App = () => {
   const [modalOpened, { open, close }] = useDisclosure(false);
   const [outdoorSeating, setOutdoorSeating] = useState(false);
   const [afternoonSun, setAfternoonSun] = useState(false);
-  const [priceRange, setPriceRange] = useState(priceStepsMinMax);
+  const [maxPrice, setMaxPrice] = useState(priceStepsMarkMax);
 
   const filteredBeerLocations = useMemo(
     () =>
       beerLocations
         .filter((location) => (outdoorSeating ? location.outdoorSeating : true))
         .filter((location) => (afternoonSun ? location.afternoonSun : true))
-        .filter(
-          (location) =>
-            location.price >= priceRange[0] && location.price <= priceRange[1],
-        ),
-    [afternoonSun, beerLocations, outdoorSeating, priceRange],
+        .filter((location) => getStandardAWAdjustedPrice(location) <= maxPrice),
+    [afternoonSun, beerLocations, maxPrice, outdoorSeating],
   );
 
   return (
@@ -68,12 +66,11 @@ const App = () => {
           <Stack justify="space-between" h="100%">
             <Stack gap="xl">
               <Box>
-                <Text>Pris</Text>
-                <RangeSlider
-                  label={null}
-                  restrictToMarks
-                  value={priceRange}
-                  onChange={setPriceRange}
+                <Text>Pris / 40cl</Text>
+                <Slider
+                  size="sm"
+                  value={maxPrice}
+                  onChange={setMaxPrice}
                   marks={priceStepsMarks}
                 />
               </Box>
@@ -91,6 +88,21 @@ const App = () => {
                   setAfternoonSun(event.currentTarget.checked);
                 }}
               />
+              <Text>
+                Priserna är justerade efter en{" "}
+                <Text fw={700} component="span">
+                  Standard AW Enhet
+                </Text>{" "}
+                (
+                <Text fs="italic" component="span">
+                  40 cl
+                </Text>
+                )
+              </Text>
+              <Text>
+                Om ölen är något annat än 40 cl så visas det justerade priset.
+                Hovra över ett ställe för att se originalpriset
+              </Text>
             </Stack>
             <ActionIcon
               variant="filled"

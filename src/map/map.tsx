@@ -16,7 +16,7 @@ import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "./constants";
 
 import { BeerLocation } from "../types/beerLocation";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { getPriceAdjustedFor40cl } from "../utils";
+import { getStandardAWAdjustedPrice } from "../utils";
 
 interface Props {
   beerLocations: BeerLocation[];
@@ -41,11 +41,7 @@ const MapContainer = ({ beerLocations }: Props) => {
             <HoverCard.Target>
               <Paper color="dark" p="xs" shadow="lg">
                 <Text size="xs" fw={700}>
-                  {location.price}{" "}
-                  <Text component="span" c="dimmed">
-                    kr/ {location.centiliters}
-                    cl
-                  </Text>
+                  {getStandardAWAdjustedPrice(location)}
                 </Text>
               </Paper>
             </HoverCard.Target>
@@ -53,16 +49,16 @@ const MapContainer = ({ beerLocations }: Props) => {
               <Group justify="space-between">
                 <Text fw={500}>{location.name}</Text>
                 <Badge color="orange">
-                  {location.centiliters !== 40
-                    ? `${getPriceAdjustedFor40cl(
-                        location.price,
-                        location.centiliters,
-                      )} kr / 40 cl`
-                    : `${location.price.toString()} kr / ${location.centiliters.toString()} cl`}
+                  {`${getStandardAWAdjustedPrice(location).toString()} kr / 40 cl`}
                 </Badge>
               </Group>
               <Group justify="space-between">
-                <Text c="dimmed">Typ: {location.beerBrand ?? "N/A"}</Text>
+                <Text c="dimmed">Typ: {location.beerBrand}</Text>
+                {location.centiliters !== 40 && (
+                  <Badge color="dark">
+                    {`${location.price.toString()} kr / ${location.centiliters.toString()} cl`}
+                  </Badge>
+                )}
               </Group>
               <Divider mt="sm" variant="dotted" />
               <List mt="sm" mb="sm">
