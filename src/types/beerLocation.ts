@@ -5,6 +5,8 @@ export interface BeerLocation {
   price: number;
   outdoorSeating: boolean;
   afternoonSun: boolean;
+  beerBrand: string | undefined;
+  centiliters: number;
   updated: `${number}-${number}-${number}`;
   mapsUrl?: string;
   websiteUrl?: string;

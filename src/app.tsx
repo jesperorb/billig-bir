@@ -19,6 +19,7 @@ import { useMemo, useState } from "react";
 
 import { defaultBeerLocations, priceStepsMarks, priceStepsMinMax } from "./db";
 import MapContainer from "./map/map";
+import { theme } from "./theme";
 
 import "@mantine/core/styles.css";
 
@@ -43,7 +44,7 @@ const App = () => {
   );
 
   return (
-    <MantineProvider>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <AppShell
         header={{ height: 60 }}
         navbar={{
@@ -60,7 +61,7 @@ const App = () => {
               hiddenFrom="sm"
               size="sm"
             />
-            <Title>Billig bir 🍻</Title>
+            <Title>Billig bir</Title>
           </Group>
         </AppShell.Header>
         <AppShell.Navbar p="md">
@@ -69,6 +70,7 @@ const App = () => {
               <Box>
                 <Text>Pris</Text>
                 <RangeSlider
+                  label={null}
                   restrictToMarks
                   value={priceRange}
                   onChange={setPriceRange}
