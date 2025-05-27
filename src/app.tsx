@@ -20,6 +20,7 @@ import { useMemo, useState } from "react";
 import { defaultBeerLocations, priceStepsMarkMax, priceStepsMarks } from "./db";
 import MapContainer from "./map/map";
 import { theme } from "./theme";
+import { ThemeToggle } from "./theme/ThemeToggle";
 import { getStandardAWAdjustedPrice } from "./utils";
 
 import "@mantine/core/styles.css";
@@ -42,7 +43,7 @@ const App = () => {
 	);
 
 	return (
-		<MantineProvider theme={theme} defaultColorScheme="dark">
+		<MantineProvider theme={theme} defaultColorScheme="light">
 			<AppShell
 				header={{ height: 60 }}
 				navbar={{
@@ -64,11 +65,12 @@ const App = () => {
 				</AppShell.Header>
 				<AppShell.Navbar p="md">
 					<Stack justify="space-between" h="100%">
-						<Stack gap="xl">
+						<Stack gap="lg">
 							<Box>
 								<Text>Pris / 40cl</Text>
 								<Slider
 									size="sm"
+									mb="sm"
 									value={maxPrice}
 									onChange={setMaxPrice}
 									marks={priceStepsMarks}
@@ -99,19 +101,18 @@ const App = () => {
 								</Text>
 								)
 							</Text>
-							<Text>
-								Om ölen är något annat än 40 cl så visas det justerade priset.
-								Hovra över ett ställe för att se originalpriset
-							</Text>
 						</Stack>
-						<ActionIcon
-							variant="filled"
-							size="xl"
-							aria-label="Information"
-							onClick={open}
-						>
-							?
-						</ActionIcon>
+						<Group>
+							<ThemeToggle />
+							<ActionIcon
+								variant="filled"
+								size="xl"
+								aria-label="Information"
+								onClick={open}
+							>
+								?
+							</ActionIcon>
+						</Group>
 					</Stack>
 				</AppShell.Navbar>
 				<AppShell.Main>
