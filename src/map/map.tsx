@@ -7,7 +7,15 @@ import {
 	List,
 	Divider,
 	Paper,
+	useComputedColorScheme,
+	Tooltip,
 } from "@mantine/core";
+import {
+	IconBeach,
+	IconBeachOff,
+	IconSun,
+	IconSunOff,
+} from "@tabler/icons-react";
 import { memo } from "react";
 // eslint-disable-next-line import/no-unresolved
 import Map, { Marker } from "react-map-gl/mapbox";
@@ -23,13 +31,18 @@ interface Props {
 }
 
 const MapContainer = ({ beerLocations }: Props) => {
+	const colorScheme = useComputedColorScheme("light");
 	return (
 		<Map
 			reuseMaps
 			mapboxAccessToken={MAPBOX_TOKEN}
 			initialViewState={INITIAL_VIEW_STATE}
 			style={DEFAULT_STYLING}
-			mapStyle="mapbox://styles/mapbox/streets-v12"
+			mapStyle={
+				colorScheme === "light"
+					? "mapbox://styles/mapbox/streets-v12"
+					: "mapbox://styles/mapbox/dark-v11"
+			}
 		>
 			{beerLocations.map((location) => (
 				<Marker
@@ -39,7 +52,14 @@ const MapContainer = ({ beerLocations }: Props) => {
 				>
 					<HoverCard>
 						<HoverCard.Target>
-							<Paper color="dark" p="xs" shadow="lg">
+							<Paper
+								bg="teal.8"
+								c="white"
+								p="xs"
+								withBorder
+								shadow="xl"
+								radius="xl"
+							>
 								<Text size="xs" fw={700}>
 									{getStandardAWAdjustedPrice(location)}
 								</Text>
@@ -48,7 +68,7 @@ const MapContainer = ({ beerLocations }: Props) => {
 						<HoverCard.Dropdown>
 							<Group justify="space-between">
 								<Text fw={500}>{location.name}</Text>
-								<Badge color="orange">
+								<Badge color="teal">
 									{`${getStandardAWAdjustedPrice(location).toString()} kr / 40 cl`}
 								</Badge>
 							</Group>
@@ -60,7 +80,26 @@ const MapContainer = ({ beerLocations }: Props) => {
 									</Badge>
 								)}
 							</Group>
-							<Divider mt="sm" variant="dotted" />
+							<Divider mt="sm" mb="sm" variant="dotted" />
+							{location.afternoonSun ? (
+								<Tooltip label="Eftermiddagssol">
+									<IconSun aria-label="Eftermiddagssol" stroke={1.5} />
+								</Tooltip>
+							) : (
+								<Tooltip label="Ej eftermiddagssol">
+									<IconSunOff aria-label="Ej eftermiddagssol" stroke={1.5} />
+								</Tooltip>
+							)}
+							{location.outdoorSeating ? (
+								<Tooltip label="Uteservering">
+									<IconBeach aria-label="Uteservering" stroke={1.5} />
+								</Tooltip>
+							) : (
+								<Tooltip label="Ej uteservering">
+									<IconBeachOff aria-label="Ej uteservering" stroke={1.5} />
+								</Tooltip>
+							)}
+							<Divider variant="dotted" />
 							<List mt="sm" mb="sm">
 								{location.mapsUrl && (
 									<List.Item>
