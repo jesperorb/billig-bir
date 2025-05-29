@@ -20,3 +20,13 @@ export const getPriceSteps = (locations: BeerLocation[]) =>
 	Array.from(new Set(locations.map(getStandardAWAdjustedPrice))).sort(
 		(a, b) => a - b,
 	);
+
+export const getCheapestLocation = (locations: BeerLocation[]) =>
+	locations.reduce(
+		(minLocation, location) =>
+			getStandardAWAdjustedPrice(location) <
+			getStandardAWAdjustedPrice(minLocation)
+				? location
+				: minLocation,
+		locations[0],
+	);

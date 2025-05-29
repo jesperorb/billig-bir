@@ -1,4 +1,5 @@
 import { type BeerLocation } from "../types/beerLocation";
+import { getCheapestLocation } from "../utils";
 
 export const defaultBeerLocations: BeerLocation[] = [
 	{
@@ -142,3 +143,5 @@ export const priceStepsMarks: { value: number; label: number }[] = [
 
 export const priceStepsMarkMax =
 	priceStepsMarks[priceStepsMarks.length - 1].value;
+
+export const cheapestLocation = getCheapestLocation(defaultBeerLocations);

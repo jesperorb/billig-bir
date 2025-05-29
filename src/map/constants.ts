@@ -19,5 +19,6 @@ export const INITIAL_VIEW_STATE: Partial<ViewState> = {
 
 export const DEFAULT_STYLING: CSSProperties = {
 	width: "100%",
-	height: "100vh",
+	height:
+		"calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))",
 };

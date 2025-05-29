@@ -4,7 +4,10 @@ import {
 	AppShell,
 	Box,
 	Burger,
+	Button,
+	Card,
 	Checkbox,
+	Divider,
 	Group,
 	MantineProvider,
 	Modal,
@@ -13,19 +16,31 @@ import {
 	Stack,
 	Text,
 	Title,
+	VisuallyHidden,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useMemo, useState } from "react";
+import { IconChevronRight } from "@tabler/icons-react";
+import { useMemo, useRef, useState } from "react";
+// eslint-disable-next-line import/no-unresolved
+import { type MapRef } from "react-map-gl/mapbox";
 
-import { defaultBeerLocations, priceStepsMarkMax, priceStepsMarks } from "./db";
+import { CardContent } from "./components/card-content";
+import {
+	cheapestLocation,
+	defaultBeerLocations,
+	priceStepsMarkMax,
+	priceStepsMarks,
+} from "./db";
 import MapContainer from "./map/map";
 import { theme } from "./theme";
 import { ThemeToggle } from "./theme/ThemeToggle";
+import { BeerLocation } from "./types/beerLocation";
 import { getStandardAWAdjustedPrice } from "./utils";
 
 import "@mantine/core/styles.css";
 
 const App = () => {
+	const mapRef = useRef<MapRef>(null);
 	const [beerLocations] = useState(defaultBeerLocations);
 	const [opened, { toggle }] = useDisclosure();
 	const [modalOpened, { open, close }] = useDisclosure(false);
@@ -41,6 +56,15 @@ const App = () => {
 				.filter((location) => getStandardAWAdjustedPrice(location) <= maxPrice),
 		[afternoonSun, beerLocations, maxPrice, outdoorSeating],
 	);
+
+	const showOnMap = (location: BeerLocation) => {
+		toggle();
+		mapRef.current?.flyTo({
+			center: [location.longitude, location.latitude],
+			zoom: 17,
+			essential: true,
+		});
+	};
 
 	return (
 		<MantineProvider theme={theme} defaultColorScheme="light">
@@ -60,12 +84,15 @@ const App = () => {
 							hiddenFrom="sm"
 							size="sm"
 						/>
-						<Title>Billig bir</Title>
+						<Title order={1}>Billig bir</Title>
 					</Group>
 				</AppShell.Header>
 				<AppShell.Navbar p="md">
 					<Stack justify="space-between" h="100%">
 						<Stack gap="lg">
+							<Title order={2} size="h3">
+								Inställningar
+							</Title>
 							<Box>
 								<Text>Pris / 40cl</Text>
 								<Slider
@@ -90,17 +117,23 @@ const App = () => {
 									setAfternoonSun(event.currentTarget.checked);
 								}}
 							/>
-							<Text>
-								Priserna är justerade efter en{" "}
-								<Text fw={700} component="span">
-									Standard AW Enhet
-								</Text>{" "}
-								(
-								<Text fs="italic" component="span">
-									40 cl
-								</Text>
-								)
-							</Text>
+							<Title order={2} size="h3">
+								Billigaste ölen
+							</Title>
+							<Card padding="sm" radius="sm" withBorder>
+								<CardContent location={cheapestLocation} />
+								<Divider variant="dotted" mb="sm" mt="sm" />
+								<Button
+									rightSection={<IconChevronRight size={14} />}
+									fullWidth
+									justify="space-between"
+									onClick={() => {
+										showOnMap(cheapestLocation);
+									}}
+								>
+									Visa på karta
+								</Button>
+							</Card>
 						</Stack>
 						<Group>
 							<ThemeToggle />
@@ -116,7 +149,10 @@ const App = () => {
 					</Stack>
 				</AppShell.Navbar>
 				<AppShell.Main>
-					<MapContainer beerLocations={filteredBeerLocations} />
+					<VisuallyHidden>
+						<Title order={2}>Karta</Title>
+					</VisuallyHidden>
+					<MapContainer mapRef={mapRef} beerLocations={filteredBeerLocations} />
 				</AppShell.Main>
 			</AppShell>
 			<Modal opened={modalOpened} onClose={close} title="Information">
