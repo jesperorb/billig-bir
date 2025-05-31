@@ -45,6 +45,7 @@ export interface BeerLocation {
 	afternoonSun: boolean;
 	beerBrand: string;
 	centiliters: number;
+	centilitersPitcher?: number;
 	updated: `${number}-${number}-${number}`;
 	mapsUrl?: string;
 	websiteUrl?: string;
