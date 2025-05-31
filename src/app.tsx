@@ -6,6 +6,7 @@ import {
 	Group,
 	MantineProvider,
 	Radio,
+	ScrollArea,
 	Slider,
 	Stack,
 	Text,
@@ -95,68 +96,70 @@ const App = () => {
 							<Title order={1}>Billig bir</Title>
 						</Group>
 					</AppShell.Header>
-					<AppShell.Navbar p="md">
-						<Stack justify="space-between" h="100%">
-							<Stack gap="lg">
-								<VisuallyHidden>
-									<Title order={2} size="h3">
-										Inställningar
-									</Title>
-								</VisuallyHidden>
-								<Radio.Group
-									value={priceType}
-									onChange={(newPriceType) => {
-										setPriceType(newPriceType as PriceType);
-									}}
-									name="priceType"
-									label="Pristyp"
-								>
-									<Group justify="space-between" mt="sm">
-										<Radio value="price" label="Standard" />
-										<Radio value="priceAW" label="AW" />
-										<Radio value="pricePitcher" label="Kanna" />
-									</Group>
-								</Radio.Group>
-								<Box>
-									<Text>Pris / 40cl</Text>
-									<Slider
-										size="sm"
-										mb="sm"
-										value={filters.price}
-										onChange={(newPrice) => {
-											setFilterProperty("price", newPrice);
+					<AppShell.Navbar>
+						<ScrollArea scrollbars="y">
+							<Stack justify="space-between" h="100%" p="md">
+								<Stack gap="lg">
+									<VisuallyHidden>
+										<Title order={2} size="h3">
+											Inställningar
+										</Title>
+									</VisuallyHidden>
+									<Radio.Group
+										value={priceType}
+										onChange={(newPriceType) => {
+											setPriceType(newPriceType as PriceType);
 										}}
-										marks={priceStepsMarks}
-										max={priceStepsMarkMax}
+										name="priceType"
+										label="Pristyp"
+									>
+										<Group justify="space-between" mt="sm">
+											<Radio value="price" label="Standard" />
+											<Radio value="priceAW" label="AW" />
+											<Radio value="pricePitcher" label="Kanna" />
+										</Group>
+									</Radio.Group>
+									<Box>
+										<Text>Pris / 40cl</Text>
+										<Slider
+											size="sm"
+											mb="sm"
+											value={filters.price}
+											onChange={(newPrice) => {
+												setFilterProperty("price", newPrice);
+											}}
+											marks={priceStepsMarks}
+											max={priceStepsMarkMax}
+										/>
+									</Box>
+									<Checkbox
+										label="Uteservering"
+										checked={Boolean(filters.outdoorSeating)}
+										onChange={(event) => {
+											setFilterProperty(
+												"outdoorSeating",
+												event.currentTarget.checked,
+											);
+										}}
 									/>
-								</Box>
-								<Checkbox
-									label="Uteservering"
-									checked={Boolean(filters.outdoorSeating)}
-									onChange={(event) => {
-										setFilterProperty(
-											"outdoorSeating",
-											event.currentTarget.checked,
-										);
-									}}
-								/>
-								<Checkbox
-									label="Eftermiddagssol"
-									checked={Boolean(filters.afternoonSun)}
-									onChange={(event) => {
-										setFilterProperty(
-											"afternoonSun",
-											event.currentTarget.checked,
-										);
-									}}
-								/>
-								<CheapestBeer showOnMap={showOnMap} />
+									<Checkbox
+										label="Eftermiddagssol"
+										checked={Boolean(filters.afternoonSun)}
+										onChange={(event) => {
+											setFilterProperty(
+												"afternoonSun",
+												event.currentTarget.checked,
+											);
+										}}
+									/>
+									<CheapestBeer showOnMap={showOnMap} />
+								</Stack>
+								<Group>
+									<ThemeToggle />
+									<InformationModal />
+								</Group>
 							</Stack>
-							<Group>
-								<ThemeToggle />
-								<InformationModal />
-							</Group>
-						</Stack>
+						</ScrollArea>
 					</AppShell.Navbar>
 					<AppShell.Main>
 						<VisuallyHidden>
