@@ -33,7 +33,7 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 			<Group justify="space-between">
 				<Text fw={500}>{location.name}</Text>
 				<Badge color="teal">
-					{`${getPriceBySelectedPriceType(priceType)(location)?.toString() ?? "N/A"} kr / 40 cl`}
+					{`${getPriceBySelectedPriceType(priceType)(location)?.toString() ?? "N/A"} kr / ${priceType === "pricePitcher" && location.centilitersPitcher ? location.centilitersPitcher.toString() : "40"} cl`}
 				</Badge>
 			</Group>
 			<Group justify="space-between">
