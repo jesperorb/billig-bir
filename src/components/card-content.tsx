@@ -14,20 +14,26 @@ import {
 	IconBeachOff,
 } from "@tabler/icons-react";
 
-import { BeerLocation } from "../types/beerLocation";
-import { getStandardAWAdjustedPrice } from "../utils";
+import {
+	AWStartAndEndTimes,
+	AWStartAndEndTimesForWeekdays,
+	BeerLocation,
+} from "../types/beerLocation";
+import { PriceType } from "../types/filters";
+import { getPriceBySelectedPriceType, getWeekdayTranslation } from "../utils";
 
 export interface CardContentProps {
 	location: BeerLocation;
+	priceType: PriceType;
 }
 
-export const CardContent = ({ location }: CardContentProps) => {
+export const CardContent = ({ location, priceType }: CardContentProps) => {
 	return (
 		<>
 			<Group justify="space-between">
 				<Text fw={500}>{location.name}</Text>
 				<Badge color="teal">
-					{`${getStandardAWAdjustedPrice(location).toString()} kr / 40 cl`}
+					{`${getPriceBySelectedPriceType(priceType)(location)?.toString() ?? "N/A"} kr / 40 cl`}
 				</Badge>
 			</Group>
 			<Group justify="space-between">
@@ -83,6 +89,34 @@ export const CardContent = ({ location }: CardContentProps) => {
 					</Tooltip>
 				)}
 			</Group>
+			{location.AWDetails && location.priceAW ? (
+				<>
+					<Divider mt="sm" mb="sm" variant="dotted" />
+					<Text>AW-tider</Text>
+					<List mb="sm" pl="xs">
+						{location.AWDetails.time ? (
+							<List.Item>{`${location.AWDetails.time.start}-${location.AWDetails.time.end}`}</List.Item>
+						) : (
+							Object.entries(location.AWDetails.times).map(
+								([weekday, time]) => {
+									const times = time as AWStartAndEndTimes;
+									const day = weekday as keyof AWStartAndEndTimesForWeekdays;
+									return (
+										<List.Item key={`${weekday}${times.start}-${times.end}`}>
+											<Text component="span">{`${getWeekdayTranslation[day]}: `}</Text>
+											<Text
+												component="span"
+												ta="right"
+											>{`${times.start}-${times.end}`}</Text>
+										</List.Item>
+									);
+								},
+							)
+						)}
+					</List>
+				</>
+			) : null}
+
 			<Divider variant="dotted" />
 			<List mt="sm" mb="sm">
 				{location.mapsUrl && (
