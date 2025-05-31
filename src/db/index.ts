@@ -32,9 +32,26 @@ export const defaultBeerLocations: BeerLocation[] = [
 		name: "O'learys",
 		latitude: 59.33076489403867,
 		longitude: 18.059353141557526,
-		price: 114,
-		centiliters: 60,
-		beerBrand: "Vet inte",
+		price: 105,
+		priceAW: 89,
+		centiliters: 40,
+		beerBrand: "Norrlands guld",
+		AWDetails: {
+			times: {
+				monday: {
+					start: "15:00",
+					end: "18:00",
+				},
+				tuesday: {
+					start: "15:00",
+					end: "18:00",
+				},
+				wednesday: {
+					start: "15:00",
+					end: "18:00",
+				},
+			},
+		},
 		outdoorSeating: true,
 		afternoonSun: false,
 		updated: "2025-05-03",
@@ -138,7 +155,7 @@ export const defaultBeerLocations: BeerLocation[] = [
 export const priceStepsMarks: { value: number; label: number }[] = [
 	{ value: 0, label: 0 },
 	{ value: 50, label: 50 },
-	{ value: 100, label: 100 },
+	{ value: 120, label: 120 },
 ];
 
 export const priceStepsMarkMax =

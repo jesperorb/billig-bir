@@ -6,9 +6,10 @@ import Map, { type MapRef, Marker } from "react-map-gl/mapbox";
 import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "./constants";
 
 import { CardContent } from "../components/card-content";
+import { usePriceType } from "../contexts/price-type-context";
 import { BeerLocation } from "../types/beerLocation";
+import { getPriceBySelectedPriceType } from "../utils";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { getStandardAWAdjustedPrice } from "../utils";
 
 interface Props {
 	beerLocations: BeerLocation[];
@@ -17,6 +18,7 @@ interface Props {
 
 const MapContainer = ({ beerLocations, mapRef }: Props) => {
 	const colorScheme = useComputedColorScheme("light");
+	const priceType = usePriceType();
 	return (
 		<Map
 			reuseMaps
@@ -44,15 +46,15 @@ const MapContainer = ({ beerLocations, mapRef }: Props) => {
 								p="xs"
 								withBorder
 								shadow="xl"
-								radius="xl"
+								radius="50%"
 							>
 								<Text size="xs" fw={700}>
-									{getStandardAWAdjustedPrice(location)}
+									{getPriceBySelectedPriceType(priceType)(location)}
 								</Text>
 							</Paper>
 						</HoverCard.Target>
 						<HoverCard.Dropdown>
-							<CardContent location={location} />
+							<CardContent location={location} priceType={priceType} />
 						</HoverCard.Dropdown>
 					</HoverCard>
 				</Marker>
