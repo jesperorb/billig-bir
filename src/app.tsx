@@ -9,13 +9,14 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { getSupabaseClient } from "@common/api/api-client";
 import { ApiClientContext } from "@common/api/api-client-context";
 import { getQueryClient } from "@common/api/query-client";
 import { theme } from "@common/theme";
 
-import { Map } from "@feature/map/map"
+import { Map } from "@feature/map/components/map"
 
 import "@mantine/core/styles.css";
 import { ThemeToggle } from "@common/theme/ThemeToggle";
@@ -56,6 +57,7 @@ const App = () => {
 						</AppShell.Header>
 						<Map toggleMenu={toggle} />
 					</AppShell>
+					<ReactQueryDevtools />
 				</QueryClientProvider>
 			</ApiClientContext>
 		</MantineProvider>

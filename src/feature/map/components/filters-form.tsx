@@ -1,8 +1,19 @@
-import { Box, Group, Radio, Stack, Title, VisuallyHidden, Text, Checkbox, Slider } from "@mantine/core";
+import {
+	Box,
+	Group,
+	Radio,
+	Stack,
+	Title,
+	VisuallyHidden,
+	Text,
+	Checkbox,
+	Slider
+} from "@mantine/core";
+
 import { FilterKey, Filters, PriceType } from "@feature/map/filters";
 import { priceStepsMarkMax, priceStepsMarks } from "@feature/map/utils";
+import { useSetPriceType, usePriceType } from "@feature/map/price-type-context";
 
-import { usePriceType, useSetPriceType } from "./price-type-context";
 
 interface Props {
 	filters: Filters

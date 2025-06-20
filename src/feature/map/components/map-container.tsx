@@ -2,12 +2,12 @@ import { memo, type Ref } from "react";
 import { HoverCard, Text, Paper, useComputedColorScheme } from "@mantine/core";
 import Map, { type MapRef, Marker } from "react-map-gl/mapbox";
 
-import { BeerLocation } from "@common/types/beerLocation";
+import { type BeerLocation } from "@common/types/beerLocation";
+
 import { getPriceBySelectedPriceType } from "@feature/map/utils";
-
 import { usePriceType } from "@feature/map/price-type-context";
+import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "@feature/map/constants";
 
-import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "./constants";
 import { CardContent } from "./card-content";
 
 import "mapbox-gl/dist/mapbox-gl.css";

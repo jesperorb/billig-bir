@@ -1,4 +1,3 @@
-import { type BeerLocation } from "@common/types/beerLocation";
 import {
 	Anchor,
 	Badge,
@@ -14,8 +13,13 @@ import {
 	IconBeach,
 	IconBeachOff,
 } from "@tabler/icons-react";
-import { type PriceType } from "./filters";
-import { getPriceBySelectedPriceType } from "./utils";
+
+import { type BeerLocation } from "@common/types/beerLocation";
+
+import { type PriceType } from "@feature/map/filters";
+import { getPriceBySelectedPriceType } from "@feature/map/utils";
+
+import { AwTimesList } from "./aw-times-list";
 
 export interface CardContentProps {
 	location: BeerLocation;
@@ -40,7 +44,7 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 				)}
 			</Group>
 			<Divider mt="sm" mb="sm" variant="dotted" />
-			<Group gap="xs" mb="sm">
+			<Group gap="xs">
 				{location.afternoonSun ? (
 					<Tooltip label="Eftermiddagssol">
 						<IconSun
@@ -84,7 +88,7 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 					</Tooltip>
 				)}
 			</Group>
-
+			{location.awTimes && <AwTimesList times={location.awTimes} />}
 			<Divider variant="dotted" />
 			<List mt="sm" mb="sm">
 				{location.urlMaps && (

@@ -11,12 +11,11 @@ import { MapRef } from "react-map-gl/mapbox";
 import { getCheapestLocation, getStandardAdjustedPrice, priceStepsMarkMax } from "@feature/map/utils";
 import { Filters, PriceType } from "@feature/map/filters";
 import { BeerLocation } from "@common/types/beerLocation";
-
-import { PriceTypeContext, SetPriceTypeContext } from "./price-type-context";
-import MapContainer from "./map-container";
-import { FiltersForm } from "./filters-form";
-import { useBeerLocations } from "./queries";
+import { useBeerLocations } from "@feature/map/queries";
+import { PriceTypeContext, SetPriceTypeContext } from "@feature/map/price-type-context";
 import { CheapestBeer } from "./cheapest-beer";
+import { FiltersForm } from "./filters-form";
+import MapContainer from "./map-container";
 
 interface Props {
 	toggleMenu: () => void;
@@ -67,17 +66,18 @@ export const Map = ({ toggleMenu }: Props) => {
 
 	return (
 		<>
-			<AppShell.Navbar>
-				<ScrollArea scrollbars="y">
-					<Stack justify="space-around" h="100%" p="md">
-						<FiltersForm filters={filters} setFilters={setFilters} />
-						<CheapestBeer location={cheapestBeer} showOnMap={showOnMap} />
-					</Stack>
-				</ScrollArea>
-			</AppShell.Navbar>
-			<AppShell.Main>
-				<SetPriceTypeContext value={setPriceType}>
-					<PriceTypeContext value={priceType}>
+			<SetPriceTypeContext value={setPriceType}>
+				<PriceTypeContext value={priceType}>
+					<AppShell.Navbar>
+						<ScrollArea scrollbars="y">
+							<Stack justify="space-around" h="100%" p="md">
+								<FiltersForm filters={filters} setFilters={setFilters} />
+								{cheapestBeer && <CheapestBeer location={cheapestBeer} showOnMap={showOnMap} />}
+							</Stack>
+						</ScrollArea>
+					</AppShell.Navbar>
+					<AppShell.Main>
+
 						<VisuallyHidden>
 							<Title order={2}>Karta</Title>
 						</VisuallyHidden>
@@ -85,9 +85,9 @@ export const Map = ({ toggleMenu }: Props) => {
 							mapRef={mapRef}
 							beerLocations={filteredBeerLocations}
 						/>
-					</PriceTypeContext>
-				</SetPriceTypeContext>
-			</AppShell.Main>
+					</AppShell.Main>
+				</PriceTypeContext>
+			</SetPriceTypeContext>
 		</>
 
 	);

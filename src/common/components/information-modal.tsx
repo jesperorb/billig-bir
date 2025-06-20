@@ -1,4 +1,4 @@
-import { Modal, Anchor, Space, Text, ActionIcon } from "@mantine/core";
+import { Modal, Anchor, Text, ActionIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconQuestionMark } from "@tabler/icons-react";
 
@@ -23,13 +23,6 @@ export const InformationModal = () => {
 						target="_blank"
 					>
 						https://github.com/jesperorb/billig-bir
-					</Anchor>
-				</Text>
-				<Space />
-				<Text>
-					Lägg till nya ställen genom att redigera:{" "}
-					<Anchor href="https://github.com/jesperorb/billig-bir/blob/main/src/db/index.ts">
-						src/db/index.ts
 					</Anchor>
 				</Text>
 			</Modal>

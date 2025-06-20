@@ -3,7 +3,8 @@ import { IconChevronRight } from "@tabler/icons-react";
 
 import { type BeerLocation } from "@common/types/beerLocation";
 
-import { usePriceType } from "./price-type-context";
+import { usePriceType } from "@feature/map/price-type-context";
+
 import { CardContent } from "./card-content";
 
 interface Props {

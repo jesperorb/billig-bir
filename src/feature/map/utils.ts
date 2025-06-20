@@ -17,7 +17,7 @@ export const getPriceBySelectedPriceType =
 
 export const getPrice = (location: BeerLocation) => location.price;
 
-export const getCheapestLocation = (locations: BeerLocation[]) =>
+export const getCheapestLocation = (locations: BeerLocation[]): BeerLocation | undefined =>
 	locations.reduce(
 		(minLocation, location) =>
 			getStandardAdjustedPrice(location) < getStandardAdjustedPrice(minLocation)
