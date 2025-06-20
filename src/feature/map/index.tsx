@@ -13,15 +13,15 @@ import { Filters, PriceType } from "@feature/map/filters";
 import { BeerLocation } from "@common/types/beerLocation";
 import { useBeerLocations } from "@feature/map/queries";
 import { PriceTypeContext, SetPriceTypeContext } from "@feature/map/price-type-context";
-import { CheapestBeer } from "./cheapest-beer";
-import { FiltersForm } from "./filters-form";
-import MapContainer from "./map-container";
+import { CheapestBeer } from "./components/cheapest-beer";
+import { FiltersForm } from "./components/filters-form";
+import MapContainer from "./components/map-container";
 
 interface Props {
 	toggleMenu: () => void;
 }
 
-export const Map = ({ toggleMenu }: Props) => {
+const MapPage = ({ toggleMenu }: Props) => {
 	const mapRef = useRef<MapRef>(null);
 	const [filters, setFilters] = useState<Filters>({
 		outdoorSeating: false,
@@ -92,3 +92,5 @@ export const Map = ({ toggleMenu }: Props) => {
 
 	);
 };
+
+export default MapPage;
