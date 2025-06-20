@@ -12,7 +12,9 @@
   "dependencies": {
     "@mantine/core": "^7.17.5",
     "@mantine/hooks": "^7.17.5",
+    "@supabase/supabase-js": "^2.49.8",
     "@tabler/icons-react": "^3.33.0",
+    "@tanstack/react-query": "^5.80.10",
     "@types/mapbox-gl": "^3.4.1",
     "mapbox-gl": "^3.11.1",
     "react": "^19.0.0",
@@ -39,6 +41,7 @@
     "prettier": "^3.5.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

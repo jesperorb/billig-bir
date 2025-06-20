@@ -1,16 +1,13 @@
-import {
-	AWStartAndEndTimesForWeekdays,
-	BeerLocation,
-} from "../types/beerLocation";
-import { PriceType } from "../types/filters";
+import { type BeerLocation } from "@common/types/beerLocation";
+import { type PriceType } from "@feature/map/filters";
 
 export const getPriceAdjustedFor40cl = (price: number, centiliters: number) =>
 	Number((price / centiliters) * 40);
 
 export const getStandardAdjustedPrice = (location: BeerLocation) =>
-	location.centiliters === 40
+	location.centilitersStandard === 40
 		? location.price
-		: Math.floor(getPriceAdjustedFor40cl(location.price, location.centiliters));
+		: Math.floor(getPriceAdjustedFor40cl(location.price, location.centilitersStandard));
 
 export const getPriceBySelectedPriceType =
 	(priceType: PriceType) => (location: BeerLocation) =>
@@ -29,13 +26,11 @@ export const getCheapestLocation = (locations: BeerLocation[]) =>
 		locations[0],
 	);
 
-export const getWeekdayTranslation: Record<
-	keyof AWStartAndEndTimesForWeekdays,
-	string
-> = {
-	monday: "Måndag",
-	tuesday: "Tisdag",
-	wednesday: "Onsdag",
-	thursday: "Torsdag",
-	friday: "Fredag",
-};
+export const priceStepsMarks: { value: number; label: number }[] = [
+	{ value: 0, label: 0 },
+	{ value: 50, label: 50 },
+	{ value: 120, label: 120 },
+];
+
+export const priceStepsMarkMax =
+	priceStepsMarks[priceStepsMarks.length - 1].value;

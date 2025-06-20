@@ -1,5 +1,4 @@
 import { type CSSProperties } from "react";
-// eslint-disable-next-line import/no-unresolved
 import { type ViewState } from "react-map-gl/mapbox";
 
 export const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
