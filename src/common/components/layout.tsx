@@ -7,13 +7,14 @@ import {
 	Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Link } from '@tanstack/react-router'
 
 import { ThemeToggle } from "@common/theme/ThemeToggle";
 import { InformationModal } from "@common/components/information-modal";
+import { useNavigate } from "@tanstack/react-router";
 
 const AppWrapper = ({ children }: PropsWithChildren) => {
 	const [menuOpen, { toggle }] = useDisclosure();
+	const navigate = useNavigate();
 	return (
 		<AppShell
 			header={{ height: 70 }}
@@ -32,10 +33,9 @@ const AppWrapper = ({ children }: PropsWithChildren) => {
 							hiddenFrom="sm"
 							size="sm"
 						/>
-						<Title order={1}>Billig bir</Title>
+						<Title onClick={() => navigate({ to: "/" })} order={1}>Billig bir</Title>
 					</Group>
 					<Group h="100%" p="xs">
-						<Link to="/admin">Admin</Link>
 						<ThemeToggle />
 						<InformationModal />
 					</Group>
