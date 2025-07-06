@@ -1,7 +1,7 @@
-import { Modal, Anchor, Text, ActionIcon } from "@mantine/core";
+import { Modal, Text, ActionIcon, Anchor as MantineAnchor } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconQuestionMark } from "@tabler/icons-react";
-import { Link } from "@tanstack/react-router";
+import { Anchor } from "./anchor";
 
 export const InformationModal = () => {
 	const [modalOpened, { open, close }] = useDisclosure(false);
@@ -19,15 +19,15 @@ export const InformationModal = () => {
 			<Modal opened={modalOpened} onClose={close} title="Information">
 				<Text>
 					GitHub:{" "}
-					<Anchor
+					<MantineAnchor
 						href="https://github.com/jesperorb/billig-bir"
 						target="_blank"
 					>
 						https://github.com/jesperorb/billig-bir
-					</Anchor>
+					</MantineAnchor>
 				</Text>
 
-				<Link onClick={() => close()} to="/admin">Admin</Link>
+				<Anchor to="/admin">Admin</Anchor>
 			</Modal>
 		</>
 	);

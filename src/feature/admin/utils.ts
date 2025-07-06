@@ -1,5 +1,5 @@
-import { Database } from "@common/api/types";
-import { AWStartAndEndTimesFormData, type BeerLocationFormData } from "./types";
+import type { Database } from "@common/api/types";
+import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "./types";
 
 type BeerLocationInsert = Database["public"]["Tables"]["location"]["Insert"];
 type AwTimeRow = Database["public"]["Tables"]["aw_time"]["Row"];

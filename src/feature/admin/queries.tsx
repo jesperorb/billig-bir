@@ -18,7 +18,6 @@ const createBeerLocationQueryKeys = {
 	create: [createBeerLocationBaseQueryKeys.create],
 };
 
-
 export const createLocation = (apiClient: SupabaseClient<Database>) => async (values: BeerLocationFormData) => {
 	const { data: locationData } = await apiClient
 		.from("location")
@@ -43,7 +42,7 @@ export const createLocation = (apiClient: SupabaseClient<Database>) => async (va
 
 export const useCreateBeerLocation = () => {
 	const apiClient = useApiClient();
-	return useMutation<unknown, unknown, BeerLocationFormData>({
+	return useMutation<void, unknown, BeerLocationFormData>({
 		mutationKey: createBeerLocationQueryKeys.create,
 		mutationFn: createLocation(apiClient)
 	})

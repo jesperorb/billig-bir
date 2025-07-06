@@ -1,18 +1,11 @@
-import { AppShell, Container, Space } from "@mantine/core";
-import { AddLocation } from "./add-location";
+import { Outlet } from "@tanstack/react-router";
+import { AdminNavigation } from "./navigation";
 
 const AdminPage = () => {
 	return (
 		<>
-			<AppShell.Navbar>
-				
-			</AppShell.Navbar>
-			<AppShell.Main>
-				<Container>
-					<Space h="xl" />
-					<AddLocation />
-				</Container>
-			</AppShell.Main>
+			<AdminNavigation />
+			<Outlet />
 		</>
 	)
 }

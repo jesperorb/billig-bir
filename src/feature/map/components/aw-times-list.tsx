@@ -1,8 +1,7 @@
 import { Divider, List, Text } from "@mantine/core";
 
 import { type AWStartAndEndTimes } from "@common/types/beerLocation"
-
-import { WEEKDAY_NAMES } from "@feature/map/constants";
+import { WEEKDAY_NAMES } from "@common/constants";
 
 interface Props {
 	times: AWStartAndEndTimes[] | undefined

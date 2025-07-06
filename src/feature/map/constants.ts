@@ -21,13 +21,3 @@ export const DEFAULT_STYLING: CSSProperties = {
 	height:
 		"calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))",
 };
-
-export const WEEKDAY_NAMES = {
-	0: "Måndag",
-	1: "Tisdag",
-	2: "Onsdag",
-	3: "Torsdag",
-	4: "Fredag",
-	5: "Lördag",
-	6: "Söndag",
-} as const;

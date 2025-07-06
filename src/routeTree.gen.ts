@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminViewBeerLocationsRouteImport } from './routes/admin/view-beer-locations'
+import { Route as AdminAddBeerLocationRouteImport } from './routes/admin/add-beer-location'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -28,34 +30,66 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminViewBeerLocationsRoute = AdminViewBeerLocationsRouteImport.update({
+  id: '/view-beer-locations',
+  path: '/view-beer-locations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAddBeerLocationRoute = AdminAddBeerLocationRouteImport.update({
+  id: '/add-beer-location',
+  path: '/add-beer-location',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
+  '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
+  '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
+  '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/login'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/admin/add-beer-location'
+    | '/admin/view-beer-locations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/login'
-  id: '__root__' | '/' | '/admin' | '/login'
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/admin/add-beer-location'
+    | '/admin/view-beer-locations'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/admin/add-beer-location'
+    | '/admin/view-beer-locations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
 }
 
@@ -82,12 +116,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/view-beer-locations': {
+      id: '/admin/view-beer-locations'
+      path: '/view-beer-locations'
+      fullPath: '/admin/view-beer-locations'
+      preLoaderRoute: typeof AdminViewBeerLocationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/add-beer-location': {
+      id: '/admin/add-beer-location'
+      path: '/add-beer-location'
+      fullPath: '/admin/add-beer-location'
+      preLoaderRoute: typeof AdminAddBeerLocationRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAddBeerLocationRoute: typeof AdminAddBeerLocationRoute
+  AdminViewBeerLocationsRoute: typeof AdminViewBeerLocationsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAddBeerLocationRoute: AdminAddBeerLocationRoute,
+  AdminViewBeerLocationsRoute: AdminViewBeerLocationsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
