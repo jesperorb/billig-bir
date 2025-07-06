@@ -30,7 +30,7 @@ export const getLocations = async (apiClient: SupabaseClient<Database>) => {
 				centilitersStandard:centiliters_standard,
 				centilitersPitcher:centiliters_pitcher,
 				beerBrand:beer_brand,
-				awTimes:aw_time(
+				awTimes:aw_time (
 					weekday,
 					startTime:start_time,
 					endTime:end_time,

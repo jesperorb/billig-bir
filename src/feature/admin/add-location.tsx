@@ -15,11 +15,8 @@ import {
 	Space,
 } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { BeerLocation, AWStartAndEndTimes } from '@common/types/beerLocation';
-
-interface AddLocationFormData extends Omit<BeerLocation, 'awTimes'> {
-  awTimes: (AWStartAndEndTimes & { id: string })[];
-}
+import { BeerLocationFormData } from './types';
+import { useCreateBeerLocation } from './queries';
 
 const weekdayOptions = [
   { value: '1', label: 'Måndag' },
@@ -36,7 +33,7 @@ export const AddLocation = () => {
     control,
     handleSubmit,
     reset,
-  } = useForm<AddLocationFormData>({
+  } = useForm<BeerLocationFormData>({
     defaultValues: {
       name: '',
       latitude: 0,
@@ -60,12 +57,10 @@ export const AddLocation = () => {
     name: 'awTimes',
   });
 
-  const onSubmit = (data: AddLocationFormData) => {
-    const formattedData: BeerLocation = {
-      ...data,
-      awTimes: data.awTimes.map(({ id, ...awTime }) => awTime),
-    };
+	const mutation = useCreateBeerLocation();
 
+  const onSubmit = (data: BeerLocationFormData) => {
+		mutation.mutate(data);
   };
 
   const addAWTime = () => {
