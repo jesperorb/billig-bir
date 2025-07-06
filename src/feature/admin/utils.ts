@@ -1,5 +1,6 @@
 import type { Database } from "@common/api/types";
-import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "./types";
+import type { BeerLocationFormData } from "./types";
+import { AWStartAndEndTimes } from "@common/types/beerLocation";
 
 type BeerLocationInsert = Database["public"]["Tables"]["location"]["Insert"];
 type AwTimeRow = Database["public"]["Tables"]["aw_time"]["Row"];
@@ -17,9 +18,10 @@ export const removeEmptyStrings = (
 		]),
 	) as BeerLocationFormData;
 
-export const beerLocationFormDataToDatabaseSchema = (
+export const beerLocationFormDataToSchema = (
 	values: BeerLocationFormData,
 ): BeerLocationInsert => ({
+	id: values.id,
 	name: values.name,
 	latitude: values.latitude,
 	longitude: values.longitude,
@@ -35,19 +37,31 @@ export const beerLocationFormDataToDatabaseSchema = (
 	url_website: values.urlWebsite,
 });
 
-export const awTimesFormDataToDatabaseSchema = (
-	awTimes: AWStartAndEndTimesFormData[],
+export const awTimesFormDataToSchema = (
+	awTimes: AWStartAndEndTimes[],
 ): AwTimeInsert[] =>
 	awTimes.map((time) => ({
+		id: time.id,
 		weekday: time.weekday,
 		same_times_all_week: time.sameTimesAllWeek,
 		end_time: time.endTime,
 		start_time: time.startTime,
 	}));
 
-export const locationAwTimesDataToDatabaseSchema = (
+export const locationAwTimesDataToSchema = (
 	awTimes: AwTimeRow[],
 	locationId: number,
 ): BeerLocationAwTimeInsert[] =>
 	awTimes?.map((time) => ({ location_id: locationId, aw_time_id: time.id })) ??
 	[];
+
+export const getRandomIntInclusive = (min: number = 0, max: number = 2000) => {
+	const randomBuffer = new Uint32Array(1);
+	crypto.getRandomValues(randomBuffer);
+
+	let randomNumber = randomBuffer[0] / (0xffffffff + 1);
+
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(randomNumber * (max - min + 1)) + min;
+};

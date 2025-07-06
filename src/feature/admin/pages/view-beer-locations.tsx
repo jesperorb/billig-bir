@@ -1,9 +1,17 @@
-import { ActionIcon, AppShell, Divider, Loader, Table, Title } from "@mantine/core";
+import { ActionIcon, AppShell, Divider, Loader, Modal, Table, Title } from "@mantine/core";
 import { useBeerLocations } from "@feature/map/queries";
 import { IconPencil } from "@tabler/icons-react";
+import { useState } from "react";
+import { BeerLocation } from "@common/types/beerLocation";
+import { useDisclosure } from "@mantine/hooks";
+import { BeerLocationForm } from "../beer-location.form";
+import { useUpdateBeerLocation } from "../queries";
 
 export const ViewBeerLocations = () => {
 	const { data, isLoading } = useBeerLocations();
+	const [modalOpened, { open, close }] = useDisclosure(false);
+	const [locationToEdit, setLocationToEdit] = useState<BeerLocation | undefined>(undefined);
+	const mutation = useUpdateBeerLocation();
 
 	if (isLoading) {
 		return <Loader />
@@ -56,7 +64,16 @@ export const ViewBeerLocations = () => {
 								<Table.Td>{location.outdoorSeating ? "Ja" : "Nej"}</Table.Td>
 								<Table.Td>{location.afternoonSun ? "Ja" : "Nej"}</Table.Td>
 								<Table.Td>
-									<ActionIcon p={0} variant="outline" size="sm" aria-label={`Redigera ${location.name}`}>
+									<ActionIcon
+										onClick={() => {
+											setLocationToEdit(location);
+											open();
+										}}
+										p={0}
+										variant="outline"
+										size="sm"
+										aria-label={`Redigera ${location.name}`}
+									>
 										<IconPencil />
 									</ActionIcon>
 								</Table.Td>
@@ -65,6 +82,19 @@ export const ViewBeerLocations = () => {
 					</Table.Tbody>
 				</Table>
 			</Table.ScrollContainer>
+			<Modal opened={modalOpened} onClose={close} title={`Redigera ${locationToEdit?.name ?? ""}`} size="auto">
+				{locationToEdit &&
+					<BeerLocationForm
+						showClearButton={false}
+						defaultValues={{
+							...locationToEdit,
+						}}
+						onSubmit={async (data) => {
+							mutation.mutate(data)
+						}}
+					/>
+				}
+			</Modal>
 		</AppShell.Main>
 	);
 };

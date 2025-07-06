@@ -9,9 +9,11 @@ export interface AWStartAndEndTimes {
 	endTime: `${number}:${number}`;
 	weekday: number;
 	sameTimesAllWeek?: boolean;
+	id: number;
 }
 
 export interface BeerLocation {
+	id: number;
 	name: string;
 	latitude: number;
 	longitude: number;

@@ -93,17 +93,14 @@ export type Database = {
       location_aw_time: {
         Row: {
           aw_time_id: number
-          id: string
           location_id: number
         }
         Insert: {
           aw_time_id: number
-          id?: string
           location_id: number
         }
         Update: {
           aw_time_id?: number
-          id?: string
           location_id?: number
         }
         Relationships: [

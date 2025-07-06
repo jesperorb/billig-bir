@@ -16,16 +16,23 @@ import {
 	Text,
 } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { type BeerLocationFormData } from './types';
-import { useCreateBeerLocation } from './queries';
+import { type AWStartAndEndTimesFormData, type BeerLocationFormData } from './types';
 import { DEFAULT_AW_TIME_VALUE, DEFAULT_FORM_VALUES } from './constants';
 import { WEEKDAY_NAMES_AS_LIST } from '@common/constants';
 
 interface Props {
 	defaultValues?: BeerLocationFormData;
+	showClearButton?: boolean;
+	onSubmit: (data: BeerLocationFormData) => Promise<void>;
+	onRemoveAwTime?: (awTime: AWStartAndEndTimesFormData) => Promise<void>;
+	onAddAwTime?: (awTime: AWStartAndEndTimesFormData, locationId: number) => Promise<void>;
 }
 
-export const LocationForm = ({ defaultValues = DEFAULT_FORM_VALUES }: Props) => {
+export const BeerLocationForm = ({
+	defaultValues = DEFAULT_FORM_VALUES,
+	onSubmit,
+	showClearButton = true,
+}: Props) => {
 	const {
 		control,
 		handleSubmit,
@@ -38,10 +45,8 @@ export const LocationForm = ({ defaultValues = DEFAULT_FORM_VALUES }: Props) => 
 		name: 'awTimes',
 	});
 
-	const mutation = useCreateBeerLocation();
-
-	const onSubmit = (data: BeerLocationFormData) => {
-		mutation.mutate(data);
+	const internalOnSubmit = (data: BeerLocationFormData) => {
+		onSubmit(data)
 	};
 
 	const addAWTime = () => {
@@ -50,7 +55,7 @@ export const LocationForm = ({ defaultValues = DEFAULT_FORM_VALUES }: Props) => 
 
 	return (
 		<>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(internalOnSubmit)}>
 				<Stack gap="md">
 					<Controller
 						name="name"
@@ -369,11 +374,13 @@ export const LocationForm = ({ defaultValues = DEFAULT_FORM_VALUES }: Props) => 
 					</Box>
 
 					<Group justify="flex-end" mt="lg">
-						<Button variant="outline" color="red" onClick={() => reset()}>
-							Rensa
-						</Button>
+						{showClearButton &&
+							<Button variant="outline" color="red" onClick={() => reset()}>
+								Rensa
+							</Button>
+						}
 						<Button type="submit">
-							Lägg till plats
+							Spara
 						</Button>
 					</Group>
 				</Stack>

@@ -18,6 +18,7 @@ export const getLocations = async (apiClient: SupabaseClient<Database>) => {
 		.from("location")
 		.select(
 			`
+				id,
 				name,
 				latitude,
 				longitude,
@@ -34,7 +35,8 @@ export const getLocations = async (apiClient: SupabaseClient<Database>) => {
 					weekday,
 					startTime:start_time,
 					endTime:end_time,
-					sameTimesAllWeek:same_times_all_week
+					sameTimesAllWeek:same_times_all_week,
+					id
 				)
 			`,
 		)

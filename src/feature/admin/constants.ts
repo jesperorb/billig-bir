@@ -1,4 +1,5 @@
 import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "./types";
+import { getRandomIntInclusive } from "./utils";
 
 export const DEFAULT_FORM_VALUES: BeerLocationFormData = {
 	name: "",
@@ -18,7 +19,7 @@ export const DEFAULT_FORM_VALUES: BeerLocationFormData = {
 };
 
 export const DEFAULT_AW_TIME_VALUE: AWStartAndEndTimesFormData = {
-	id: crypto.randomUUID(),
+	id: getRandomIntInclusive(),
 	startTime: "16:00" as const,
 	endTime: "18:00" as const,
 	weekday: 0,
