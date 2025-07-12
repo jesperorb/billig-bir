@@ -1,4 +1,4 @@
-import { ActionIcon, AppShell, Button, CheckIcon, Divider, Group, Table, ThemeIcon, Title } from "@mantine/core";
+import { ActionIcon, AppShell, Button, Divider, Group, Table, ThemeIcon, Title } from "@mantine/core";
 import { beerLocationsBaseQueryKeys, useBeerLocations } from "@feature/map/queries";
 import { IconCheck, IconPencil, IconReload, IconX } from "@tabler/icons-react";
 import { useState } from "react";

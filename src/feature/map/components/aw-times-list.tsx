@@ -13,7 +13,7 @@ export const AwTimesList = ({ times }: Props) => {
 	if (times.some(time => time.sameTimesAllWeek)) {
 		return (
 			<>
-				<Divider my="sm" />
+				<Divider my="sm" variant="dotted" />
 				<Text fw={700}>AW-tider</Text>
 				<List mb="sm">
 					<List.Item>Alla dagar: {times[0]?.startTime}–{times[0]?.endTime}</List.Item>
@@ -23,7 +23,7 @@ export const AwTimesList = ({ times }: Props) => {
 	}
 	return (
 		<>
-			<Divider my="sm" />
+			<Divider my="sm" variant="dotted" />
 			<Text fw={700}>AW-tider</Text>
 			<List mb="sm">
 				{times.map(time => (

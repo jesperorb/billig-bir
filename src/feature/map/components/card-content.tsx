@@ -44,7 +44,7 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 				)}
 			</Group>
 			<Divider mt="sm" mb="sm" variant="dotted" />
-			<Group gap="xs">
+			<Group gap="xs" mb="sm">
 				{location.afternoonSun ? (
 					<Tooltip label="Eftermiddagssol">
 						<IconSun
