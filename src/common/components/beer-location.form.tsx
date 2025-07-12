@@ -16,9 +16,8 @@ import {
 	Text,
 } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { type AWStartAndEndTimesFormData, type BeerLocationFormData } from '../types';
-import { DEFAULT_AW_TIME_VALUE, DEFAULT_FORM_VALUES } from '../constants';
-import { WEEKDAY_NAMES_AS_LIST } from '@common/constants';
+import { DEFAULT_AW_TIME_VALUE, DEFAULT_FORM_VALUES, WEEKDAY_NAMES_AS_LIST } from '@common/constants';
+import { AWStartAndEndTimesFormData, BeerLocationFormData } from '@common/types/beer-location-form-data';
 
 interface Props {
 	defaultValues?: BeerLocationFormData;

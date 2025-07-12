@@ -14,7 +14,7 @@ import {
 	IconBeachOff,
 } from "@tabler/icons-react";
 
-import { type BeerLocation } from "@common/types/beerLocation";
+import { type BeerLocation } from "@common/types/beer-location";
 
 import { type PriceType } from "@feature/map/filters";
 import { getPriceBySelectedPriceType } from "@feature/map/utils";

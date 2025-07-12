@@ -41,6 +41,33 @@ export type Database = {
         }
         Relationships: []
       }
+      aw_time_submission: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: number
+          same_times_all_week: boolean | null
+          start_time: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: number
+          same_times_all_week?: boolean | null
+          start_time: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: number
+          same_times_all_week?: boolean | null
+          start_time?: string
+          weekday?: number
+        }
+        Relationships: []
+      }
       location: {
         Row: {
           afternoon_sun: boolean | null
@@ -130,6 +157,96 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      location_aw_time_submission: {
+        Row: {
+          aw_time_id: number
+          location_id: number
+        }
+        Insert: {
+          aw_time_id: number
+          location_id: number
+        }
+        Update: {
+          aw_time_id?: number
+          location_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_aw_time_submission_aw_time_id_fkey"
+            columns: ["aw_time_id"]
+            isOneToOne: false
+            referencedRelation: "aw_time_submission"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "location_aw_time_submission_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "location_submission"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      location_submission: {
+        Row: {
+          afternoon_sun: boolean | null
+          beer_brand: string | null
+          centiliters_pitcher: number | null
+          centiliters_standard: number
+          created_at: string
+          created_by: string | null
+          id: number
+          latitude: number
+          longitude: number
+          name: string
+          outdoor_seating: boolean | null
+          price_aw: number | null
+          price_pitcher: number | null
+          price_standard: number
+          updated_at: string | null
+          url_maps: string | null
+          url_website: string | null
+        }
+        Insert: {
+          afternoon_sun?: boolean | null
+          beer_brand?: string | null
+          centiliters_pitcher?: number | null
+          centiliters_standard: number
+          created_at?: string
+          created_by?: string | null
+          id?: number
+          latitude: number
+          longitude: number
+          name: string
+          outdoor_seating?: boolean | null
+          price_aw?: number | null
+          price_pitcher?: number | null
+          price_standard: number
+          updated_at?: string | null
+          url_maps?: string | null
+          url_website?: string | null
+        }
+        Update: {
+          afternoon_sun?: boolean | null
+          beer_brand?: string | null
+          centiliters_pitcher?: number | null
+          centiliters_standard?: number
+          created_at?: string
+          created_by?: string | null
+          id?: number
+          latitude?: number
+          longitude?: number
+          name?: string
+          outdoor_seating?: boolean | null
+          price_aw?: number | null
+          price_pitcher?: number | null
+          price_standard?: number
+          updated_at?: string | null
+          url_maps?: string | null
+          url_website?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

@@ -1,5 +1,6 @@
 import { useApiClient } from "@common/api/api-client-context";
 import { useSession } from "@common/api/use-session";
+import { BeerLocationSubmissionDialog } from "@feature/submissions/beer-location-submission.dialog";
 import { Modal, ActionIcon, Button, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBrandGithub, IconExternalLink, IconQuestionMark, IconSettings } from "@tabler/icons-react";
@@ -23,15 +24,7 @@ export const InformationModal = () => {
 			</ActionIcon>
 			<Modal opened={modalOpened} onClose={close} title="Information">
 				<Stack gap="md">
-					<Button
-						component="a"
-						href="https://github.com/jesperorb/billig-bir"
-						leftSection={<IconBrandGithub />}
-						rightSection={<IconExternalLink />}
-						onClick={close}
-					>
-						GitHub
-					</Button>
+					<BeerLocationSubmissionDialog />
 					<Button
 						onClick={() => {
 							navigate({ to: "/admin" })
@@ -52,6 +45,15 @@ export const InformationModal = () => {
 							Logga ut
 						</Button>
 					)}
+					<Button
+						component="a"
+						href="https://github.com/jesperorb/billig-bir"
+						leftSection={<IconBrandGithub />}
+						rightSection={<IconExternalLink />}
+						onClick={close}
+					>
+						GitHub
+					</Button>
 				</Stack>
 			</Modal>
 		</>

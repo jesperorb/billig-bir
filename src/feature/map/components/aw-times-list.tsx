@@ -1,6 +1,6 @@
 import { Divider, List, Text } from "@mantine/core";
 
-import { type AWStartAndEndTimes } from "@common/types/beerLocation"
+import { type AWStartAndEndTimes } from "@common/types/beer-location"
 import { WEEKDAY_NAMES } from "@common/constants";
 
 interface Props {
