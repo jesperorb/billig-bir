@@ -5,7 +5,7 @@ import { Database } from "@common/api/types";
 import { useApiClient } from "@common/api/api-client-context";
 import { BeerLocation } from "@common/types/beerLocation";
 
-const beerLocationsBaseQueryKeys = {
+export const beerLocationsBaseQueryKeys = {
 	get: "getBeerLocations",
 } as const;
 
@@ -23,6 +23,7 @@ export const getLocations = async (apiClient: SupabaseClient<Database>) => {
 				latitude,
 				longitude,
 				outdoorSeating:outdoor_seating,
+				afternoonSun:afternoon_sun,
 				urlMaps:url_maps,
 				urlWebsite:url_website,
 				price:price_standard,
@@ -31,6 +32,7 @@ export const getLocations = async (apiClient: SupabaseClient<Database>) => {
 				centilitersStandard:centiliters_standard,
 				centilitersPitcher:centiliters_pitcher,
 				beerBrand:beer_brand,
+				updatedAt: updated_at,
 				awTimes:aw_time (
 					weekday,
 					startTime:start_time,
@@ -40,6 +42,7 @@ export const getLocations = async (apiClient: SupabaseClient<Database>) => {
 				)
 			`,
 		)
+		.order("name")
 		.overrideTypes<BeerLocation[]>()
 };
 

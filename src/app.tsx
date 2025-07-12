@@ -3,7 +3,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import ApiClientWrapper from '@common/api/api-client-wrapper'
 
-import { useSession } from '@feature/auth/use-session'
+import { useSession } from '@common/api/use-session'
 
 const router = createRouter({
 	routeTree, context: {

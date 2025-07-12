@@ -21,7 +21,7 @@ export const removeEmptyStrings = (
 export const beerLocationFormDataToSchema = (
 	values: BeerLocationFormData,
 ): BeerLocationInsert => ({
-	id: values.id,
+	id: values.id >= 0 ?  values.id :undefined,
 	name: values.name,
 	latitude: values.latitude,
 	longitude: values.longitude,
@@ -39,14 +39,15 @@ export const beerLocationFormDataToSchema = (
 
 export const awTimesFormDataToSchema = (
 	awTimes: AWStartAndEndTimes[],
-): AwTimeInsert[] =>
-	awTimes.map((time) => ({
-		id: time.id,
-		weekday: time.weekday,
-		same_times_all_week: time.sameTimesAllWeek,
-		end_time: time.endTime,
-		start_time: time.startTime,
-	}));
+): AwTimeInsert[] => awTimes.map(awTimeFormDataToSchema);
+
+export const awTimeFormDataToSchema = (time: AWStartAndEndTimes) => ({
+	id: time.id > 0 ? time.id : undefined,
+	weekday: time.weekday,
+	same_times_all_week: time.sameTimesAllWeek,
+	end_time: time.endTime,
+	start_time: time.startTime,
+});
 
 export const locationAwTimesDataToSchema = (
 	awTimes: AwTimeRow[],
@@ -55,7 +56,10 @@ export const locationAwTimesDataToSchema = (
 	awTimes?.map((time) => ({ location_id: locationId, aw_time_id: time.id })) ??
 	[];
 
-export const getRandomIntInclusive = (min: number = 0, max: number = 2000) => {
+export const getRandomIntInclusive = (
+	min: number = -1_000_000,
+	max: number = 0,
+) => {
 	const randomBuffer = new Uint32Array(1);
 	crypto.getRandomValues(randomBuffer);
 
@@ -65,3 +69,9 @@ export const getRandomIntInclusive = (min: number = 0, max: number = 2000) => {
 	max = Math.floor(max);
 	return Math.floor(randomNumber * (max - min + 1)) + min;
 };
+
+export const awTimeHasId = (
+	time: AwTimeInsert,
+): time is Omit<AwTimeInsert, "id"> & { id: number } => Boolean(time.id);
+
+export const awTimeHasNoId = (time: AwTimeInsert) => !awTimeHasId(time);

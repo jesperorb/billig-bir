@@ -1,7 +1,10 @@
 import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "./types";
 import { getRandomIntInclusive } from "./utils";
 
+export const TEMP_ID_PREFIX = "temp_"
+
 export const DEFAULT_FORM_VALUES: BeerLocationFormData = {
+	id: getRandomIntInclusive(),
 	name: "",
 	latitude: 59.3307648940387,
 	longitude: 18.0593531415575,

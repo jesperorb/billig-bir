@@ -16,41 +16,56 @@ import {
 	Text,
 } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { type AWStartAndEndTimesFormData, type BeerLocationFormData } from './types';
-import { DEFAULT_AW_TIME_VALUE, DEFAULT_FORM_VALUES } from './constants';
+import { type AWStartAndEndTimesFormData, type BeerLocationFormData } from '../types';
+import { DEFAULT_AW_TIME_VALUE, DEFAULT_FORM_VALUES } from '../constants';
 import { WEEKDAY_NAMES_AS_LIST } from '@common/constants';
 
 interface Props {
 	defaultValues?: BeerLocationFormData;
 	showClearButton?: boolean;
+	loading: boolean;
 	onSubmit: (data: BeerLocationFormData) => Promise<void>;
 	onRemoveAwTime?: (awTime: AWStartAndEndTimesFormData) => Promise<void>;
-	onAddAwTime?: (awTime: AWStartAndEndTimesFormData, locationId: number) => Promise<void>;
 }
 
 export const BeerLocationForm = ({
 	defaultValues = DEFAULT_FORM_VALUES,
 	onSubmit,
 	showClearButton = true,
+	onRemoveAwTime,
+	loading,
 }: Props) => {
 	const {
 		control,
 		handleSubmit,
 		reset,
+		watch,
 	} = useForm<BeerLocationFormData>({
 		defaultValues: defaultValues
 	});
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: 'awTimes',
+		keyName: 'fieldId',
 	});
+
+	const watchFieldArray = watch("awTimes");
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...(watchFieldArray ? watchFieldArray[index] : {})
+    };
+  });
 
 	const internalOnSubmit = (data: BeerLocationFormData) => {
 		onSubmit(data)
 	};
 
-	const addAWTime = () => {
-		append(DEFAULT_AW_TIME_VALUE);
+	const addAWTime = async () => {
+		append({
+			...DEFAULT_AW_TIME_VALUE,
+			weekday: Math.max(...controlledFields.map(field => field.weekday)) + 1,
+		});
 	};
 
 	return (
@@ -295,14 +310,19 @@ export const BeerLocationForm = ({
 								variant="light"
 								size="sm"
 								onClick={addAWTime}
+								loading={loading}
+								disabled={
+									controlledFields.some(field => field.sameTimesAllWeek) ||
+									controlledFields.length >= 5
+								}
 							>
 								Lägg till AW-tid
 							</Button>
 						</Group>
 						<Space h="md" />
 						<Stack gap="sm">
-							{fields.map((field, index) => (
-								<Paper key={field.id} p="sm" withBorder>
+							{controlledFields.map((field, index) => (
+								<Paper key={field.fieldId} p="sm" withBorder>
 									<Group>
 										<Controller
 											name={`awTimes.${index}.weekday`}
@@ -362,8 +382,14 @@ export const BeerLocationForm = ({
 										<ActionIcon
 											color="red"
 											variant="light"
-											onClick={() => remove(index)}
+											onClick={async () => {
+												if(onRemoveAwTime) {
+													await onRemoveAwTime(field);
+												}
+												remove(index);
+											}}
 											mt="xl"
+											loading={loading}
 										>
 											<IconTrash size={16} />
 										</ActionIcon>
@@ -375,11 +401,11 @@ export const BeerLocationForm = ({
 
 					<Group justify="flex-end" mt="lg">
 						{showClearButton &&
-							<Button variant="outline" color="red" onClick={() => reset()}>
+							<Button variant="outline" color="red" onClick={() => reset()} loading={loading}>
 								Rensa
 							</Button>
 						}
-						<Button type="submit">
+						<Button type="submit" loading={loading}>
 							Spara
 						</Button>
 					</Group>
@@ -389,3 +415,4 @@ export const BeerLocationForm = ({
 		</>
 	);
 };
+

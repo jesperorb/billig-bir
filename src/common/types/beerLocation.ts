@@ -28,4 +28,5 @@ export interface BeerLocation {
 	centilitersPitcher?: number;
 	urlMaps?: string;
 	urlWebsite?: string;
+	updatedAt?: string;
 }
