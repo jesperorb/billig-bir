@@ -16,6 +16,7 @@ import {
 const createBeerLocationBaseQueryKeys = {
 	create: "createBeerLocation",
 	update: "updateBeerLocation",
+	delete: "deleteBeerLocation",
 	createAwTime: "createAwTime",
 	deleteAwTime: "deleteAwTime",
 } as const;
@@ -23,6 +24,7 @@ const createBeerLocationBaseQueryKeys = {
 const createBeerLocationQueryKeys = {
 	createBeerLocation: [createBeerLocationBaseQueryKeys.create],
 	updateBeerLocation: [createBeerLocationBaseQueryKeys.update],
+	deleteBeerLocation: [createBeerLocationBaseQueryKeys.delete],
 	createAwTime: [createBeerLocationBaseQueryKeys.createAwTime],
 	deleteAwTime: [createBeerLocationBaseQueryKeys.deleteAwTime],
 };
@@ -82,6 +84,19 @@ export const updateBeerLocation = (apiClient: SupabaseClient<Database>) =>
 		}
 	}
 
+export const deleteBeerLocation = (apiClient: SupabaseClient<Database>) =>
+	async (values: BeerLocationFormData) => {
+		if (values.awTimes?.length) {
+			for await (const time of values.awTimes) {
+				await deleteAwTime(apiClient)(time);
+			}
+		}
+		await apiClient
+			.from("location")
+			.delete()
+			.eq('id', values.id);
+	}
+
 export const deleteAwTime = (apiClient: SupabaseClient<Database>) =>
 	async (value: AWStartAndEndTimesFormData) => {
 		if (value.id < 0) return;
@@ -122,6 +137,14 @@ export const useUpdateBeerLocation = () => {
 	return useMutation<void, unknown, BeerLocationFormData>({
 		mutationKey: createBeerLocationQueryKeys.createBeerLocation,
 		mutationFn: updateBeerLocation(apiClient)
+	})
+}
+
+export const useDeleteBeerLocation = () => {
+	const apiClient = useApiClient();
+	return useMutation<void, unknown, BeerLocationFormData>({
+		mutationKey: createBeerLocationQueryKeys.deleteBeerLocation,
+		mutationFn: deleteBeerLocation(apiClient)
 	})
 }
 

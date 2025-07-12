@@ -1,8 +1,9 @@
-import { Modal } from "@mantine/core";
+import { Modal, Button, Group, Text, Title } from "@mantine/core";
+import { useState } from "react";
 import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "../types"
 import { BeerLocationForm } from "./beer-location.form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useDeleteAwTime, useUpdateBeerLocation } from "../queries";
+import { useDeleteAwTime, useDeleteBeerLocation, useUpdateBeerLocation } from "../queries";
 import { beerLocationsBaseQueryKeys } from "@feature/map/queries";
 
 interface Props {
@@ -18,8 +19,10 @@ export const EditBeerLocationDialog = ({
 	open,
 	onClose,
 }: Props) => {
+	const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 	const queryClient = useQueryClient();
 	const mutation = useUpdateBeerLocation();
+	const deleteMutation = useDeleteBeerLocation();
 	const awTimeDeleteMutation = useDeleteAwTime();
 
 	const invalidateBeerLocations = () => {
@@ -38,19 +41,71 @@ export const EditBeerLocationDialog = ({
 		await awTimeDeleteMutation.mutateAsync(awTime);
 	}
 
+	const onDeleteLocation = async () => {
+		if (!location) return;
+
+		await deleteMutation.mutateAsync(location);
+		invalidateBeerLocations();
+		setDeleteConfirmOpen(false);
+		onClose();
+	}
+
 	return (
-		<Modal opened={open} onClose={onClose} title={`Redigera ${location?.name ?? ""}`} size="auto">
-			{location &&
-				<BeerLocationForm
-					loading={isLoading}
-					showClearButton={false}
-					defaultValues={{
-						...location,
-					}}
-					onRemoveAwTime={onRemoveAwTime}
-					onSubmit={onSubmit}
-				/>
-			}
-		</Modal>
+		<>
+			<Modal
+				opened={open}
+				onClose={onClose}
+				title={<Title order={2}>{`Redigera ${location?.name ?? ""}`}</Title>}
+				size="auto"
+			>
+				{location &&
+					<BeerLocationForm
+						loading={isLoading}
+						showClearButton={false}
+						defaultValues={{
+							...location,
+						}}
+						onRemoveAwTime={onRemoveAwTime}
+						onSubmit={onSubmit}
+					/>
+				}
+				<Group justify="space-between" mt="md">
+					<Button
+						color="red"
+						variant="filled"
+						onClick={() => setDeleteConfirmOpen(true)}
+						loading={deleteMutation.isPending}
+					>
+						Ta bort plats
+					</Button>
+				</Group>
+			</Modal>
+
+			<Modal
+				opened={deleteConfirmOpen}
+				onClose={() => setDeleteConfirmOpen(false)}
+				title={<Title order={2}>Bekräfta borttagning</Title>}
+				size="sm"
+			>
+				<Text mb="md">
+					Är du säker på att du vill ta bort "{location?.name}"? Denna åtgärd kan inte ångras.
+				</Text>
+				<Group justify="flex-end">
+					<Button
+						variant="default"
+						onClick={() => setDeleteConfirmOpen(false)}
+					>
+						Avbryt
+					</Button>
+					<Button
+						color="red"
+						onClick={onDeleteLocation}
+						loading={deleteMutation.isPending}
+					>
+						Ta bort
+					</Button>
+				</Group>
+			</Modal>
+		</>
 	)
 }
