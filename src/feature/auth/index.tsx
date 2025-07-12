@@ -1,7 +1,9 @@
 import { useApiClient } from '@common/api/api-client-context';
+import { useSession } from '@common/api/use-session';
 import { AppShell, Button, Container, Space, TextInput } from '@mantine/core';
 import { IconAt } from '@tabler/icons-react';
 import { useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 interface LoginFormData {
@@ -12,6 +14,7 @@ interface LoginFormData {
 const LoginPage = () => {
 	const apiClient = useApiClient();
 	const navigate = useNavigate();
+	const session = useSession();
 	
 	const {
 		control,
@@ -24,15 +27,17 @@ const LoginPage = () => {
 	});
 
 	const onSubmit = async ({ email, password }: LoginFormData) => {
-		const response = await apiClient.auth.signInWithPassword({
+		await apiClient.auth.signInWithPassword({
 			email,
 			password,
 		});
+	};
 
-		if (response.data.user) {
+	useEffect(() => {
+		if(session?.user) {
 			navigate({ to: "/admin" });
 		}
-	};
+	}, [session])
 
 	return (
 		<AppShell.Main px="lg">

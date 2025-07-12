@@ -41,11 +41,12 @@ export const InformationModal = () => {
 					>
 						Administrera
 					</Button>
-					{Boolean(session) && (
+					{Boolean(session?.user) && (
 						<Button
 							onClick={async () => {
 								await apiClient.auth.signOut();
 								navigate({ to: "/" })
+								close();
 							}}
 						>
 							Logga ut
