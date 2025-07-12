@@ -28,7 +28,7 @@ export const ViewBeerLocations = () => {
 						})
 					}}
 				>
-					Reload
+					Ladda om
 				</Button>
 			</Group>
 			<Divider />

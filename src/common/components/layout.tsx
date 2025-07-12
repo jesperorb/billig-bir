@@ -33,7 +33,7 @@ const AppWrapper = ({ children }: PropsWithChildren) => {
 							hiddenFrom="sm"
 							size="sm"
 						/>
-						<Title onClick={() => navigate({ to: "/" })} order={1}>Billig bir</Title>
+						<Title onClick={() => navigate({ to: "/" })} order={1}>billig.beer</Title>
 					</Group>
 					<Group h="100%" p="xs">
 						<ThemeToggle />
