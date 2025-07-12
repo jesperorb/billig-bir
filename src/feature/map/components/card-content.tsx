@@ -14,13 +14,12 @@ import {
 	IconBeachOff,
 } from "@tabler/icons-react";
 
-import {
-	AWStartAndEndTimes,
-	AWStartAndEndTimesForWeekdays,
-	BeerLocation,
-} from "../types/beerLocation";
-import { PriceType } from "../types/filters";
-import { getPriceBySelectedPriceType, getWeekdayTranslation } from "../utils";
+import { type BeerLocation } from "@common/types/beerLocation";
+
+import { type PriceType } from "@feature/map/filters";
+import { getPriceBySelectedPriceType } from "@feature/map/utils";
+
+import { AwTimesList } from "./aw-times-list";
 
 export interface CardContentProps {
 	location: BeerLocation;
@@ -38,9 +37,9 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 			</Group>
 			<Group justify="space-between">
 				<Text c="dimmed">Typ: {location.beerBrand}</Text>
-				{location.centiliters !== 40 && (
+				{location.centilitersStandard !== 40 && (
 					<Badge color="dark">
-						{`${location.price.toString()} kr / ${location.centiliters.toString()} cl`}
+						{`${location.price.toString()} kr / ${location.centilitersStandard.toString()} cl`}
 					</Badge>
 				)}
 			</Group>
@@ -89,53 +88,24 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 					</Tooltip>
 				)}
 			</Group>
-			{location.AWDetails && location.priceAW ? (
-				<>
-					<Divider mt="sm" mb="sm" variant="dotted" />
-					<Text>AW-tider</Text>
-					<List mb="sm" pl="xs">
-						{location.AWDetails.time ? (
-							<List.Item>{`${location.AWDetails.time.start}-${location.AWDetails.time.end}`}</List.Item>
-						) : (
-							Object.entries(location.AWDetails.times).map(
-								([weekday, time]) => {
-									const times = time as AWStartAndEndTimes;
-									const day = weekday as keyof AWStartAndEndTimesForWeekdays;
-									return (
-										<List.Item key={`${weekday}${times.start}-${times.end}`}>
-											<Text component="span">{`${getWeekdayTranslation[day]}: `}</Text>
-											<Text
-												component="span"
-												ta="right"
-											>{`${times.start}-${times.end}`}</Text>
-										</List.Item>
-									);
-								},
-							)
-						)}
-					</List>
-				</>
-			) : null}
-
+			{location.awTimes && <AwTimesList times={location.awTimes} />}
 			<Divider variant="dotted" />
 			<List mt="sm" mb="sm">
-				{location.mapsUrl && (
+				{location.urlMaps && (
 					<List.Item>
-						<Anchor href={location.mapsUrl} target="_blank">
+						<Anchor href={location.urlMaps} target="_blank">
 							Google Maps
 						</Anchor>
 					</List.Item>
 				)}
-				{location.websiteUrl && (
+				{location.urlWebsite && (
 					<List.Item>
-						<Anchor href={location.websiteUrl} target="_blank">
+						<Anchor href={location.urlWebsite} target="_blank">
 							Hemsida
 						</Anchor>
 					</List.Item>
 				)}
 			</List>
-			<Divider variant="dotted" mb="sm" />
-			<Text c="dimmed">Uppdaterad: {location.updated}</Text>
 		</>
 	);
 };

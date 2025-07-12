@@ -1,4 +1,4 @@
-import { type BeerLocation } from "./beerLocation";
+import { BeerLocation } from "@common/types/beerLocation";
 
 export type Filters = Pick<
 	BeerLocation,
