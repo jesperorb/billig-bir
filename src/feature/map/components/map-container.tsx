@@ -1,14 +1,15 @@
-import { HoverCard, Text, Paper, useComputedColorScheme } from "@mantine/core";
 import { memo, type Ref } from "react";
-// eslint-disable-next-line import/no-unresolved
+import { HoverCard, Text, Paper, useComputedColorScheme } from "@mantine/core";
 import Map, { type MapRef, Marker } from "react-map-gl/mapbox";
 
-import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "./constants";
+import { type BeerLocation } from "@common/types/beerLocation";
 
-import { CardContent } from "../components/card-content";
-import { usePriceType } from "../contexts/price-type-context";
-import { BeerLocation } from "../types/beerLocation";
-import { getPriceBySelectedPriceType } from "../utils";
+import { getPriceBySelectedPriceType } from "@feature/map/utils";
+import { usePriceType } from "@feature/map/price-type-context";
+import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "@feature/map/constants";
+
+import { CardContent } from "./card-content";
+
 import "mapbox-gl/dist/mapbox-gl.css";
 
 interface Props {

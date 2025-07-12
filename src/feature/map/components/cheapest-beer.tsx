@@ -1,17 +1,18 @@
 import { Button, Card, Divider, Title } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
 
+import { type BeerLocation } from "@common/types/beerLocation";
+
+import { usePriceType } from "@feature/map/price-type-context";
+
 import { CardContent } from "./card-content";
 
-import { usePriceType } from "../contexts/price-type-context";
-import { cheapestLocation } from "../db";
-import { BeerLocation } from "../types/beerLocation";
-
 interface Props {
+	location: BeerLocation;
 	showOnMap: (location: BeerLocation) => void;
 }
 
-export const CheapestBeer = ({ showOnMap }: Props) => {
+export const CheapestBeer = ({ showOnMap, location }: Props) => {
 	const priceType = usePriceType();
 	return (
 		<>
@@ -19,14 +20,14 @@ export const CheapestBeer = ({ showOnMap }: Props) => {
 				Billigaste ölen
 			</Title>
 			<Card padding="sm" radius="sm" withBorder>
-				<CardContent location={cheapestLocation} priceType={priceType} />
+				<CardContent location={location} priceType={priceType} />
 				<Divider variant="dotted" mb="sm" mt="sm" />
 				<Button
 					rightSection={<IconChevronRight size={14} />}
 					fullWidth
 					justify="space-between"
 					onClick={() => {
-						showOnMap(cheapestLocation);
+						showOnMap(location);
 					}}
 				>
 					Visa på karta
