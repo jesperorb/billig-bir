@@ -15,9 +15,15 @@ import {
 	Space,
 	Text,
 } from '@mantine/core';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
-import { DEFAULT_AW_TIME_VALUE, DEFAULT_FORM_VALUES, WEEKDAY_NAMES_AS_LIST } from '@common/constants';
+import { IconPlus, IconTrash, IconMap } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
+import {
+	DEFAULT_AW_TIME_VALUE,
+	DEFAULT_FORM_VALUES,
+	WEEKDAY_NAMES_AS_LIST
+} from '@common/constants';
 import { AWStartAndEndTimesFormData, BeerLocationFormData } from '@common/types/beer-location-form-data';
+import { MapLocationPickerDialog } from './map-location-picker.dialog';
 
 interface Props {
 	defaultValues?: BeerLocationFormData;
@@ -41,6 +47,7 @@ export const BeerLocationForm = ({
 		handleSubmit,
 		reset,
 		watch,
+		setValue,
 	} = useForm<BeerLocationFormData>({
 		defaultValues: defaultValues
 	});
@@ -50,13 +57,17 @@ export const BeerLocationForm = ({
 		keyName: 'fieldId',
 	});
 
+	const [mapOpened, { open: openMap, close: closeMap }] = useDisclosure(false);
+
 	const watchFieldArray = watch("awTimes");
-  const controlledFields = fields.map((field, index) => {
-    return {
-      ...field,
-      ...(watchFieldArray ? watchFieldArray[index] : {})
-    };
-  });
+	const watchLatitude = watch("latitude");
+	const watchLongitude = watch("longitude");
+	const controlledFields = fields.map((field, index) => {
+		return {
+			...field,
+			...(watchFieldArray ? watchFieldArray[index] : {})
+		};
+	});
 
 	const internalOnSubmit = (data: BeerLocationFormData) => {
 		onSubmit(data)
@@ -70,6 +81,11 @@ export const BeerLocationForm = ({
 			...DEFAULT_AW_TIME_VALUE,
 			weekday: weekday,
 		});
+	};
+
+	const handleMapLocationSelect = (latitude: number, longitude: number) => {
+		setValue('latitude', latitude);
+		setValue('longitude', longitude);
 	};
 
 	return (
@@ -90,7 +106,12 @@ export const BeerLocationForm = ({
 							/>
 						)}
 					/>
-					<Group grow>
+					<Box style={{
+						display: 'grid',
+						gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+						gap: 'var(--mantine-spacing-md)',
+						alignItems: 'end'
+					}}>
 						<Controller
 							name="latitude"
 							control={control}
@@ -128,7 +149,16 @@ export const BeerLocationForm = ({
 								/>
 							)}
 						/>
-					</Group>
+						
+						<Button
+							variant="outline"
+							leftSection={<IconMap size={16} />}
+							onClick={openMap}
+							disabled={loading}
+						>
+							Välj position på karta
+						</Button>
+					</Box>
 
 					<Controller
 						name="beerBrand"
@@ -144,7 +174,11 @@ export const BeerLocationForm = ({
 							/>
 						)}
 					/>
-					<Group grow>
+					<Box style={{
+						display: 'grid',
+						gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+						gap: 'var(--mantine-spacing-md)'
+					}}>
 						<Controller
 							name="price"
 							control={control}
@@ -197,8 +231,12 @@ export const BeerLocationForm = ({
 								/>
 							)}
 						/>
-					</Group>
-					<Group grow>
+					</Box>
+					<Box style={{
+						display: 'grid',
+						gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+						gap: 'var(--mantine-spacing-md)'
+					}}>
 						<Controller
 							name="centilitersStandard"
 							control={control}
@@ -232,9 +270,13 @@ export const BeerLocationForm = ({
 								/>
 							)}
 						/>
-					</Group>
+					</Box>
 
-					<Group>
+					<Box style={{
+						display: 'grid',
+						gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+						gap: 'var(--mantine-spacing-md)'
+					}}>
 						<Controller
 							name="outdoorSeating"
 							control={control}
@@ -260,7 +302,7 @@ export const BeerLocationForm = ({
 								/>
 							)}
 						/>
-					</Group>
+					</Box>
 
 					<Controller
 						name="urlMaps"
@@ -387,7 +429,7 @@ export const BeerLocationForm = ({
 											color="red"
 											variant="light"
 											onClick={async () => {
-												if(onRemoveAwTime) {
+												if (onRemoveAwTime) {
 													await onRemoveAwTime(field);
 												}
 												remove(index);
@@ -416,6 +458,13 @@ export const BeerLocationForm = ({
 				</Stack>
 			</form>
 			<Space h="lg" />
+			<MapLocationPickerDialog
+				opened={mapOpened}
+				onClose={closeMap}
+				onConfirm={handleMapLocationSelect}
+				initialLatitude={watchLatitude}
+				initialLongitude={watchLongitude}
+			/>
 		</>
 	);
 };
