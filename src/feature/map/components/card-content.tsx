@@ -6,6 +6,7 @@ import {
 	List,
 	Tooltip,
 	Text,
+	Stack,
 } from "@mantine/core";
 import {
 	IconSun,
@@ -28,23 +29,19 @@ export interface CardContentProps {
 
 export const CardContent = ({ location, priceType }: CardContentProps) => {
 	return (
-		<>
-			<Group justify="space-between">
-				<Text fw={500}>{location.name}</Text>
-				<Badge color="teal">
-					{`${getPriceBySelectedPriceType(priceType)(location)?.toString() ?? "N/A"} kr / ${priceType === "pricePitcher" && location.centilitersPitcher ? location.centilitersPitcher.toString() : "40"} cl`}
+		<Stack gap="sm">
+			<Text fw={500}>{location.name}</Text>
+			<Badge color="teal">
+				{`${getPriceBySelectedPriceType(priceType)(location)?.toString() ?? "N/A"} kr / ${priceType === "pricePitcher" && location.centilitersPitcher ? location.centilitersPitcher.toString() : "40"} cl`}
+			</Badge>
+			<Text c="dimmed">Typ: {location.beerBrand}</Text>
+			{location.centilitersStandard !== 40 && (
+				<Badge color="dark">
+					{`${location.price.toString()} kr / ${location.centilitersStandard.toString()} cl`}
 				</Badge>
-			</Group>
-			<Group justify="space-between">
-				<Text c="dimmed">Typ: {location.beerBrand}</Text>
-				{location.centilitersStandard !== 40 && (
-					<Badge color="dark">
-						{`${location.price.toString()} kr / ${location.centilitersStandard.toString()} cl`}
-					</Badge>
-				)}
-			</Group>
-			<Divider mt="sm" mb="sm" variant="dotted" />
-			<Group gap="xs" mb="sm">
+			)}
+			<Divider />
+			<Group gap="xs">
 				{location.afternoonSun ? (
 					<Tooltip label="Eftermiddagssol">
 						<IconSun
@@ -89,8 +86,8 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 				)}
 			</Group>
 			{location.awTimes && <AwTimesList times={location.awTimes} />}
-			<Divider variant="dotted" />
-			<List mt="sm" mb="sm">
+			<Divider />
+			<List>
 				{location.urlMaps && (
 					<List.Item>
 						<Anchor href={location.urlMaps} target="_blank">
@@ -106,6 +103,6 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 					</List.Item>
 				)}
 			</List>
-		</>
+		</Stack>
 	);
 };

@@ -15,9 +15,9 @@ export const BeerLocationSubmissionDialog = () => {
 		try {
 			await mutation.mutateAsync(data);
 			setShowNotification("success");
+			setOpen(false);
 			setTimeout(() => {
 				setShowNotification(undefined);
-				setOpen(false);
 			}, 2000);
 		} catch (e) {
 			console.error(e);
@@ -69,6 +69,7 @@ export const BeerLocationSubmissionDialog = () => {
 			>
 				<BeerLocationForm
 					loading={mutation.isPending}
+					submitButtonText="Skicka"
 					showClearButton={true}
 					onSubmit={onSubmit}
 				/>

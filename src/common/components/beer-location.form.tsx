@@ -23,6 +23,7 @@ interface Props {
 	defaultValues?: BeerLocationFormData;
 	showClearButton?: boolean;
 	loading: boolean;
+	submitButtonText?: string;
 	onSubmit: (data: BeerLocationFormData) => Promise<void>;
 	onRemoveAwTime?: (awTime: AWStartAndEndTimesFormData) => Promise<void>;
 }
@@ -31,6 +32,7 @@ export const BeerLocationForm = ({
 	defaultValues = DEFAULT_FORM_VALUES,
 	onSubmit,
 	showClearButton = true,
+	submitButtonText,
 	onRemoveAwTime,
 	loading,
 }: Props) => {
@@ -61,9 +63,12 @@ export const BeerLocationForm = ({
 	};
 
 	const addAWTime = async () => {
+		const weekday = fields.length === 0
+			? 0
+			: Math.max(...controlledFields.map(field => field.weekday)) + 1;
 		append({
 			...DEFAULT_AW_TIME_VALUE,
-			weekday: Math.max(...controlledFields.map(field => field.weekday)) + 1,
+			weekday: weekday,
 		});
 	};
 
@@ -401,11 +406,11 @@ export const BeerLocationForm = ({
 					<Group justify="flex-end" mt="lg">
 						{showClearButton &&
 							<Button variant="outline" color="red" onClick={() => reset()} loading={loading}>
-								Rensa
+								Rensa formulär
 							</Button>
 						}
 						<Button type="submit" loading={loading}>
-							Spara
+							{submitButtonText ?? "Spara"}
 						</Button>
 					</Group>
 				</Stack>
