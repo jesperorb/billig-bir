@@ -1,4 +1,4 @@
-import { AppShell, Button, Divider, Group, Title } from "@mantine/core";
+import { AppShell, Button, Group, Title } from "@mantine/core";
 import { beerLocationsBaseQueryKeys, useBeerLocations } from "@feature/map/queries";
 import { IconPencil, IconReload } from "@tabler/icons-react";
 import { useState } from "react";
@@ -37,7 +37,6 @@ export const ViewBeerLocations = () => {
 					Ladda om
 				</Button>
 			</Group>
-			<Divider />
 			<BeerLocationTable
 				data={data || undefined}
 				actionColumn={{
