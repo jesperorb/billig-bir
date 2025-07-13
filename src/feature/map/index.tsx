@@ -16,6 +16,7 @@ import { PriceTypeContext, SetPriceTypeContext } from "@feature/map/price-type-c
 import { CheapestBeer } from "./components/cheapest-beer";
 import { FiltersForm } from "./components/filters-form";
 import MapContainer from "./components/map-container";
+import { MapMarkers } from "./components/map-markers";
 
 interface Props {
 	toggleMenu: () => void;
@@ -83,8 +84,11 @@ const MapPage = ({ toggleMenu }: Props) => {
 						</VisuallyHidden>
 						<MapContainer
 							mapRef={mapRef}
-							beerLocations={filteredBeerLocations}
-						/>
+						>
+							<MapMarkers
+								beerLocations={filteredBeerLocations}
+							/>
+						</MapContainer>
 					</AppShell.Main>
 				</PriceTypeContext>
 			</SetPriceTypeContext>
