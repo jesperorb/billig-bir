@@ -1,4 +1,7 @@
-import { AWStartAndEndTimesFormData, BeerLocationFormData } from "./types/beer-location-form-data";
+import {
+	AWStartAndEndTimesFormData,
+	BeerLocationFormData,
+} from "./types/beer-location-form-data";
 import { getRandomIntInclusive } from "./utils/number";
 
 export const WEEKDAY_NAMES = {
@@ -15,11 +18,14 @@ export const WEEKDAY_NAMES_AS_LIST = Object.entries(WEEKDAY_NAMES).map(
 	([key, value]) => ({ value: key, label: value }),
 );
 
+export const DEFAULT_LATITUDE = 59.3307648940387;
+export const DEFAULT_LONGITUDE = 18.0593531415575;
+
 export const DEFAULT_FORM_VALUES: BeerLocationFormData = {
 	id: getRandomIntInclusive(),
 	name: "",
-	latitude: 59.3307648940387,
-	longitude: 18.0593531415575,
+	latitude: DEFAULT_LATITUDE,
+	longitude: DEFAULT_LONGITUDE,
 	price: 79,
 	pricePitcher: undefined,
 	priceAW: undefined,
