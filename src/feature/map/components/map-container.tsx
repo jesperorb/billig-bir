@@ -2,7 +2,7 @@ import { memo, type Ref } from "react";
 import { HoverCard, Text, Paper, useComputedColorScheme } from "@mantine/core";
 import Map, { type MapRef, Marker } from "react-map-gl/mapbox";
 
-import { type BeerLocation } from "@common/types/beerLocation";
+import { type BeerLocation } from "@common/types/beer-location";
 
 import { getPriceBySelectedPriceType } from "@feature/map/utils";
 import { usePriceType } from "@feature/map/price-type-context";
