@@ -1,3 +1,6 @@
+import { AWStartAndEndTimesFormData, BeerLocationFormData } from "./types/beer-location-form-data";
+import { getRandomIntInclusive } from "./utils/number";
+
 export const WEEKDAY_NAMES = {
 	0: "Måndag",
 	1: "Tisdag",
@@ -11,3 +14,29 @@ export const WEEKDAY_NAMES = {
 export const WEEKDAY_NAMES_AS_LIST = Object.entries(WEEKDAY_NAMES).map(
 	([key, value]) => ({ value: key, label: value }),
 );
+
+export const DEFAULT_FORM_VALUES: BeerLocationFormData = {
+	id: getRandomIntInclusive(),
+	name: "",
+	latitude: 59.3307648940387,
+	longitude: 18.0593531415575,
+	price: 79,
+	pricePitcher: undefined,
+	priceAW: undefined,
+	awTimes: [],
+	outdoorSeating: false,
+	afternoonSun: false,
+	beerBrand: "",
+	centilitersStandard: 40,
+	centilitersPitcher: undefined,
+	urlMaps: "",
+	urlWebsite: "",
+};
+
+export const DEFAULT_AW_TIME_VALUE: AWStartAndEndTimesFormData = {
+	id: getRandomIntInclusive(),
+	startTime: "16:00" as const,
+	endTime: "18:00" as const,
+	weekday: 0,
+	sameTimesAllWeek: false,
+};

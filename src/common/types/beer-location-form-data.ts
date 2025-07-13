@@ -1,4 +1,4 @@
-import type { AWStartAndEndTimes, BeerLocation } from "@common/types/beerLocation";
+import type { AWStartAndEndTimes, BeerLocation } from "@common/types/beer-location";
 
 export interface AWStartAndEndTimesFormData extends AWStartAndEndTimes {
 	fieldId?: string;

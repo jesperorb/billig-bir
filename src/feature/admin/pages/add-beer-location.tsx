@@ -4,13 +4,13 @@ import {
 	Title,
 	Notification,
 } from '@mantine/core';
-import { BeerLocationForm } from '../components/beer-location.form';
 import { useCreateBeerLocation } from '../queries';
 import { useQueryClient } from '@tanstack/react-query';
 import { beerLocationsBaseQueryKeys } from '@feature/map/queries';
-import { BeerLocationFormData } from '../types';
 import { useState } from 'react';
 import { IconCheck } from '@tabler/icons-react';
+import { BeerLocationFormData } from '@common/types/beer-location-form-data';
+import { BeerLocationForm } from '@common/components/beer-location.form';
 
 type NotificationType = "success" | "error";
 

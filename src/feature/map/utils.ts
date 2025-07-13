@@ -1,4 +1,4 @@
-import { type BeerLocation } from "@common/types/beerLocation";
+import { type BeerLocation } from "@common/types/beer-location";
 import { type PriceType } from "@feature/map/filters";
 
 export const getPriceAdjustedFor40cl = (price: number, centiliters: number) =>

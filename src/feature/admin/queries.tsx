@@ -1,30 +1,24 @@
 import { type Database } from "@common/api/types"
 import { type SupabaseClient } from "@supabase/supabase-js"
-import { AWStartAndEndTimesFormData, type BeerLocationFormData } from "./types"
 import { useMutation } from "@tanstack/react-query";
 import { useApiClient } from "@common/api/api-client-context";
-import {
-	awTimeFormDataToSchema,
-	awTimeHasId,
-	awTimeHasNoId,
-	awTimesFormDataToSchema,
-	beerLocationFormDataToSchema,
-	locationAwTimesDataToSchema,
-	removeEmptyStrings
-} from "./utils";
+import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "@common/types/beer-location-form-data";
+import { removeEmptyStrings } from "@common/utils/object";
+import { beerLocationFormDataToSchema } from "@common/utils/beer-location";
+import { awTimeFormDataToSchema, awTimeHasId, awTimeHasNoId, awTimesFormDataToSchema, locationAwTimesDataToSchema } from "@common/utils/aw-time";
 
 const createBeerLocationBaseQueryKeys = {
-	create: "createBeerLocation",
-	update: "updateBeerLocation",
-	delete: "deleteBeerLocation",
+	createBeerLocation: "createBeerLocation",
+	updateBeerLocation: "updateBeerLocation",
+	deleteBeerLocation: "deleteBeerLocation",
 	createAwTime: "createAwTime",
 	deleteAwTime: "deleteAwTime",
 } as const;
 
 const createBeerLocationQueryKeys = {
-	createBeerLocation: [createBeerLocationBaseQueryKeys.create],
-	updateBeerLocation: [createBeerLocationBaseQueryKeys.update],
-	deleteBeerLocation: [createBeerLocationBaseQueryKeys.delete],
+	createBeerLocation: [createBeerLocationBaseQueryKeys.createBeerLocation],
+	updateBeerLocation: [createBeerLocationBaseQueryKeys.updateBeerLocation],
+	deleteBeerLocation: [createBeerLocationBaseQueryKeys.deleteBeerLocation],
 	createAwTime: [createBeerLocationBaseQueryKeys.createAwTime],
 	deleteAwTime: [createBeerLocationBaseQueryKeys.deleteAwTime],
 };

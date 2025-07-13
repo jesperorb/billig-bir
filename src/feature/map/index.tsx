@@ -10,7 +10,7 @@ import { MapRef } from "react-map-gl/mapbox";
 
 import { getCheapestLocation, getStandardAdjustedPrice, priceStepsMarkMax } from "@feature/map/utils";
 import { Filters, PriceType } from "@feature/map/filters";
-import { BeerLocation } from "@common/types/beerLocation";
+import { BeerLocation } from "@common/types/beer-location";
 import { useBeerLocations } from "@feature/map/queries";
 import { PriceTypeContext, SetPriceTypeContext } from "@feature/map/price-type-context";
 import { CheapestBeer } from "./components/cheapest-beer";

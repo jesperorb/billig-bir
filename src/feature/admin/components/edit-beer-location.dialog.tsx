@@ -1,10 +1,10 @@
 import { Modal, Button, Group, Text, Title } from "@mantine/core";
 import { useState } from "react";
-import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "../types"
-import { BeerLocationForm } from "./beer-location.form";
+import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "@common/types/beer-location-form-data"
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteAwTime, useDeleteBeerLocation, useUpdateBeerLocation } from "../queries";
 import { beerLocationsBaseQueryKeys } from "@feature/map/queries";
+import { BeerLocationForm } from "@common/components/beer-location.form";
 
 interface Props {
 	location: BeerLocationFormData | undefined;

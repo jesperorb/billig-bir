@@ -2,7 +2,7 @@ import { ActionIcon, AppShell, Button, Divider, Group, Table, ThemeIcon, Title }
 import { beerLocationsBaseQueryKeys, useBeerLocations } from "@feature/map/queries";
 import { IconCheck, IconPencil, IconReload, IconX } from "@tabler/icons-react";
 import { useState } from "react";
-import { BeerLocation } from "@common/types/beerLocation";
+import { BeerLocation } from "@common/types/beer-location";
 import { useDisclosure } from "@mantine/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog";

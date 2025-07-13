@@ -3,7 +3,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 import { Database } from "@common/api/types";
 import { useApiClient } from "@common/api/api-client-context";
-import { BeerLocation } from "@common/types/beerLocation";
+import { BeerLocation } from "@common/types/beer-location";
 
 export const beerLocationsBaseQueryKeys = {
 	get: "getBeerLocations",

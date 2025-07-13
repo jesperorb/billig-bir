@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminViewBeerLocationsRouteImport } from './routes/admin/view-beer-locations'
+import { Route as AdminViewBeerLocationSubmissionsRouteImport } from './routes/admin/view-beer-location-submissions'
 import { Route as AdminAddBeerLocationRouteImport } from './routes/admin/add-beer-location'
 
 const LoginRoute = LoginRouteImport.update({
@@ -35,6 +36,12 @@ const AdminViewBeerLocationsRoute = AdminViewBeerLocationsRouteImport.update({
   path: '/view-beer-locations',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminViewBeerLocationSubmissionsRoute =
+  AdminViewBeerLocationSubmissionsRouteImport.update({
+    id: '/view-beer-location-submissions',
+    path: '/view-beer-location-submissions',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminAddBeerLocationRoute = AdminAddBeerLocationRouteImport.update({
   id: '/add-beer-location',
   path: '/add-beer-location',
@@ -46,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
+  '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +61,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
+  '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
 }
 export interface FileRoutesById {
@@ -61,6 +70,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
+  '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
 }
 export interface FileRouteTypes {
@@ -70,6 +80,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/admin/add-beer-location'
+    | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -77,6 +88,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/admin/add-beer-location'
+    | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
   id:
     | '__root__'
@@ -84,6 +96,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/admin/add-beer-location'
+    | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
   fileRoutesById: FileRoutesById
 }
@@ -123,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminViewBeerLocationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/view-beer-location-submissions': {
+      id: '/admin/view-beer-location-submissions'
+      path: '/view-beer-location-submissions'
+      fullPath: '/admin/view-beer-location-submissions'
+      preLoaderRoute: typeof AdminViewBeerLocationSubmissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/add-beer-location': {
       id: '/admin/add-beer-location'
       path: '/add-beer-location'
@@ -135,11 +155,13 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAddBeerLocationRoute: typeof AdminAddBeerLocationRoute
+  AdminViewBeerLocationSubmissionsRoute: typeof AdminViewBeerLocationSubmissionsRoute
   AdminViewBeerLocationsRoute: typeof AdminViewBeerLocationsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAddBeerLocationRoute: AdminAddBeerLocationRoute,
+  AdminViewBeerLocationSubmissionsRoute: AdminViewBeerLocationSubmissionsRoute,
   AdminViewBeerLocationsRoute: AdminViewBeerLocationsRoute,
 }
 
