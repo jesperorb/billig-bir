@@ -6,7 +6,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconBrandGithub, IconExternalLink, IconQuestionMark, IconSettings } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
 
-export const InformationModal = () => {
+const InformationModal = () => {
 	const [modalOpened, { open, close }] = useDisclosure(false);
 	const navigate = useNavigate();
 	const session = useSession();
@@ -59,3 +59,5 @@ export const InformationModal = () => {
 		</>
 	);
 };
+
+export default InformationModal;
