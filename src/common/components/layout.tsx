@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from "react";
+import { lazy, type PropsWithChildren } from "react";
 import {
 	AppShell,
 	Burger,
@@ -9,8 +9,8 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 
 import { ThemeToggle } from "@common/theme/ThemeToggle";
-import { InformationModal } from "@common/components/information-modal";
 import { useNavigate } from "@tanstack/react-router";
+const InformationModal = lazy(() => import("@common/components/information-modal"));
 
 const AppWrapper = ({ children }: PropsWithChildren) => {
 	const [menuOpen, { toggle }] = useDisclosure();
