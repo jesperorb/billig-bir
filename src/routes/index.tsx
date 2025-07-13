@@ -6,5 +6,5 @@ export const Route = createFileRoute('/')({
 })
 
 function Index() {
-  return <Map toggleMenu={() => {}} />
+  return <Map />
 }

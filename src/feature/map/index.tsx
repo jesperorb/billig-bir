@@ -17,13 +17,11 @@ import { CheapestBeer } from "./components/cheapest-beer";
 import { FiltersForm } from "./components/filters-form";
 import MapContainer from "./components/map-container";
 import { MapMarkers } from "./components/map-markers";
+import { useToggleIsMenuOpen } from "@common/context/menu-context";
 
-interface Props {
-	toggleMenu: () => void;
-}
-
-const MapPage = ({ toggleMenu }: Props) => {
+const MapPage = () => {
 	const mapRef = useRef<MapRef>(null);
+	const toggleMenu = useToggleIsMenuOpen();
 	const [filters, setFilters] = useState<Filters>({
 		outdoorSeating: false,
 		afternoonSun: false,
