@@ -138,6 +138,10 @@ export const getBeerLocationSubmissions = async (apiClient: SupabaseClient<Datab
 				centilitersPitcher:centiliters_pitcher,
 				beerBrand:beer_brand,
 				updatedAt: updated_at,
+				districts:location_district_submission(
+					id,
+					name
+				),
 				awTimes:aw_time_submission (
 					weekday,
 					startTime:start_time,

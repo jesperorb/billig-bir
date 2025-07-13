@@ -1,3 +1,5 @@
+import type { District } from "./district";
+
 export interface AWStartAndEndTimes {
 	/**
 	 * @format HH:mm:ss
@@ -29,4 +31,5 @@ export interface BeerLocation {
 	urlMaps?: string;
 	urlWebsite?: string;
 	updatedAt?: string;
+	districts?: District[];
 }

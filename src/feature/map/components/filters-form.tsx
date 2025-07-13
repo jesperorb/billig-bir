@@ -13,10 +13,12 @@ import {
 import { FilterKey, Filters, PriceType } from "@feature/map/filters";
 import { priceStepsMarkMax, priceStepsMarks } from "@feature/map/utils";
 import { useSetPriceType, usePriceType } from "@feature/map/price-type-context";
+import { District } from "@common/types/district";
 
 
 interface Props {
 	filters: Filters
+	districts: District[];
 	setFilters: (filters: Filters) => void;
 }
 

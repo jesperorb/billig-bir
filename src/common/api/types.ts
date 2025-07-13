@@ -68,6 +68,21 @@ export type Database = {
         }
         Relationships: []
       }
+      district: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
       location: {
         Row: {
           afternoon_sun: boolean | null
@@ -181,6 +196,66 @@ export type Database = {
           },
           {
             foreignKeyName: "location_aw_time_submission_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "location_submission"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      location_district: {
+        Row: {
+          district_id: number
+          location_id: number
+        }
+        Insert: {
+          district_id: number
+          location_id: number
+        }
+        Update: {
+          district_id?: number
+          location_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_district_district_id_fkey"
+            columns: ["district_id"]
+            isOneToOne: false
+            referencedRelation: "district"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "location_district_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "location"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      location_district_submission: {
+        Row: {
+          district_id: number
+          location_id: number
+        }
+        Insert: {
+          district_id: number
+          location_id: number
+        }
+        Update: {
+          district_id?: number
+          location_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_district_submission_district_id_fkey"
+            columns: ["district_id"]
+            isOneToOne: false
+            referencedRelation: "district"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "location_district_submission_location_id_fkey"
             columns: ["location_id"]
             isOneToOne: false
             referencedRelation: "location_submission"

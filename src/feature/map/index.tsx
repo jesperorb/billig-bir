@@ -18,6 +18,7 @@ import { FiltersForm } from "./components/filters-form";
 import MapContainer from "./components/map-container";
 import { MapMarkers } from "./components/map-markers";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";
+import { useDistricts } from "@common/api/queries";
 
 const MapPage = () => {
 	const mapRef = useRef<MapRef>(null);
@@ -26,9 +27,11 @@ const MapPage = () => {
 		outdoorSeating: false,
 		afternoonSun: false,
 		price: priceStepsMarkMax,
+		districts: [],
 	});
 	const [priceType, setPriceType] = useState<PriceType>("price");
 	const { data } = useBeerLocations();
+	const { data: districts } = useDistricts();
 
 	const filteredBeerLocations = useMemo(
 		() =>
@@ -70,7 +73,7 @@ const MapPage = () => {
 					<AppShell.Navbar>
 						<ScrollArea scrollbars="y">
 							<Stack justify="space-around" h="100%" p="md">
-								<FiltersForm filters={filters} setFilters={setFilters} />
+								<FiltersForm filters={filters} setFilters={setFilters} districts={districts ?? []} />
 								{cheapestBeer && <CheapestBeer location={cheapestBeer} showOnMap={showOnMap} />}
 							</Stack>
 						</ScrollArea>
