@@ -7,7 +7,8 @@ import {
 	VisuallyHidden,
 	Text,
 	Checkbox,
-	Slider
+	Slider,
+	MultiSelect
 } from "@mantine/core";
 
 import { FilterKey, Filters, PriceType } from "@feature/map/filters";
@@ -22,7 +23,7 @@ interface Props {
 	setFilters: (filters: Filters) => void;
 }
 
-export const FiltersForm = ({ filters, setFilters }: Props) => {
+export const FiltersForm = ({ filters, setFilters, districts }: Props) => {
 	const priceType = usePriceType();
 	const setPriceType = useSetPriceType()
 	const setFilterProperty = (key: FilterKey, value: Filters[FilterKey]) => {
@@ -81,6 +82,23 @@ export const FiltersForm = ({ filters, setFilters }: Props) => {
 						event.currentTarget.checked,
 					);
 				}}
+			/>
+			<MultiSelect
+				label="Stadsdelar"
+				placeholder="Välj stadsdelar"
+				data={districts.map(district => ({
+					value: district.id.toString(),
+					label: district.name
+				}))}
+				value={filters.districts.map(d => d.id.toString())}
+				onChange={(selectedIds) => {
+					const selectedDistricts = districts.filter(district =>
+						selectedIds.includes(district.id.toString())
+					);
+					setFilterProperty("districts", selectedDistricts);
+				}}
+				searchable
+				clearable
 			/>
 		</Stack>
 	)

@@ -30,6 +30,9 @@ export const createBeerLocation = (apiClient: SupabaseClient<Database>) =>
 			.insert(beerLocationFormDataToSchema(removeEmptyStrings(values)))
 			.select()
 			.single();
+		if (values.districtId && locationData?.id) {
+			await createLocationDistrict(apiClient)(values.districtId, locationData?.id);
+		}
 		if (values.awTimes?.length && locationData) {
 			const { data: awTimesData } = await apiClient
 				.from("aw_time")
@@ -52,6 +55,10 @@ export const updateBeerLocation = (apiClient: SupabaseClient<Database>) =>
 			.from("location")
 			.update(beerLocationFormDataToSchema(removeEmptyStrings(values)))
 			.eq('id', values.id)
+		console.log(values)
+		if (values.districtId && values.id) {
+			await createLocationDistrict(apiClient)(values.districtId, values.id)
+		}
 		if (!values.awTimes?.length) return;
 		const times = awTimesFormDataToSchema(values.awTimes);
 		const toUpdate = times.filter(awTimeHasId);
@@ -116,6 +123,14 @@ export const createAwTime = (apiClient: SupabaseClient<Database>) =>
 				.from("location_aw_time")
 				.insert({ location_id: locationId, aw_time_id: response.data.id });
 		}
+	}
+
+export const createLocationDistrict = (apiClient: SupabaseClient<Database>) =>
+	async (districtId: number, locationId: number) => {
+		await apiClient
+			.from("location_district")
+			.upsert({ district_id: districtId, location_id: locationId, })
+			.select();
 	}
 
 export const useCreateBeerLocation = () => {

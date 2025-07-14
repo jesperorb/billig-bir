@@ -159,7 +159,7 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 						</Title>
 						<Stack gap="sm">
 							<Group justify="space-between" align="center">
-								<Text size="sm" c="dimmed">Standardpris</Text>
+								<Text size="sm" c="dimmed">Pris</Text>
 								<Text fw={500}>
 									{submission.price && submission.centilitersStandard
 										? `${submission.price} kr / ${submission.centilitersStandard} cl`

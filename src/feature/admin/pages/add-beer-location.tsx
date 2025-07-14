@@ -11,12 +11,14 @@ import { useState } from 'react';
 import { IconCheck } from '@tabler/icons-react';
 import { BeerLocationFormData } from '@common/types/beer-location-form-data';
 import { BeerLocationForm } from '@common/components/beer-location.form';
+import { useDistricts } from '@common/api/queries';
 
 type NotificationType = "success" | "error";
 
 export const AddBeerLocation = () => {
 	const mutation = useCreateBeerLocation();
 	const queryClient = useQueryClient();
+	const { data: districts } = useDistricts();
 	const [showNotification, setShowNotification] = useState<NotificationType | undefined>(undefined);
 
 	const invalidateBeerLocations = () => {
@@ -66,6 +68,7 @@ export const AddBeerLocation = () => {
 				<BeerLocationForm
 					onSubmit={onSubmit}
 					loading={false}
+					districts={districts ?? undefined}
 				/>
 			</Container>
 		</AppShell.Main>

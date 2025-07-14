@@ -57,10 +57,13 @@ export const approveBeerLocationSubmission = (apiClient: SupabaseClient<Database
 		if (values.awTimes?.length && locationData) {
 			for await (const time of values.awTimes) {
 				await createAwTime(apiClient)({
-					value: {...time, id: getRandomIntInclusive() },
+					value: { ...time, id: getRandomIntInclusive() },
 					locationId: locationData.id
 				});
 			}
+		}
+		if (values.districtId && locationData?.id) {
+			await createLocationDistrictSubmission(apiClient)(values.districtId, locationData?.id);
 		}
 	}
 
@@ -75,6 +78,10 @@ export const deleteBeerLocationSubmission = (apiClient: SupabaseClient<Database>
 			.from("location_submission")
 			.delete()
 			.eq('id', values.id);
+		await apiClient
+			.from("location_aw_time_submission")
+			.delete()
+			.eq("location_id", values.id)
 	}
 
 export const deleteAwTimeSubmission = (apiClient: SupabaseClient<Database>) =>
@@ -116,6 +123,13 @@ export const createAwTime = (apiClient: SupabaseClient<Database>) =>
 				.from("location_aw_time")
 				.insert({ location_id: locationId, aw_time_id: response.data.id });
 		}
+	}
+
+export const createLocationDistrictSubmission = (apiClient: SupabaseClient<Database>) =>
+	async (districtId: number, locationId: number) => {
+		await apiClient
+			.from("location_district_submission")
+			.insert({ district_id: districtId, location_id: locationId, });
 	}
 
 export const getBeerLocationSubmissions = async (apiClient: SupabaseClient<Database>) => {

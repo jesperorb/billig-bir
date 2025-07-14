@@ -44,12 +44,22 @@ const MapPage = () => {
 							? getStandardAdjustedPrice(location) <= value
 							: hasValidSelectedPriceType;
 					}
+					if (key === "districts" && Array.isArray(value)) {
+						// If no districts selected or all districts selected, show all locations
+						if (value.length === 0 || value.length === districts?.length) {
+							return true;
+						}
+						// Check if location has any of the selected districts
+						return location.districts?.some(locationDistrict => 
+							value.some(selectedDistrict => selectedDistrict.id === locationDistrict.id)
+						) ?? false;
+					}
 					return value === false
 						? true
 						: value === location[key as keyof BeerLocation];
 				}),
 			) ?? [],
-		[data, filters, priceType],
+		[data, filters, priceType, districts],
 	);
 
 	const cheapestBeer = useMemo(() =>
