@@ -31,8 +31,8 @@ import {
 	useApproveBeerLocationSubmission,
 	createBeerLocationSubmissionQueryKeys
 } from "./queries";
-import { beerLocationsBaseQueryKeys } from "@feature/map/queries";
 import { WEEKDAY_NAMES } from "@common/constants";
+import { commonBaseQueryKeys } from "@common/api/queries";
 
 interface Props {
 	submission: BeerLocation | undefined;
@@ -55,7 +55,7 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 			queryKey: createBeerLocationSubmissionQueryKeys.getBeerLocationSubmissions
 		});
 		queryClient.invalidateQueries({
-			queryKey: [beerLocationsBaseQueryKeys.get]
+			queryKey: [commonBaseQueryKeys.getBeerLocations]
 		});
 	};
 
@@ -159,7 +159,7 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 						</Title>
 						<Stack gap="sm">
 							<Group justify="space-between" align="center">
-								<Text size="sm" c="dimmed">Standardpris</Text>
+								<Text size="sm" c="dimmed">Pris</Text>
 								<Text fw={500}>
 									{submission.price && submission.centilitersStandard
 										? `${submission.price} kr / ${submission.centilitersStandard} cl`

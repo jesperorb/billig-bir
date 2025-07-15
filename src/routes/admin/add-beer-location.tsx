@@ -1,8 +1,8 @@
-import { AddBeerLocation } from '@feature/admin/pages/add-beer-location'
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import AddBeerLocation from '@feature/admin/pages/add-beer-location'
 
 export const Route = createFileRoute('/admin/add-beer-location')({
-	component: AddBeerLocationPage,
+	component: AddBeerLocation,
 	beforeLoad: ({ context, location }) => {
 		if (!context.session) {
 			throw redirect({
@@ -14,7 +14,3 @@ export const Route = createFileRoute('/admin/add-beer-location')({
 		}
 	},
 })
-
-function AddBeerLocationPage() {
-	return <AddBeerLocation />
-}

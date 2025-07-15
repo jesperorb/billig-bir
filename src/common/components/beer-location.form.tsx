@@ -23,6 +23,7 @@ import {
 	WEEKDAY_NAMES_AS_LIST
 } from '@common/constants';
 import { AWStartAndEndTimesFormData, BeerLocationFormData } from '@common/types/beer-location-form-data';
+import { District } from '@common/types/district';
 import { MapLocationPickerDialog } from './map-location-picker.dialog';
 
 interface Props {
@@ -30,6 +31,7 @@ interface Props {
 	showClearButton?: boolean;
 	loading: boolean;
 	submitButtonText?: string;
+	districts: District[] | undefined;
 	onSubmit: (data: BeerLocationFormData) => Promise<void>;
 	onRemoveAwTime?: (awTime: AWStartAndEndTimesFormData) => Promise<void>;
 }
@@ -41,6 +43,7 @@ export const BeerLocationForm = ({
 	submitButtonText,
 	onRemoveAwTime,
 	loading,
+	districts = [],
 }: Props) => {
 	const {
 		control,
@@ -106,59 +109,6 @@ export const BeerLocationForm = ({
 							/>
 						)}
 					/>
-					<Box style={{
-						display: 'grid',
-						gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-						gap: 'var(--mantine-spacing-md)',
-						alignItems: 'end'
-					}}>
-						<Controller
-							name="latitude"
-							control={control}
-							rules={{
-								required: 'Fyll i latitude',
-								min: { value: -90, message: 'Latitud måste vara mellan -90 och 90' },
-								max: { value: 90, message: 'Latitud måste vara mellan -90 och 90' }
-							}}
-							render={({ field, fieldState }) => (
-								<NumberInput
-									{...field}
-									label="Latitud"
-									placeholder="Fyll i latitud med ett värde mellan -90 och 90"
-									error={fieldState.error?.message}
-									withAsterisk
-								/>
-							)}
-						/>
-
-						<Controller
-							name="longitude"
-							control={control}
-							rules={{
-								required: 'Fyll i longitude med ett värde mellan -180 och 180',
-								min: { value: -180, message: 'Longitud måste vara mellan -180 och 180' },
-								max: { value: 180, message: 'Longitud måste vara mellan -180 och 180' }
-							}}
-							render={({ field, fieldState }) => (
-								<NumberInput
-									{...field}
-									label="Longitud"
-									placeholder="Fyll i longitud"
-									error={fieldState.error?.message}
-									withAsterisk
-								/>
-							)}
-						/>
-						
-						<Button
-							variant="outline"
-							leftSection={<IconMap size={16} />}
-							onClick={openMap}
-							disabled={loading}
-						>
-							Välj position på karta
-						</Button>
-					</Box>
 
 					<Controller
 						name="beerBrand"
@@ -183,14 +133,14 @@ export const BeerLocationForm = ({
 							name="price"
 							control={control}
 							rules={{
-								required: 'Fyll i standardpris',
-								min: { value: 0, message: 'Standardpriset måste vara över 0' }
+								required: 'Fyll i pris',
+								min: { value: 0, message: 'Priset måste vara över 0' }
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
 									{...field}
-									label="Standardpris (SEK)"
-									placeholder="Fyll i standardpris"
+									label="Pris (SEK)"
+									placeholder="Fyll i pris"
 									error={fieldState.error?.message}
 									decimalScale={0}
 									withAsterisk
@@ -241,14 +191,14 @@ export const BeerLocationForm = ({
 							name="centilitersStandard"
 							control={control}
 							rules={{
-								required: 'Fyll i standardvolym',
+								required: 'Fyll i volym',
 								min: { value: 1, message: 'Volymen måste vara över 0' }
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
 									{...field}
-									label="Standardvolym (cl)"
-									placeholder="Fyll i standardvolym"
+									label="Volym (cl)"
+									placeholder="Fyll i volym"
 									error={fieldState.error?.message}
 									withAsterisk
 								/>
@@ -303,6 +253,101 @@ export const BeerLocationForm = ({
 							)}
 						/>
 					</Box>
+
+					<Box style={{
+						display: 'grid',
+						gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+						gap: 'var(--mantine-spacing-md)',
+						alignItems: 'end'
+					}}>
+						<Controller
+							name="latitude"
+							control={control}
+							rules={{
+								required: 'Fyll i latitude',
+								min: { value: -90, message: 'Latitud måste vara mellan -90 och 90' },
+								max: { value: 90, message: 'Latitud måste vara mellan -90 och 90' }
+							}}
+							render={({ field, fieldState }) => (
+								<NumberInput
+									{...field}
+									label="Latitud"
+									placeholder="Fyll i latitud med ett värde mellan -90 och 90"
+									error={fieldState.error?.message}
+									withAsterisk
+								/>
+							)}
+						/>
+
+						<Controller
+							name="longitude"
+							control={control}
+							rules={{
+								required: 'Fyll i longitude med ett värde mellan -180 och 180',
+								min: { value: -180, message: 'Longitud måste vara mellan -180 och 180' },
+								max: { value: 180, message: 'Longitud måste vara mellan -180 och 180' }
+							}}
+							render={({ field, fieldState }) => (
+								<NumberInput
+									{...field}
+									label="Longitud"
+									placeholder="Fyll i longitud"
+									error={fieldState.error?.message}
+									withAsterisk
+								/>
+							)}
+						/>
+
+						<Button
+							variant="outline"
+							leftSection={<IconMap size={16} />}
+							onClick={openMap}
+							disabled={loading}
+						>
+							Välj position på karta
+						</Button>
+					</Box>
+
+					{districts.length > 0 && (
+							<Controller
+								name="districtId"
+								control={control}
+								render={({ field, fieldState }) => (
+									<Select
+										{...field}
+										value={field.value?.toString()}
+										defaultValue={defaultValues.districts?.[0]?.id.toString()}
+										onChange={(value) => field.onChange(value ? parseInt(value) : undefined)}
+										label="Stadsdel"
+										placeholder="Välj stadsdel"
+										data={[
+											{
+												group: "Innanför tullarna",
+												items: districts
+													.filter(district => district.insideTolls)
+													.map(district => ({
+														value: district.id.toString(),
+														label: district.name
+													}))
+											},
+											{
+												group: "Utanför tullarna",
+												items: districts
+													.filter(district => !district.insideTolls)
+													.map(district => ({
+														value: district.id.toString(),
+														label: district.name
+													}))
+											}
+										]}
+										error={fieldState.error?.message}
+										searchable
+										clearable
+									/>
+								)}
+							/>
+						)
+					}
 
 					<Controller
 						name="urlMaps"

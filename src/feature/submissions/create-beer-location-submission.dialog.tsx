@@ -5,10 +5,12 @@ import { useCreateBeerLocationSubmission } from "./queries";
 import { BeerLocationForm } from "@common/components/beer-location.form";
 import type { BeerLocationFormData } from "@common/types/beer-location-form-data";
 import type { NotificationType } from "@common/types/common";
+import { useDistricts } from "@common/api/queries";
 
 export const BeerLocationSubmissionDialog = () => {
 	const [open, setOpen] = useState(false);
 	const mutation = useCreateBeerLocationSubmission();
+	const { data: districts} = useDistricts();
 	const [showNotification, setShowNotification] = useState<NotificationType | undefined>(undefined);
 
 	const onSubmit = async (data: BeerLocationFormData) => {
@@ -72,6 +74,7 @@ export const BeerLocationSubmissionDialog = () => {
 					submitButtonText="Skicka"
 					showClearButton={true}
 					onSubmit={onSubmit}
+					districts={districts ?? undefined}
 				/>
 			</Modal>
 		</>

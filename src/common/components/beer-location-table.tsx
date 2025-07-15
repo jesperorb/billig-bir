@@ -123,6 +123,13 @@ export const BeerLocationTable = ({ data, actionColumn }: BeerLocationTableProps
 						: <ThemeIcon color="red" size="xs"><IconX /></ThemeIcon>
 				),
 			}),
+			columnHelper.display({
+				id: 'districts',
+				header: 'Stadsdel',
+				cell: ({ row }) => (
+					row.original.districts?.map(district => district.name).join(', ') || '-'
+				),
+			}),
 			columnHelper.accessor('latitude', {
 				header: 'Latitude',
 				enableSorting: false,
@@ -172,7 +179,7 @@ export const BeerLocationTable = ({ data, actionColumn }: BeerLocationTableProps
 
 	return (
 		<Stack gap="md">
-			<Group justify="space-between" align="flex-end" px="md">
+			<Group justify="space-between" align="flex-end" px="sm">
 				<TextInput
 					placeholder="Sök efter namn"
 					leftSection={<IconSearch size={16} />}

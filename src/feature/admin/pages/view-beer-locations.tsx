@@ -1,5 +1,4 @@
 import { AppShell, Button, Group, Title } from "@mantine/core";
-import { beerLocationsBaseQueryKeys, useBeerLocations } from "@feature/map/queries";
 import { IconPencil, IconReload } from "@tabler/icons-react";
 import { useState } from "react";
 import { BeerLocation } from "@common/types/beer-location";
@@ -7,8 +6,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog";
 import { BeerLocationTable } from "@common/components/beer-location-table";
+import { commonBaseQueryKeys, useBeerLocations } from "@common/api/queries";
 
-export const ViewBeerLocations = () => {
+const ViewBeerLocations = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocations();
 	const [modalOpened, { open, close }] = useDisclosure(false);
@@ -22,7 +22,7 @@ export const ViewBeerLocations = () => {
 	return (
 		<AppShell.Main>
 			<Group justify="space-between" p="sm">
-				<Title order={2} p="md">
+				<Title order={2}>
 					Platser
 				</Title>
 				<Button
@@ -30,7 +30,7 @@ export const ViewBeerLocations = () => {
 					rightSection={<IconReload />}
 					onClick={() => {
 						queryClient.invalidateQueries({
-							queryKey: [beerLocationsBaseQueryKeys.get]
+							queryKey: [commonBaseQueryKeys.getBeerLocations]
 						})
 					}}
 				>
@@ -55,3 +55,5 @@ export const ViewBeerLocations = () => {
 		</AppShell.Main>
 	);
 };
+
+export default ViewBeerLocations;

@@ -1,10 +1,6 @@
-import { ViewBeerLocations } from '@feature/admin/pages/view-beer-locations'
 import { createFileRoute } from '@tanstack/react-router'
+import ViewBeerLocations from '@feature/admin/pages/view-beer-locations'
 
 export const Route = createFileRoute('/admin/view-beer-locations')({
-  component: ViewBeerLocationsPage,
+	component: ViewBeerLocations,
 })
-
-function ViewBeerLocationsPage() {
-  return <ViewBeerLocations />
-}

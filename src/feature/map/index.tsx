@@ -11,24 +11,26 @@ import { MapRef } from "react-map-gl/mapbox";
 import { getCheapestLocation, getStandardAdjustedPrice, priceStepsMarkMax } from "@feature/map/utils";
 import { Filters, PriceType } from "@feature/map/filters";
 import { BeerLocation } from "@common/types/beer-location";
-import { useBeerLocations } from "@feature/map/queries";
 import { PriceTypeContext, SetPriceTypeContext } from "@feature/map/price-type-context";
 import { CheapestBeer } from "./components/cheapest-beer";
 import { FiltersForm } from "./components/filters-form";
 import MapContainer from "./components/map-container";
 import { MapMarkers } from "./components/map-markers";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";
+import { useBeerLocations, useDistricts } from "@common/api/queries";
 
-const MapPage = () => {
+const Map = () => {
 	const mapRef = useRef<MapRef>(null);
 	const toggleMenu = useToggleIsMenuOpen();
 	const [filters, setFilters] = useState<Filters>({
 		outdoorSeating: false,
 		afternoonSun: false,
 		price: priceStepsMarkMax,
+		districts: [],
 	});
 	const [priceType, setPriceType] = useState<PriceType>("price");
 	const { data } = useBeerLocations();
+	const { data: districts } = useDistricts();
 
 	const filteredBeerLocations = useMemo(
 		() =>
@@ -41,12 +43,22 @@ const MapPage = () => {
 							? getStandardAdjustedPrice(location) <= value
 							: hasValidSelectedPriceType;
 					}
+					if (key === "districts" && Array.isArray(value)) {
+						// If no districts selected or all districts selected, show all locations
+						if (value.length === 0 || value.length === districts?.length) {
+							return true;
+						}
+						// Check if location has any of the selected districts
+						return location.districts?.some(locationDistrict => 
+							value.some(selectedDistrict => selectedDistrict.id === locationDistrict.id)
+						) ?? false;
+					}
 					return value === false
 						? true
 						: value === location[key as keyof BeerLocation];
 				}),
 			) ?? [],
-		[data, filters, priceType],
+		[data, filters, priceType, districts],
 	);
 
 	const cheapestBeer = useMemo(() =>
@@ -70,7 +82,7 @@ const MapPage = () => {
 					<AppShell.Navbar>
 						<ScrollArea scrollbars="y">
 							<Stack justify="space-around" h="100%" p="md">
-								<FiltersForm filters={filters} setFilters={setFilters} />
+								<FiltersForm filters={filters} setFilters={setFilters} districts={districts ?? []} />
 								{cheapestBeer && <CheapestBeer location={cheapestBeer} showOnMap={showOnMap} />}
 							</Stack>
 						</ScrollArea>
@@ -95,4 +107,4 @@ const MapPage = () => {
 	);
 };
 
-export default MapPage;
+export default Map;
