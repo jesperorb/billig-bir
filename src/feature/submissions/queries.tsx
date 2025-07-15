@@ -13,6 +13,7 @@ import {
 } from "@common/utils/aw-time";
 import { BeerLocation } from "@common/types/beer-location";
 import { getRandomIntInclusive } from "@common/utils/number";
+import { beerLocationsSelectQuery } from "@common/api/queries";
 
 const createBeerLocationSubmissionBaseQueryKeys = {
 	getBeerLocationSubmissions: "getBeerLocationSubmissions",
@@ -37,6 +38,9 @@ export const createBeerLocationSubmission = (apiClient: SupabaseClient<Database>
 			.insert(beerLocationFormDataToSchema(removeEmptyStrings(values)))
 			.select()
 			.single();
+		if(values.districtId && locationData) {
+			await createLocationDistrictSubmission(apiClient)(values.districtId, locationData.id);
+		}
 		if (values.awTimes?.length && locationData) {
 			for await (const time of values.awTimes) {
 				await createAwTimeSubmission(apiClient)({
@@ -57,10 +61,13 @@ export const approveBeerLocationSubmission = (apiClient: SupabaseClient<Database
 		if (values.awTimes?.length && locationData) {
 			for await (const time of values.awTimes) {
 				await createAwTime(apiClient)({
-					value: {...time, id: getRandomIntInclusive() },
+					value: { ...time, id: getRandomIntInclusive() },
 					locationId: locationData.id
 				});
 			}
+		}
+		if (values.districtId && locationData?.id) {
+			await createLocationDistrict(apiClient)(values.districtId, locationData?.id);
 		}
 	}
 
@@ -70,6 +77,9 @@ export const deleteBeerLocationSubmission = (apiClient: SupabaseClient<Database>
 			for await (const time of values.awTimes) {
 				await deleteAwTimeSubmission(apiClient)(time);
 			}
+		}
+		if(values.districts?.length) {
+			await deleteLocationDistrictSubmission(apiClient)(values.id);
 		}
 		await apiClient
 			.from("location_submission")
@@ -118,35 +128,32 @@ export const createAwTime = (apiClient: SupabaseClient<Database>) =>
 		}
 	}
 
+export const createLocationDistrictSubmission = (apiClient: SupabaseClient<Database>) =>
+	async (districtId: number, locationId: number) => {
+		await apiClient
+			.from("location_district_submission")
+			.insert({ district_id: districtId, location_id: locationId });
+	}
+
+export const createLocationDistrict = (apiClient: SupabaseClient<Database>) =>
+	async (districtId: number, locationId: number) => {
+		await apiClient
+			.from("location_district")
+			.insert({ district_id: districtId, location_id: locationId });
+	}
+
+export const deleteLocationDistrictSubmission = (apiClient: SupabaseClient<Database>) =>
+	async (locationId: number) => {
+		await apiClient
+			.from("location_district_submission")
+			.delete()
+			.eq("location_id", locationId)
+	}
+
 export const getBeerLocationSubmissions = async (apiClient: SupabaseClient<Database>) => {
 	return apiClient
 		.from("location_submission")
-		.select(
-			`
-				id,
-				name,
-				latitude,
-				longitude,
-				outdoorSeating:outdoor_seating,
-				afternoonSun:afternoon_sun,
-				urlMaps:url_maps,
-				urlWebsite:url_website,
-				price:price_standard,
-				priceAW:price_aw,
-				pricePitcher:price_pitcher,
-				centilitersStandard:centiliters_standard,
-				centilitersPitcher:centiliters_pitcher,
-				beerBrand:beer_brand,
-				updatedAt: updated_at,
-				awTimes:aw_time_submission (
-					weekday,
-					startTime:start_time,
-					endTime:end_time,
-					sameTimesAllWeek:same_times_all_week,
-					id
-				)
-			`,
-		)
+		.select(beerLocationsSelectQuery)
 		.order("name")
 		.overrideTypes<BeerLocation[]>()
 };
@@ -159,7 +166,6 @@ export const useBeerLocationSubmissions = () => {
 		staleTime: 60 * 60 * 5,
 	});
 };
-
 
 export const useCreateBeerLocationSubmission = () => {
 	const apiClient = useApiClient();

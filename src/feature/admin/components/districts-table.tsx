@@ -1,7 +1,7 @@
-import { ActionIcon, Table, ThemeIcon, Group, Menu, Button, Checkbox, Stack, TextInput } from "@mantine/core";
-import { IconCheck, IconX, IconChevronUp, IconChevronDown, IconColumns, IconSearch } from "@tabler/icons-react";
+import { ActionIcon, Table, Group, Menu, Button, Checkbox, Stack, TextInput, ThemeIcon } from "@mantine/core";
+import { IconChevronUp, IconChevronDown, IconColumns, IconSearch, IconCheck, IconX } from "@tabler/icons-react";
 import { useMemo, useState, ReactNode, useEffect } from "react";
-import type { BeerLocation } from "@common/types/beer-location";
+import type { District } from "@common/types/district";
 import { createLocalStorageManager } from "@common/utils/local-storage";
 import {
 	createColumnHelper,
@@ -14,21 +14,21 @@ import {
 	type VisibilityState,
 } from '@tanstack/react-table';
 
-interface BeerLocationTableProps {
-	data: BeerLocation[] | undefined;
+interface DistrictsTableProps {
+	data: District[] | undefined;
 	actionColumn: {
 		header: string;
 		icon: ReactNode;
-		onClick: (location: BeerLocation) => void;
-		ariaLabel: (location: BeerLocation) => string;
+		onClick: (district: District) => void;
+		ariaLabel: (district: District) => string;
 	};
 }
 
-const STORAGE_KEY = 'beer-location-table-visibility';
-const columnHelper = createColumnHelper<BeerLocation>();
+const STORAGE_KEY = 'districts-table-visibility';
+const columnHelper = createColumnHelper<District>();
 const columnVisibilityStorage = createLocalStorageManager<VisibilityState>(STORAGE_KEY, {});
 
-export const BeerLocationTable = ({ data, actionColumn }: BeerLocationTableProps) => {
+export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 	const [sorting, setSorting] = useState<SortingState>([
 		{
 			id: 'name',
@@ -64,79 +64,15 @@ export const BeerLocationTable = ({ data, actionColumn }: BeerLocationTableProps
 				header: 'Namn',
 				enableSorting: true,
 			}),
-			columnHelper.accessor('beerBrand', {
-				header: 'Ölmärke',
-				enableSorting: false,
-			}),
-			columnHelper.accessor('price', {
-				header: 'Pris',
+
+			columnHelper.accessor('insideTolls', {
+				header: 'Innanför tullarna',
 				enableSorting: true,
-			}),
-			columnHelper.accessor('centilitersStandard', {
-				header: 'cl',
-				enableSorting: false,
-			}),
-			columnHelper.accessor('priceAW', {
-				header: 'Pris (AW)',
-				enableSorting: false,
-				cell: ({ getValue }) => getValue() || '-',
-			}),
-			columnHelper.display({
-				id: 'centilitersAW',
-				header: 'cl (AW)',
-				cell: ({ row }) => row.original.centilitersStandard,
-			}),
-			columnHelper.accessor('pricePitcher', {
-				header: 'Pris (kanna)',
-				enableSorting: false,
-				cell: ({ getValue }) => getValue() || '-',
-			}),
-			columnHelper.accessor('centilitersPitcher', {
-				header: 'cl (kanna)',
-				enableSorting: false,
-				cell: ({ getValue }) => getValue() || '-',
-			}),
-			columnHelper.accessor('outdoorSeating', {
-				header: 'Uteservering',
-				enableSorting: false,
 				cell: ({ getValue }) => (
 					getValue()
 						? <ThemeIcon size="xs"><IconCheck /></ThemeIcon>
 						: <ThemeIcon color="red" size="xs"><IconX /></ThemeIcon>
-				),
-			}),
-			columnHelper.accessor('afternoonSun', {
-				header: 'Eftermiddagssol',
-				enableSorting: false,
-				cell: ({ getValue }) => (
-					getValue()
-						? <ThemeIcon size="xs"><IconCheck /></ThemeIcon>
-						: <ThemeIcon color="red" size="xs"><IconX /></ThemeIcon>
-				),
-			}),
-			columnHelper.display({
-				id: 'awTimes',
-				header: 'AW-tider',
-				cell: ({ row }) => (
-					row.original.awTimes?.length
-						? <ThemeIcon size="xs"><IconCheck /></ThemeIcon>
-						: <ThemeIcon color="red" size="xs"><IconX /></ThemeIcon>
-				),
-			}),
-			columnHelper.display({
-				id: 'districts',
-				header: 'Stadsdel',
-				cell: ({ row }) => (
-					row.original.districts?.map(district => district.name).join(', ') || '-'
-				),
-			}),
-			columnHelper.accessor('latitude', {
-				header: 'Latitude',
-				enableSorting: false,
-			}),
-			columnHelper.accessor('longitude', {
-				header: 'Longitude',
-				enableSorting: false,
+				)
 			}),
 		],
 		[actionColumn]
@@ -179,7 +115,7 @@ export const BeerLocationTable = ({ data, actionColumn }: BeerLocationTableProps
 
 	return (
 		<Stack gap="md">
-			<Group justify="space-between" align="flex-end" px="sm">
+			<Group justify="space-between" align="flex-end" mx="sm">
 				<TextInput
 					placeholder="Sök efter namn"
 					leftSection={<IconSearch size={16} />}

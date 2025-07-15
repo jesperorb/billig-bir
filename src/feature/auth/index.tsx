@@ -11,7 +11,7 @@ interface LoginFormData {
 	password: string;
 }
 
-const LoginPage = () => {
+const Login = () => {
 	const apiClient = useApiClient();
 	const navigate = useNavigate();
 	const session = useSession();
@@ -88,4 +88,4 @@ const LoginPage = () => {
 	)
 }
 
-export default LoginPage;
+export default Login;
