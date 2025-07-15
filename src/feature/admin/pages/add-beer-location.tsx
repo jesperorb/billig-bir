@@ -6,16 +6,15 @@ import {
 } from '@mantine/core';
 import { useCreateBeerLocation } from '../queries';
 import { useQueryClient } from '@tanstack/react-query';
-import { beerLocationsBaseQueryKeys } from '@feature/map/queries';
 import { useState } from 'react';
 import { IconCheck } from '@tabler/icons-react';
 import { BeerLocationFormData } from '@common/types/beer-location-form-data';
 import { BeerLocationForm } from '@common/components/beer-location.form';
-import { useDistricts } from '@common/api/queries';
+import { commonBaseQueryKeys, useDistricts } from '@common/api/queries';
 
 type NotificationType = "success" | "error";
 
-export const AddBeerLocation = () => {
+const AddBeerLocation = () => {
 	const mutation = useCreateBeerLocation();
 	const queryClient = useQueryClient();
 	const { data: districts } = useDistricts();
@@ -23,7 +22,7 @@ export const AddBeerLocation = () => {
 
 	const invalidateBeerLocations = () => {
 		queryClient.invalidateQueries({
-			queryKey: [beerLocationsBaseQueryKeys.get]
+			queryKey: [commonBaseQueryKeys.getBeerLocations]
 		})
 	}
 
@@ -74,3 +73,5 @@ export const AddBeerLocation = () => {
 		</AppShell.Main>
 	);
 };
+
+export default AddBeerLocation;

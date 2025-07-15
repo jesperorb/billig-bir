@@ -86,10 +86,26 @@ export const FiltersForm = ({ filters, setFilters, districts }: Props) => {
 			<MultiSelect
 				label="Stadsdelar"
 				placeholder="Välj stadsdelar"
-				data={districts.map(district => ({
-					value: district.id.toString(),
-					label: district.name
-				}))}
+				data={[
+					{
+						group: "Innanför tullarna",
+						items: districts
+							.filter(district => district.insideTolls)
+							.map(district => ({
+								value: district.id.toString(),
+								label: district.name
+							}))
+					},
+					{
+						group: "Utanför tullarna",
+						items: districts
+							.filter(district => !district.insideTolls)
+							.map(district => ({
+								value: district.id.toString(),
+								label: district.name
+							}))
+					}
+				]}
 				value={filters.districts.map(d => d.id.toString())}
 				onChange={(selectedIds) => {
 					const selectedDistricts = districts.filter(district =>

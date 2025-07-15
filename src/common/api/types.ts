@@ -71,14 +71,17 @@ export type Database = {
       district: {
         Row: {
           id: number
+          inside_tolls: boolean
           name: string
         }
         Insert: {
           id?: number
+          inside_tolls?: boolean
           name: string
         }
         Update: {
           id?: number
+          inside_tolls?: boolean
           name?: string
         }
         Relationships: []

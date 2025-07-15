@@ -1,6 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-
-import AdminPage from '@feature/admin'
+import Admin from '@feature/admin'
 
 export const Route = createFileRoute('/admin')({
 	component: Admin,
@@ -15,7 +14,3 @@ export const Route = createFileRoute('/admin')({
 		}
 	},
 })
-
-function Admin() {
-	return <AdminPage />
-}

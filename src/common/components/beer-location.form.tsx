@@ -312,19 +312,34 @@ export const BeerLocationForm = ({
 							<Controller
 								name="districtId"
 								control={control}
-								rules={{ required: 'Välj en stadsdel' }}
 								render={({ field, fieldState }) => (
 									<Select
 										{...field}
 										value={field.value?.toString()}
-										defaultValue={defaultValues.districts?.[0].id.toString()}
+										defaultValue={defaultValues.districts?.[0]?.id.toString()}
 										onChange={(value) => field.onChange(value ? parseInt(value) : undefined)}
 										label="Stadsdel"
 										placeholder="Välj stadsdel"
-										data={districts.map(district => ({
-											value: district.id.toString(),
-											label: district.name
-										}))}
+										data={[
+											{
+												group: "Innanför tullarna",
+												items: districts
+													.filter(district => district.insideTolls)
+													.map(district => ({
+														value: district.id.toString(),
+														label: district.name
+													}))
+											},
+											{
+												group: "Utanför tullarna",
+												items: districts
+													.filter(district => !district.insideTolls)
+													.map(district => ({
+														value: district.id.toString(),
+														label: district.name
+													}))
+											}
+										]}
 										error={fieldState.error?.message}
 										searchable
 										clearable

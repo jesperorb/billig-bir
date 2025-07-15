@@ -11,16 +11,15 @@ import { MapRef } from "react-map-gl/mapbox";
 import { getCheapestLocation, getStandardAdjustedPrice, priceStepsMarkMax } from "@feature/map/utils";
 import { Filters, PriceType } from "@feature/map/filters";
 import { BeerLocation } from "@common/types/beer-location";
-import { useBeerLocations } from "@feature/map/queries";
 import { PriceTypeContext, SetPriceTypeContext } from "@feature/map/price-type-context";
 import { CheapestBeer } from "./components/cheapest-beer";
 import { FiltersForm } from "./components/filters-form";
 import MapContainer from "./components/map-container";
 import { MapMarkers } from "./components/map-markers";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";
-import { useDistricts } from "@common/api/queries";
+import { useBeerLocations, useDistricts } from "@common/api/queries";
 
-const MapPage = () => {
+const Map = () => {
 	const mapRef = useRef<MapRef>(null);
 	const toggleMenu = useToggleIsMenuOpen();
 	const [filters, setFilters] = useState<Filters>({
@@ -108,4 +107,4 @@ const MapPage = () => {
 	);
 };
 
-export default MapPage;
+export default Map;

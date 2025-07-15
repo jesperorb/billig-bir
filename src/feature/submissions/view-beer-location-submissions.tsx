@@ -8,7 +8,7 @@ import { useBeerLocationSubmissions, createBeerLocationSubmissionQueryKeys } fro
 import { ViewBeerLocationSubmissionDialog } from "./view-beer-location-submission.dialog";
 import { BeerLocationTable } from "@common/components/beer-location-table";
 
-export const ViewBeerLocationSubmissions = () => {
+const ViewBeerLocationSubmissions = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocationSubmissions();
 	const [modalOpened, { open, close }] = useDisclosure(false);
@@ -22,7 +22,7 @@ export const ViewBeerLocationSubmissions = () => {
 	return (
 		<AppShell.Main>
 			<Group justify="space-between" p="sm">
-				<Title order={2} p="md">
+				<Title order={2}>
 					Platsförslag
 				</Title>
 				<Button
@@ -54,3 +54,5 @@ export const ViewBeerLocationSubmissions = () => {
 		</AppShell.Main>
 	);
 };
+
+export default ViewBeerLocationSubmissions;

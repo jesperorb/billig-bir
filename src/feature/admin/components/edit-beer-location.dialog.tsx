@@ -3,9 +3,8 @@ import { useState } from "react";
 import type { AWStartAndEndTimesFormData, BeerLocationFormData } from "@common/types/beer-location-form-data"
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteAwTime, useDeleteBeerLocation, useUpdateBeerLocation } from "../queries";
-import { beerLocationsBaseQueryKeys } from "@feature/map/queries";
 import { BeerLocationForm } from "@common/components/beer-location.form";
-import { useDistricts } from "@common/api/queries";
+import { commonBaseQueryKeys, useDistricts } from "@common/api/queries";
 
 interface Props {
 	location: BeerLocationFormData | undefined;
@@ -29,7 +28,7 @@ export const EditBeerLocationDialog = ({
 
 	const invalidateBeerLocations = () => {
 		queryClient.invalidateQueries({
-			queryKey: [beerLocationsBaseQueryKeys.get]
+			queryKey: [commonBaseQueryKeys.getBeerLocations]
 		})
 	}
 
