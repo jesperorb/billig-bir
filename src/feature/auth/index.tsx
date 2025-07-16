@@ -1,10 +1,11 @@
-import { useApiClient } from '@common/api/api-client-context';
-import { useSession } from '@common/api/use-session';
-import { AppShell, Button, Container, Space, TextInput } from '@mantine/core';
-import { IconAt } from '@tabler/icons-react';
-import { useNavigate } from '@tanstack/react-router';
-import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { AppShell, Button, Container, Space, TextInput } from "@mantine/core";
+import { IconAt } from "@tabler/icons-react";
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+
+import { useApiClient } from "@common/api/api-client-context";
+import { useSession } from "@common/api/use-session";
 
 interface LoginFormData {
 	email: string;
@@ -15,14 +16,11 @@ const Login = () => {
 	const apiClient = useApiClient();
 	const navigate = useNavigate();
 	const session = useSession();
-	
-	const {
-		control,
-		handleSubmit,
-	} = useForm<LoginFormData>({
+
+	const { control, handleSubmit } = useForm<LoginFormData>({
 		defaultValues: {
-			email: '',
-			password: '',
+			email: "",
+			password: "",
 		},
 	});
 
@@ -34,10 +32,10 @@ const Login = () => {
 	};
 
 	useEffect(() => {
-		if(session?.user) {
+		if (session?.user) {
 			navigate({ to: "/admin" });
 		}
-	}, [session])
+	}, [session, navigate]);
 
 	return (
 		<AppShell.Main px="lg">
@@ -47,12 +45,12 @@ const Login = () => {
 					<Controller
 						name="email"
 						control={control}
-						rules={{ 
-							required: 'Skriv in en email',
+						rules={{
+							required: "Skriv in en email",
 							pattern: {
 								value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-								message: 'Ange en giltig email-adress'
-							}
+								message: "Ange en giltig email-adress",
+							},
 						}}
 						render={({ field, fieldState }) => (
 							<TextInput
@@ -68,7 +66,7 @@ const Login = () => {
 					<Controller
 						name="password"
 						control={control}
-						rules={{ required: 'Skriv in ett lösenord' }}
+						rules={{ required: "Skriv in ett lösenord" }}
 						render={({ field, fieldState }) => (
 							<TextInput
 								{...field}
@@ -79,13 +77,11 @@ const Login = () => {
 						)}
 					/>
 					<Space h="md" />
-					<Button type="submit">
-						Logga in
-					</Button>
+					<Button type="submit">Logga in</Button>
 				</form>
 			</Container>
 		</AppShell.Main>
-	)
-}
+	);
+};
 
 export default Login;

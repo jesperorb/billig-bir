@@ -1,10 +1,8 @@
-import { PropsWithChildren, useRef } from "react";
-import {
-	MantineProvider,
-} from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { PropsWithChildren, useRef } from "react";
 
 import { getQueryClient } from "@common/api/query-client";
 import { theme } from "@common/theme";

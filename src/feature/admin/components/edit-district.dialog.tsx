@@ -1,6 +1,8 @@
 import { Modal, Title, Group, Button } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
+
 import type { District } from "@common/types/district";
+
 import { DistrictForm } from "./district-form";
 
 interface EditDistrictDialogProps {
@@ -42,18 +44,25 @@ export const EditDistrictDialog = ({
 			size="md"
 		>
 			<DistrictForm
-				defaultValues={district || undefined}
+				defaultValues={district ?? undefined}
 				loading={loading}
 				onSubmit={handleSubmit}
 				onCancel={onClose}
 			/>
 			{onDelete && (
-				<Group justify="flex-start" mt="md" pt="md" style={{ borderTop: '1px solid var(--mantine-color-gray-3)' }}>
+				<Group
+					justify="flex-start"
+					mt="md"
+					pt="md"
+					style={{ borderTop: "1px solid var(--mantine-color-gray-3)" }}
+				>
 					<Button
 						color="red"
 						variant="outline"
 						leftSection={<IconTrash size={16} />}
-						onClick={handleDelete}
+						onClick={() => {
+							handleDelete();
+						}}
 						loading={deleteLoading}
 						disabled={loading}
 					>

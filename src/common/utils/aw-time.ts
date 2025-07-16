@@ -22,8 +22,7 @@ export const locationAwTimesDataToSchema = (
 	awTimes: AwTimeRow[],
 	locationId: number,
 ): BeerLocationAwTimeInsert[] =>
-	awTimes?.map((time) => ({ location_id: locationId, aw_time_id: time.id })) ??
-	[];
+	awTimes.map((time) => ({ location_id: locationId, aw_time_id: time.id }));
 
 export const awTimeHasId = (
 	time: AwTimeInsert,

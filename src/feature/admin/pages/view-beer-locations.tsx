@@ -1,18 +1,22 @@
 import { AppShell, Button, Group, Title } from "@mantine/core";
-import { IconPencil, IconReload } from "@tabler/icons-react";
-import { useState } from "react";
-import { BeerLocation } from "@common/types/beer-location";
 import { useDisclosure } from "@mantine/hooks";
+import { IconPencil, IconReload } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog";
-import { BeerLocationTable } from "@common/components/beer-location-table";
+import { useState } from "react";
+
 import { commonBaseQueryKeys, useBeerLocations } from "@common/api/queries";
+import { BeerLocationTable } from "@common/components/beer-location-table";
+import { BeerLocation } from "@common/types/beer-location";
+
+import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog";
 
 const ViewBeerLocations = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocations();
 	const [modalOpened, { open, close }] = useDisclosure(false);
-	const [locationToEdit, setLocationToEdit] = useState<BeerLocation | undefined>(undefined);
+	const [locationToEdit, setLocationToEdit] = useState<
+		BeerLocation | undefined
+	>(undefined);
 
 	const handleEditClick = (location: BeerLocation) => {
 		setLocationToEdit(location);
@@ -22,25 +26,23 @@ const ViewBeerLocations = () => {
 	return (
 		<AppShell.Main>
 			<Group justify="space-between" p="sm">
-				<Title order={2}>
-					Platser
-				</Title>
+				<Title order={2}>Platser</Title>
 				<Button
 					loading={isLoading}
 					rightSection={<IconReload />}
 					onClick={() => {
 						queryClient.invalidateQueries({
-							queryKey: [commonBaseQueryKeys.getBeerLocations]
-						})
+							queryKey: [commonBaseQueryKeys.getBeerLocations],
+						});
 					}}
 				>
 					Ladda om
 				</Button>
 			</Group>
 			<BeerLocationTable
-				data={data || undefined}
+				data={data ?? undefined}
 				actionColumn={{
-					header: 'Redigera',
+					header: "Redigera",
 					icon: <IconPencil />,
 					onClick: handleEditClick,
 					ariaLabel: (location) => `Redigera ${location.name}`,

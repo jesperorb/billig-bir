@@ -1,6 +1,7 @@
 import { TextInput, Switch, Button, Group, Stack } from "@mantine/core";
-import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+
 import type { District } from "@common/types/district";
 
 interface DistrictFormProps {
@@ -20,22 +21,18 @@ export const DistrictForm = ({
 	onSubmit,
 	onCancel,
 }: DistrictFormProps) => {
-	const {
-		control,
-		handleSubmit,
-		reset,
-	} = useForm<District>({
+	const { control, handleSubmit, reset } = useForm<District>({
 		defaultValues: {
 			name: "",
 			insideTolls: false,
-		}
+		},
 	});
 
 	useEffect(() => {
 		if (defaultValues) {
 			reset({
-				name: defaultValues.name || "",
-				insideTolls: defaultValues.insideTolls || false,
+				name: defaultValues.name ?? "",
+				insideTolls: defaultValues.insideTolls ?? false,
 			});
 		}
 	}, [defaultValues, reset]);
@@ -46,7 +43,7 @@ export const DistrictForm = ({
 				<Controller
 					name="name"
 					control={control}
-					rules={{ required: 'Fyll i namn på stadsdel' }}
+					rules={{ required: "Fyll i namn på stadsdel" }}
 					render={({ field, fieldState }) => (
 						<TextInput
 							{...field}

@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { useQuery } from "@tanstack/react-query";
 
-import type { Database } from "@common/api/types";
 import { useApiClient } from "@common/api/api-client-context";
-import type { District } from "@common/types/district";
+import type { Database } from "@common/api/types";
 import type { BeerLocation } from "@common/types/beer-location";
+import type { District } from "@common/types/district";
 
 export const commonBaseQueryKeys = {
 	getDistricts: "getDistricts",

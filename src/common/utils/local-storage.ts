@@ -26,7 +26,7 @@ export function getFromLocalStorage<T>(key: string, defaultValue: T): T {
  * @param key - The localStorage key
  * @param value - The value to store
  */
-export function setToLocalStorage<T>(key: string, value: T): void {
+export function setToLocalStorage(key: string, value: unknown): void {
 	try {
 		localStorage.setItem(key, JSON.stringify(value));
 	} catch (error) {
@@ -43,6 +43,8 @@ export function setToLocalStorage<T>(key: string, value: T): void {
 export function createLocalStorageManager<T>(key: string, defaultValue: T) {
 	return {
 		get: () => getFromLocalStorage(key, defaultValue),
-		set: (value: T) => setToLocalStorage(key, value),
+		set: (value: T) => {
+			setToLocalStorage(key, value);
+		},
 	};
 }

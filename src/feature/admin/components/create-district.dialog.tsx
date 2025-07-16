@@ -1,6 +1,8 @@
 import { Modal, Title } from "@mantine/core";
-import { DistrictForm } from "./district-form";
+
 import type { District } from "@common/types/district";
+
+import { DistrictForm } from "./district-form";
 
 interface CreateDistrictDialogProps {
 	opened: boolean;

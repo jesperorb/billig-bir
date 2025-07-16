@@ -1,8 +1,22 @@
-import { ActionIcon, Table, Group, Menu, Button, Checkbox, Stack, TextInput, ThemeIcon } from "@mantine/core";
-import { IconChevronUp, IconChevronDown, IconColumns, IconSearch, IconCheck, IconX } from "@tabler/icons-react";
-import { useMemo, useState, ReactNode, useEffect } from "react";
-import type { District } from "@common/types/district";
-import { createLocalStorageManager } from "@common/utils/local-storage";
+import {
+	ActionIcon,
+	Table,
+	Group,
+	Menu,
+	Button,
+	Checkbox,
+	Stack,
+	TextInput,
+	ThemeIcon,
+} from "@mantine/core";
+import {
+	IconChevronUp,
+	IconChevronDown,
+	IconColumns,
+	IconSearch,
+	IconCheck,
+	IconX,
+} from "@tabler/icons-react";
 import {
 	createColumnHelper,
 	flexRender,
@@ -12,7 +26,11 @@ import {
 	useReactTable,
 	type SortingState,
 	type VisibilityState,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
+import { useMemo, useState, ReactNode, useEffect } from "react";
+
+import type { District } from "@common/types/district";
+import { createLocalStorageManager } from "@common/utils/local-storage";
 
 interface DistrictsTableProps {
 	data: District[] | undefined;
@@ -24,20 +42,25 @@ interface DistrictsTableProps {
 	};
 }
 
-const STORAGE_KEY = 'districts-table-visibility';
+const STORAGE_KEY = "districts-table-visibility";
 const columnHelper = createColumnHelper<District>();
-const columnVisibilityStorage = createLocalStorageManager<VisibilityState>(STORAGE_KEY, {});
+const columnVisibilityStorage = createLocalStorageManager<VisibilityState>(
+	STORAGE_KEY,
+	{},
+);
 
 export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 	const [sorting, setSorting] = useState<SortingState>([
 		{
-			id: 'name',
+			id: "name",
 			desc: false,
-		}
+		},
 	]);
 
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(() => columnVisibilityStorage.get());
-	const [globalFilter, setGlobalFilter] = useState('');
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+		() => columnVisibilityStorage.get(),
+	);
+	const [globalFilter, setGlobalFilter] = useState("");
 
 	useEffect(() => {
 		columnVisibilityStorage.set(columnVisibility);
@@ -46,11 +69,13 @@ export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
-				id: 'actions',
+				id: "actions",
 				header: actionColumn.header,
 				cell: ({ row }) => (
 					<ActionIcon
-						onClick={() => actionColumn.onClick(row.original)}
+						onClick={() => {
+							actionColumn.onClick(row.original);
+						}}
 						p={0}
 						variant="subtle"
 						size="sm"
@@ -60,33 +85,44 @@ export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 					</ActionIcon>
 				),
 			}),
-			columnHelper.accessor('name', {
-				header: 'Namn',
+			columnHelper.accessor("name", {
+				header: "Namn",
 				enableSorting: true,
 			}),
 
-			columnHelper.accessor('insideTolls', {
-				header: 'Innanför tullarna',
+			columnHelper.accessor("insideTolls", {
+				header: "Innanför tullarna",
 				enableSorting: true,
-				cell: ({ getValue }) => (
-					getValue()
-						? <ThemeIcon size="xs"><IconCheck /></ThemeIcon>
-						: <ThemeIcon color="red" size="xs"><IconX /></ThemeIcon>
-				)
+				cell: ({ getValue }) =>
+					getValue() ? (
+						<ThemeIcon size="xs">
+							<IconCheck />
+						</ThemeIcon>
+					) : (
+						<ThemeIcon color="red" size="xs">
+							<IconX />
+						</ThemeIcon>
+					),
 			}),
 		],
-		[actionColumn]
+		[actionColumn],
 	);
 
-	const columnOptions = columns.map(col => ({
-		value: col.id || (col as any).accessorKey,
-		label: typeof col.header === 'string' ? col.header : col.id || (col as any).accessorKey
-	})).filter(option => option.value && option.value !== 'actions');
+	const columnOptions = columns
+		.map((col) => {
+			const accessorKey = "accessorKey" in col ? col.accessorKey : "";
+			const accessor = col.id ?? accessorKey;
+			return {
+				value: accessor,
+				label: typeof col.header === "string" ? col.header : accessor,
+			};
+		})
+		.filter((option) => option.value && option.value !== "actions");
 
 	const handleColumnToggle = (columnId: string) => {
-		setColumnVisibility(prev => ({
+		setColumnVisibility((prev) => ({
 			...prev,
-			[columnId]: prev[columnId] === false ? true : false
+			[columnId]: !prev[columnId] ? true : false,
 		}));
 	};
 
@@ -101,15 +137,15 @@ export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 		onSortingChange: setSorting,
 		onColumnVisibilityChange: setColumnVisibility,
 		onGlobalFilterChange: setGlobalFilter,
-		globalFilterFn: 'includesString',
+		globalFilterFn: "includesString",
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 	});
 
-	const getSortIcon = (isSorted: false | 'asc' | 'desc') => {
-		if (isSorted === 'asc') return <IconChevronUp size={14} />;
-		if (isSorted === 'desc') return <IconChevronDown size={14} />;
+	const getSortIcon = (isSorted: false | "asc" | "desc") => {
+		if (isSorted === "asc") return <IconChevronUp size={14} />;
+		if (isSorted === "desc") return <IconChevronDown size={14} />;
 		return null;
 	};
 
@@ -119,25 +155,33 @@ export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 				<TextInput
 					placeholder="Sök efter namn"
 					leftSection={<IconSearch size={16} />}
-					value={globalFilter ?? ''}
-					onChange={(event) => setGlobalFilter(event.currentTarget.value)}
+					value={globalFilter}
+					onChange={(event) => {
+						setGlobalFilter(event.currentTarget.value);
+					}}
 					style={{ flexGrow: 1, maxWidth: 300 }}
 				/>
 				<Menu shadow="md" width={250}>
 					<Menu.Target>
-						<Button leftSection={<IconColumns size={16} />} variant="outline" size="sm">
+						<Button
+							leftSection={<IconColumns size={16} />}
+							variant="outline"
+							size="sm"
+						>
 							Kolumner
 						</Button>
 					</Menu.Target>
 
 					<Menu.Dropdown>
 						<Menu.Label>Synliga kolumner</Menu.Label>
-						{columnOptions.map(option => (
+						{columnOptions.map((option) => (
 							<Menu.Item key={option.value} closeMenuOnClick={false}>
 								<Checkbox
 									label={option.label}
-									checked={columnVisibility[option.value] !== false}
-									onChange={() => handleColumnToggle(option.value)}
+									checked={columnVisibility[option.value]}
+									onChange={() => {
+										handleColumnToggle(option.value);
+									}}
 								/>
 							</Menu.Item>
 						))}
@@ -153,22 +197,32 @@ export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 					withColumnBorders
 				>
 					<Table.Thead>
-						{table.getHeaderGroups().map(headerGroup => (
+						{table.getHeaderGroups().map((headerGroup) => (
 							<Table.Tr key={headerGroup.id}>
-								{headerGroup.headers.map(header => (
+								{headerGroup.headers.map((header) => (
 									<Table.Th
 										key={header.id}
 										style={{
-											cursor: header.column.getCanSort() ? 'pointer' : 'default',
-											userSelect: 'none',
-											whiteSpace: 'nowrap',
+											cursor: header.column.getCanSort()
+												? "pointer"
+												: "default",
+											userSelect: "none",
+											whiteSpace: "nowrap",
 										}}
 										onClick={header.column.getToggleSortingHandler()}
 									>
 										<Group gap="xs" wrap="nowrap">
-											{flexRender(header.column.columnDef.header, header.getContext())}
+											{flexRender(
+												header.column.columnDef.header,
+												header.getContext(),
+											)}
 											{header.column.getCanSort() && (
-												<span style={{ display: 'inline-flex', alignItems: 'center' }}>
+												<span
+													style={{
+														display: "inline-flex",
+														alignItems: "center",
+													}}
+												>
 													{getSortIcon(header.column.getIsSorted())}
 												</span>
 											)}
@@ -179,10 +233,10 @@ export const DistrictsTable = ({ data, actionColumn }: DistrictsTableProps) => {
 						))}
 					</Table.Thead>
 					<Table.Tbody>
-						{table.getRowModel().rows.map(row => (
+						{table.getRowModel().rows.map((row) => (
 							<Table.Tr key={row.id}>
-								{row.getVisibleCells().map(cell => (
-									<Table.Td key={cell.id} style={{ whiteSpace: 'nowrap' }}>
+								{row.getVisibleCells().map((cell) => (
+									<Table.Td key={cell.id} style={{ whiteSpace: "nowrap" }}>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</Table.Td>
 								))}

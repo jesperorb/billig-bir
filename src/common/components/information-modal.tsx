@@ -1,10 +1,16 @@
+import { Modal, ActionIcon, Button, Stack } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import {
+	IconBrandGithub,
+	IconExternalLink,
+	IconQuestionMark,
+	IconSettings,
+} from "@tabler/icons-react";
+import { useNavigate } from "@tanstack/react-router";
+
 import { useApiClient } from "@common/api/api-client-context";
 import { useSession } from "@common/api/use-session";
 import { BeerLocationSubmissionDialog } from "@feature/submissions/create-beer-location-submission.dialog";
-import { Modal, ActionIcon, Button, Stack } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconBrandGithub, IconExternalLink, IconQuestionMark, IconSettings } from "@tabler/icons-react";
-import { useNavigate } from "@tanstack/react-router";
 
 const InformationModal = () => {
 	const [modalOpened, { open, close }] = useDisclosure(false);
@@ -27,8 +33,8 @@ const InformationModal = () => {
 					<BeerLocationSubmissionDialog />
 					<Button
 						onClick={() => {
-							navigate({ to: "/admin" })
-							close()
+							navigate({ to: "/admin" });
+							close();
 						}}
 						leftSection={<IconSettings />}
 					>
@@ -36,10 +42,14 @@ const InformationModal = () => {
 					</Button>
 					{Boolean(session?.user) && (
 						<Button
-							onClick={async () => {
-								await apiClient.auth.signOut();
-								navigate({ to: "/" })
-								close();
+							onClick={() => {
+								apiClient.auth
+									.signOut()
+									.then(() => {
+										navigate({ to: "/" });
+										close();
+									})
+									.catch(close);
 							}}
 						>
 							Logga ut

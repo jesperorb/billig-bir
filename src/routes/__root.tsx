@@ -1,11 +1,11 @@
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
-import { type Session } from '@supabase/supabase-js'
+import { type Session } from "@supabase/supabase-js";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 
-import AppWrapper from '@common/components/app-wrapper'
-import Layout from '@common/components/layout'
+import AppWrapper from "@common/components/app-wrapper";
+import Layout from "@common/components/layout";
 
 interface RouterContext {
-	session: Session | null
+	session: Session | null;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -16,4 +16,4 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			</Layout>
 		</AppWrapper>
 	),
-})
+});

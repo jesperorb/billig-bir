@@ -4,7 +4,7 @@ import { getSupabaseClient } from "@common/api/api-client";
 import { ApiClientContext } from "@common/api/api-client-context";
 
 const ApiClientWrapper = ({ children }: PropsWithChildren) => {
-	const apiClient = useRef(getSupabaseClient())
+	const apiClient = useRef(getSupabaseClient());
 	return (
 		<ApiClientContext value={apiClient.current}>{children}</ApiClientContext>
 	);

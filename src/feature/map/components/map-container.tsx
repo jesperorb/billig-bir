@@ -1,8 +1,12 @@
-import { memo, PropsWithChildren, type Ref, type CSSProperties } from "react";
 import { useComputedColorScheme } from "@mantine/core";
+import { memo, PropsWithChildren, type Ref, type CSSProperties } from "react";
 import Map, { type MapRef, type ViewState } from "react-map-gl/mapbox";
 
-import { DEFAULT_STYLING, INITIAL_VIEW_STATE, MAPBOX_TOKEN } from "@feature/map/constants";
+import {
+	DEFAULT_STYLING,
+	INITIAL_VIEW_STATE,
+	MAPBOX_TOKEN,
+} from "@feature/map/constants";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -14,13 +18,13 @@ interface Props extends PropsWithChildren {
 	interactive?: boolean;
 }
 
-const MapContainer = ({ 
-	children, 
-	mapRef, 
+const MapContainer = ({
+	children,
+	mapRef,
 	initialViewState = INITIAL_VIEW_STATE,
 	style = DEFAULT_STYLING,
 	onMove,
-	interactive = true
+	interactive = true,
 }: Props) => {
 	const colorScheme = useComputedColorScheme("light");
 	return (

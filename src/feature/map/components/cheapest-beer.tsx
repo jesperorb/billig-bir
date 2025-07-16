@@ -2,7 +2,6 @@ import { Button, Card, Divider, Title } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
 
 import { type BeerLocation } from "@common/types/beer-location";
-
 import { usePriceType } from "@feature/map/price-type-context";
 
 import { CardContent } from "./card-content";

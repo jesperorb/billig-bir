@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
 import { type Session } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+
 import { useApiClient } from "@common/api/api-client-context";
 
 export const useSession = () => {
@@ -14,7 +15,9 @@ export const useSession = () => {
 		} = apiClient.auth.onAuthStateChange((_event, session) => {
 			setSession(session);
 		});
-		return () => subscription.unsubscribe();
-	}, []);
+		return () => {
+			subscription.unsubscribe();
+		};
+	}, [apiClient.auth]);
 	return session;
 };

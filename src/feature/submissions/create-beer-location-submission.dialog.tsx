@@ -1,17 +1,21 @@
 import { Modal, Title, Notification, Button } from "@mantine/core";
-import { useState } from "react";
 import { IconBeer, IconCheck } from "@tabler/icons-react";
-import { useCreateBeerLocationSubmission } from "./queries";
+import { useState } from "react";
+
+import { useDistricts } from "@common/api/queries";
 import { BeerLocationForm } from "@common/components/beer-location.form";
 import type { BeerLocationFormData } from "@common/types/beer-location-form-data";
 import type { NotificationType } from "@common/types/common";
-import { useDistricts } from "@common/api/queries";
+
+import { useCreateBeerLocationSubmission } from "./queries";
 
 export const BeerLocationSubmissionDialog = () => {
 	const [open, setOpen] = useState(false);
 	const mutation = useCreateBeerLocationSubmission();
-	const { data: districts} = useDistricts();
-	const [showNotification, setShowNotification] = useState<NotificationType | undefined>(undefined);
+	const { data: districts } = useDistricts();
+	const [showNotification, setShowNotification] = useState<
+		NotificationType | undefined
+	>(undefined);
 
 	const onSubmit = async (data: BeerLocationFormData) => {
 		try {
@@ -34,14 +38,20 @@ export const BeerLocationSubmissionDialog = () => {
 		<>
 			<Button
 				leftSection={<IconBeer size={16} />}
-				onClick={() => setOpen(true)}
+				onClick={() => {
+					setOpen(true);
+				}}
 			>
 				Föreslå ny plats
 			</Button>
 
 			{showNotification && (
 				<Notification
-					title={showNotification === "success" ? "Förslag skickat!" : "Något gick fel"}
+					title={
+						showNotification === "success"
+							? "Förslag skickat!"
+							: "Något gick fel"
+					}
 					color={showNotification === "error" ? "red" : "green"}
 					styles={{
 						root: {
@@ -49,23 +59,26 @@ export const BeerLocationSubmissionDialog = () => {
 							top: "2rem",
 							right: "2rem",
 							zIndex: 9999999,
-						}
+						},
 					}}
 					withBorder
 					withCloseButton
-					onClose={() => setShowNotification(undefined)}
+					onClose={() => {
+						setShowNotification(undefined);
+					}}
 					icon={<IconCheck />}
 				>
-					{showNotification === "success" 
+					{showNotification === "success"
 						? "Ditt förslag på ny plats har skickats för granskning"
-						: "Försök igen eller kontakta en katt om problemet kvarstår"
-					}
+						: "Försök igen eller kontakta en katt om problemet kvarstår"}
 				</Notification>
 			)}
-			
+
 			<Modal
 				opened={open}
-				onClose={() => setOpen(false)}
+				onClose={() => {
+					setOpen(false);
+				}}
 				title={<Title order={2}>Föreslå ny plats</Title>}
 				size="auto"
 			>

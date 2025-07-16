@@ -6,7 +6,7 @@ type BeerLocationInsert = Database["public"]["Tables"]["location"]["Insert"];
 export const beerLocationFormDataToSchema = (
 	values: BeerLocationFormData,
 ): BeerLocationInsert => ({
-	id: values.id >= 0 ?  values.id :undefined,
+	id: values.id >= 0 ? values.id : undefined,
 	name: values.name,
 	latitude: values.latitude,
 	longitude: values.longitude,
@@ -21,5 +21,3 @@ export const beerLocationFormDataToSchema = (
 	url_maps: values.urlMaps,
 	url_website: values.urlWebsite,
 });
-
-
