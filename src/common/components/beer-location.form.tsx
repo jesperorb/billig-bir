@@ -1,4 +1,4 @@
-import { useForm, Controller, useFieldArray } from 'react-hook-form';
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import {
 	TextInput,
 	NumberInput,
@@ -14,17 +14,28 @@ import {
 	Divider,
 	Space,
 	Text,
-} from '@mantine/core';
-import { IconPlus, IconTrash, IconMap } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { IconPlus, IconTrash, IconMap } from "@tabler/icons-react";
+import {
+	useForm,
+	Controller,
+	useFieldArray,
+	SubmitHandler,
+} from "react-hook-form";
+
 import {
 	DEFAULT_AW_TIME_VALUE,
 	DEFAULT_FORM_VALUES,
-	WEEKDAY_NAMES_AS_LIST
-} from '@common/constants';
-import { AWStartAndEndTimesFormData, BeerLocationFormData } from '@common/types/beer-location-form-data';
-import { District } from '@common/types/district';
-import { MapLocationPickerDialog } from './map-location-picker.dialog';
+	WEEKDAY_NAMES_AS_LIST,
+} from "@common/constants";
+import {
+	AWStartAndEndTimesFormData,
+	BeerLocationFormData,
+} from "@common/types/beer-location-form-data";
+import { District } from "@common/types/district";
+
+import { MapLocationPickerDialog } from "./map-location-picker.dialog";
 
 interface Props {
 	defaultValues?: BeerLocationFormData;
@@ -43,21 +54,16 @@ export const BeerLocationForm = ({
 	submitButtonText,
 	onRemoveAwTime,
 	loading,
-	districts = [],
+	districts,
 }: Props) => {
-	const {
-		control,
-		handleSubmit,
-		reset,
-		watch,
-		setValue,
-	} = useForm<BeerLocationFormData>({
-		defaultValues: defaultValues
-	});
+	const { control, handleSubmit, reset, watch, setValue } =
+		useForm<BeerLocationFormData>({
+			defaultValues: defaultValues,
+		});
 	const { fields, append, remove } = useFieldArray({
 		control,
-		name: 'awTimes',
-		keyName: 'fieldId',
+		name: "awTimes",
+		keyName: "fieldId",
 	});
 
 	const [mapOpened, { open: openMap, close: closeMap }] = useDisclosure(false);
@@ -68,18 +74,19 @@ export const BeerLocationForm = ({
 	const controlledFields = fields.map((field, index) => {
 		return {
 			...field,
-			...(watchFieldArray ? watchFieldArray[index] : {})
+			...(watchFieldArray ? watchFieldArray[index] : {}),
 		};
 	});
 
-	const internalOnSubmit = (data: BeerLocationFormData) => {
-		onSubmit(data)
+	const internalOnSubmit: SubmitHandler<BeerLocationFormData> = (data) => {
+		onSubmit(data);
 	};
 
-	const addAWTime = async () => {
-		const weekday = fields.length === 0
-			? 0
-			: Math.max(...controlledFields.map(field => field.weekday)) + 1;
+	const addAWTime = () => {
+		const weekday =
+			fields.length === 0
+				? 0
+				: Math.max(...controlledFields.map((field) => field.weekday)) + 1;
 		append({
 			...DEFAULT_AW_TIME_VALUE,
 			weekday: weekday,
@@ -87,8 +94,8 @@ export const BeerLocationForm = ({
 	};
 
 	const handleMapLocationSelect = (latitude: number, longitude: number) => {
-		setValue('latitude', latitude);
-		setValue('longitude', longitude);
+		setValue("latitude", latitude);
+		setValue("longitude", longitude);
 	};
 
 	return (
@@ -98,7 +105,7 @@ export const BeerLocationForm = ({
 					<Controller
 						name="name"
 						control={control}
-						rules={{ required: 'Fyll i namn på plats' }}
+						rules={{ required: "Fyll i namn på plats" }}
 						render={({ field, fieldState }) => (
 							<TextInput
 								{...field}
@@ -124,17 +131,19 @@ export const BeerLocationForm = ({
 							/>
 						)}
 					/>
-					<Box style={{
-						display: 'grid',
-						gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-						gap: 'var(--mantine-spacing-md)'
-					}}>
+					<Box
+						style={{
+							display: "grid",
+							gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+							gap: "var(--mantine-spacing-md)",
+						}}
+					>
 						<Controller
 							name="price"
 							control={control}
 							rules={{
-								required: 'Fyll i pris',
-								min: { value: 0, message: 'Priset måste vara över 0' }
+								required: "Fyll i pris",
+								min: { value: 0, message: "Priset måste vara över 0" },
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
@@ -152,7 +161,10 @@ export const BeerLocationForm = ({
 							name="pricePitcher"
 							control={control}
 							rules={{
-								min: { value: 0, message: 'Priset för kanna måste vara över 0' }
+								min: {
+									value: 0,
+									message: "Priset för kanna måste vara över 0",
+								},
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
@@ -169,7 +181,10 @@ export const BeerLocationForm = ({
 							name="priceAW"
 							control={control}
 							rules={{
-								min: { value: 0, message: 'After Work-priset måste vara över 0' }
+								min: {
+									value: 0,
+									message: "After Work-priset måste vara över 0",
+								},
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
@@ -182,17 +197,19 @@ export const BeerLocationForm = ({
 							)}
 						/>
 					</Box>
-					<Box style={{
-						display: 'grid',
-						gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-						gap: 'var(--mantine-spacing-md)'
-					}}>
+					<Box
+						style={{
+							display: "grid",
+							gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+							gap: "var(--mantine-spacing-md)",
+						}}
+					>
 						<Controller
 							name="centilitersStandard"
 							control={control}
 							rules={{
-								required: 'Fyll i volym',
-								min: { value: 1, message: 'Volymen måste vara över 0' }
+								required: "Fyll i volym",
+								min: { value: 1, message: "Volymen måste vara över 0" },
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
@@ -209,7 +226,7 @@ export const BeerLocationForm = ({
 							name="centilitersPitcher"
 							control={control}
 							rules={{
-								min: { value: 1, message: 'Volymen måste vara över 0' }
+								min: { value: 1, message: "Volymen måste vara över 0" },
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
@@ -222,11 +239,13 @@ export const BeerLocationForm = ({
 						/>
 					</Box>
 
-					<Box style={{
-						display: 'grid',
-						gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-						gap: 'var(--mantine-spacing-md)'
-					}}>
+					<Box
+						style={{
+							display: "grid",
+							gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+							gap: "var(--mantine-spacing-md)",
+						}}
+					>
 						<Controller
 							name="outdoorSeating"
 							control={control}
@@ -254,19 +273,27 @@ export const BeerLocationForm = ({
 						/>
 					</Box>
 
-					<Box style={{
-						display: 'grid',
-						gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-						gap: 'var(--mantine-spacing-md)',
-						alignItems: 'end'
-					}}>
+					<Box
+						style={{
+							display: "grid",
+							gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+							gap: "var(--mantine-spacing-md)",
+							alignItems: "end",
+						}}
+					>
 						<Controller
 							name="latitude"
 							control={control}
 							rules={{
-								required: 'Fyll i latitude',
-								min: { value: -90, message: 'Latitud måste vara mellan -90 och 90' },
-								max: { value: 90, message: 'Latitud måste vara mellan -90 och 90' }
+								required: "Fyll i latitude",
+								min: {
+									value: -90,
+									message: "Latitud måste vara mellan -90 och 90",
+								},
+								max: {
+									value: 90,
+									message: "Latitud måste vara mellan -90 och 90",
+								},
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
@@ -283,9 +310,15 @@ export const BeerLocationForm = ({
 							name="longitude"
 							control={control}
 							rules={{
-								required: 'Fyll i longitude med ett värde mellan -180 och 180',
-								min: { value: -180, message: 'Longitud måste vara mellan -180 och 180' },
-								max: { value: 180, message: 'Longitud måste vara mellan -180 och 180' }
+								required: "Fyll i longitude med ett värde mellan -180 och 180",
+								min: {
+									value: -180,
+									message: "Longitud måste vara mellan -180 och 180",
+								},
+								max: {
+									value: 180,
+									message: "Longitud måste vara mellan -180 och 180",
+								},
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
@@ -308,46 +341,47 @@ export const BeerLocationForm = ({
 						</Button>
 					</Box>
 
-					{districts.length > 0 && (
-							<Controller
-								name="districtId"
-								control={control}
-								render={({ field, fieldState }) => (
-									<Select
-										{...field}
-										value={field.value?.toString()}
-										defaultValue={defaultValues.districts?.[0]?.id.toString()}
-										onChange={(value) => field.onChange(value ? parseInt(value) : undefined)}
-										label="Stadsdel"
-										placeholder="Välj stadsdel"
-										data={[
-											{
-												group: "Innanför tullarna",
-												items: districts
-													.filter(district => district.insideTolls)
-													.map(district => ({
-														value: district.id.toString(),
-														label: district.name
-													}))
-											},
-											{
-												group: "Utanför tullarna",
-												items: districts
-													.filter(district => !district.insideTolls)
-													.map(district => ({
-														value: district.id.toString(),
-														label: district.name
-													}))
-											}
-										]}
-										error={fieldState.error?.message}
-										searchable
-										clearable
-									/>
-								)}
-							/>
-						)
-					}
+					{districts && districts.length > 0 && (
+						<Controller
+							name="districtId"
+							control={control}
+							render={({ field, fieldState }) => (
+								<Select
+									{...field}
+									value={field.value?.toString()}
+									defaultValue={defaultValues.districts?.[0]?.id.toString()}
+									onChange={(value) => {
+										field.onChange(value ? parseInt(value) : undefined);
+									}}
+									label="Stadsdel"
+									placeholder="Välj stadsdel"
+									data={[
+										{
+											group: "Innanför tullarna",
+											items: districts
+												.filter((district) => district.insideTolls)
+												.map((district) => ({
+													value: district.id.toString(),
+													label: district.name,
+												})),
+										},
+										{
+											group: "Utanför tullarna",
+											items: districts
+												.filter((district) => !district.insideTolls)
+												.map((district) => ({
+													value: district.id.toString(),
+													label: district.name,
+												})),
+										},
+									]}
+									error={fieldState.error?.message}
+									searchable
+									clearable
+								/>
+							)}
+						/>
+					)}
 
 					<Controller
 						name="urlMaps"
@@ -355,8 +389,8 @@ export const BeerLocationForm = ({
 						rules={{
 							pattern: {
 								value: /^https?:\/\/.+/,
-								message: 'Fyll i en URl som börjar på https://'
-							}
+								message: "Fyll i en URl som börjar på https://",
+							},
 						}}
 						render={({ field, fieldState }) => (
 							<TextInput
@@ -374,8 +408,8 @@ export const BeerLocationForm = ({
 						rules={{
 							pattern: {
 								value: /^https?:\/\/.+/,
-								message: 'Fyll i en URl som börjar på https://'
-							}
+								message: "Fyll i en URl som börjar på https://",
+							},
 						}}
 						render={({ field, fieldState }) => (
 							<TextInput
@@ -392,7 +426,13 @@ export const BeerLocationForm = ({
 					<Box>
 						<Stack>
 							<Title order={4}>After Work-tider</Title>
-							<Text>Ange i kombination med fältet "After Work-pris". Lägg till flera tider om det varierar beroende på dag. Lägg till en tid och markera "Samma tider hela vecka" om platsen alltid har samma AW-tider. Hoppa över detta om priset inte är beroende av AW-tider.</Text>
+							<Text>
+								Ange i kombination med fältet "After Work-pris". Lägg till flera
+								tider om det varierar beroende på dag. Lägg till en tid och
+								markera "Samma tider hela vecka" om platsen alltid har samma
+								AW-tider. Hoppa över detta om priset inte är beroende av
+								AW-tider.
+							</Text>
 						</Stack>
 						<Space h="md" />
 						<Group justify="end">
@@ -403,7 +443,7 @@ export const BeerLocationForm = ({
 								onClick={addAWTime}
 								loading={loading}
 								disabled={
-									controlledFields.some(field => field.sameTimesAllWeek) ||
+									controlledFields.some((field) => field.sameTimesAllWeek) ||
 									controlledFields.length >= 5
 								}
 							>
@@ -421,8 +461,10 @@ export const BeerLocationForm = ({
 											render={({ field: fieldProps }) => (
 												<Select
 													{...fieldProps}
-													value={fieldProps.value?.toString()}
-													onChange={(value) => fieldProps.onChange(value ? parseInt(value) : 1)}
+													value={fieldProps.value.toString()}
+													onChange={(value) => {
+														fieldProps.onChange(value ? parseInt(value) : 1);
+													}}
 													label="Veckodag"
 													data={WEEKDAY_NAMES_AS_LIST}
 													style={{ flex: 1 }}
@@ -459,10 +501,12 @@ export const BeerLocationForm = ({
 										<Controller
 											name={`awTimes.${index}.sameTimesAllWeek`}
 											control={control}
-											render={({ field: { value, onChange, ...fieldProps } }) => (
+											render={({
+												field: { value, onChange, ...fieldProps },
+											}) => (
 												<Switch
 													{...fieldProps}
-													checked={value || false}
+													checked={value ?? false}
 													onChange={onChange}
 													label="Samma tider hela veckan"
 													mt="xl"
@@ -491,11 +535,18 @@ export const BeerLocationForm = ({
 					</Box>
 
 					<Group justify="flex-end" mt="lg">
-						{showClearButton &&
-							<Button variant="outline" color="red" onClick={() => reset()} loading={loading}>
+						{showClearButton && (
+							<Button
+								variant="outline"
+								color="red"
+								onClick={() => {
+									reset();
+								}}
+								loading={loading}
+							>
 								Rensa formulär
 							</Button>
-						}
+						)}
 						<Button type="submit" loading={loading}>
 							{submitButtonText ?? "Spara"}
 						</Button>
@@ -513,4 +564,3 @@ export const BeerLocationForm = ({
 		</>
 	);
 };
-

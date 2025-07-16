@@ -7,7 +7,9 @@ export const getPriceAdjustedFor40cl = (price: number, centiliters: number) =>
 export const getStandardAdjustedPrice = (location: BeerLocation) =>
 	location.centilitersStandard === 40
 		? location.price
-		: Math.floor(getPriceAdjustedFor40cl(location.price, location.centilitersStandard));
+		: Math.floor(
+				getPriceAdjustedFor40cl(location.price, location.centilitersStandard),
+			);
 
 export const getPriceBySelectedPriceType =
 	(priceType: PriceType) => (location: BeerLocation) =>
@@ -17,7 +19,9 @@ export const getPriceBySelectedPriceType =
 
 export const getPrice = (location: BeerLocation) => location.price;
 
-export const getCheapestLocation = (locations: BeerLocation[]): BeerLocation | undefined =>
+export const getCheapestLocation = (
+	locations: BeerLocation[],
+): BeerLocation | undefined =>
 	locations.reduce(
 		(minLocation, location) =>
 			getStandardAdjustedPrice(location) < getStandardAdjustedPrice(minLocation)

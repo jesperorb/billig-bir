@@ -10,10 +10,8 @@ import {
 	Badge,
 	Grid,
 	ThemeIcon,
-	Notification
+	Notification,
 } from "@mantine/core";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import {
 	IconCheck,
 	IconX,
@@ -23,16 +21,21 @@ import {
 	IconExternalLink,
 	IconCurrencyKroneSwedish,
 	IconAdjustments,
-	IconInfoCircle
+	IconInfoCircle,
 } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+
+import { commonBaseQueryKeys } from "@common/api/queries";
+import { WEEKDAY_NAMES } from "@common/constants";
 import type { BeerLocation } from "@common/types/beer-location";
+import { NotificationType } from "@common/types/common";
+
 import {
 	useDeleteBeerLocationSubmission,
 	useApproveBeerLocationSubmission,
-	createBeerLocationSubmissionQueryKeys
+	createBeerLocationSubmissionQueryKeys,
 } from "./queries";
-import { WEEKDAY_NAMES } from "@common/constants";
-import { commonBaseQueryKeys } from "@common/api/queries";
 
 interface Props {
 	submission: BeerLocation | undefined;
@@ -40,22 +43,27 @@ interface Props {
 	onClose: () => void;
 }
 
-type NotificationType = "success" | "error";
-
-export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: Props) => {
+export const ViewBeerLocationSubmissionDialog = ({
+	submission,
+	open,
+	onClose,
+}: Props) => {
 	const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 	const [approveConfirmOpen, setApproveConfirmOpen] = useState(false);
-	const [showNotification, setShowNotification] = useState<NotificationType | undefined>(undefined);
+	const [showNotification, setShowNotification] = useState<
+		NotificationType | undefined
+	>(undefined);
 	const queryClient = useQueryClient();
 	const deleteMutation = useDeleteBeerLocationSubmission();
 	const approveMutation = useApproveBeerLocationSubmission();
 
 	const invalidateQueries = () => {
 		queryClient.invalidateQueries({
-			queryKey: createBeerLocationSubmissionQueryKeys.getBeerLocationSubmissions
+			queryKey:
+				createBeerLocationSubmissionQueryKeys.getBeerLocationSubmissions,
 		});
 		queryClient.invalidateQueries({
-			queryKey: [commonBaseQueryKeys.getBeerLocations]
+			queryKey: [commonBaseQueryKeys.getBeerLocations],
 		});
 	};
 
@@ -106,7 +114,11 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 		<>
 			{showNotification && (
 				<Notification
-					title={showNotification === "success" ? "Åtgärd slutförd!" : "Något gick fel"}
+					title={
+						showNotification === "success"
+							? "Åtgärd slutförd!"
+							: "Något gick fel"
+					}
 					color={showNotification === "error" ? "red" : "green"}
 					styles={{
 						root: {
@@ -114,17 +126,18 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 							top: "2rem",
 							right: "2rem",
 							zIndex: 9999999,
-						}
+						},
 					}}
 					withBorder
 					withCloseButton
-					onClose={() => setShowNotification(undefined)}
+					onClose={() => {
+						setShowNotification(undefined);
+					}}
 					icon={showNotification === "success" ? <IconCheck /> : <IconX />}
 				>
 					{showNotification === "success"
 						? "Åtgärden har slutförts framgångsrikt"
-						: "Försök igen eller kontakta en katt om problemet kvarstår"
-					}
+						: "Försök igen eller kontakta en katt om problemet kvarstår"}
 				</Notification>
 			)}
 
@@ -136,55 +149,70 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 			>
 				<Stack gap="md">
 					<Paper p="md" withBorder>
-						<Title order={4} mb="sm" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+						<Title
+							order={4}
+							mb="sm"
+							style={{ display: "flex", alignItems: "center", gap: "8px" }}
+						>
 							<IconInfoCircle size={16} />
 							Grundinformation
 						</Title>
 						<Grid>
 							<Grid.Col span={6}>
-								<Text size="sm" c="dimmed">Namn</Text>
+								<Text size="sm" c="dimmed">
+									Namn
+								</Text>
 								<Text fw={500}>{submission.name}</Text>
 							</Grid.Col>
 							<Grid.Col span={6}>
-								<Text size="sm" c="dimmed">Ölmärke</Text>
+								<Text size="sm" c="dimmed">
+									Ölmärke
+								</Text>
 								<Text fw={500}>{submission.beerBrand || "-"}</Text>
 							</Grid.Col>
 						</Grid>
 					</Paper>
 
 					<Paper p="md" withBorder>
-						<Title order={4} mb="sm" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+						<Title
+							order={4}
+							mb="sm"
+							style={{ display: "flex", alignItems: "center", gap: "8px" }}
+						>
 							<IconCurrencyKroneSwedish size={16} />
 							Priser
 						</Title>
 						<Stack gap="sm">
 							<Group justify="space-between" align="center">
-								<Text size="sm" c="dimmed">Pris</Text>
+								<Text size="sm" c="dimmed">
+									Pris
+								</Text>
 								<Text fw={500}>
 									{submission.price && submission.centilitersStandard
-										? `${submission.price} kr / ${submission.centilitersStandard} cl`
-										: "-"
-									}
+										? `${submission.price.toString()} kr / ${submission.centilitersStandard.toString()} cl`
+										: "-"}
 								</Text>
 							</Group>
 
 							<Group justify="space-between" align="center">
-								<Text size="sm" c="dimmed">AW-pris</Text>
+								<Text size="sm" c="dimmed">
+									AW-pris
+								</Text>
 								<Text fw={500}>
 									{submission.priceAW && submission.centilitersStandard
-										? `${submission.priceAW} kr / ${submission.centilitersStandard} cl`
-										: "-"
-									}
+										? `${submission.priceAW.toString()} kr / ${submission.centilitersStandard.toString()} cl`
+										: "-"}
 								</Text>
 							</Group>
 
 							<Group justify="space-between" align="center">
-								<Text size="sm" c="dimmed">Kannapris</Text>
+								<Text size="sm" c="dimmed">
+									Kannapris
+								</Text>
 								<Text fw={500}>
 									{submission.pricePitcher && submission.centilitersPitcher
-										? `${submission.pricePitcher} kr / ${submission.centilitersPitcher} cl`
-										: "-"
-									}
+										? `${submission.pricePitcher.toString()} kr / ${submission.centilitersPitcher.toString()} cl`
+										: "-"}
 								</Text>
 							</Group>
 						</Stack>
@@ -192,32 +220,54 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 
 					{/* Features */}
 					<Paper p="md" withBorder>
-						<Title order={4} mb="sm" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+						<Title
+							order={4}
+							mb="sm"
+							style={{ display: "flex", alignItems: "center", gap: "8px" }}
+						>
 							<IconAdjustments size={16} />
 							Egenskaper
 						</Title>
 						<Group gap="sm">
 							<Badge
 								color={submission.outdoorSeating ? "green" : "gray"}
-								leftSection={<ThemeIcon size="xs" variant="transparent">
-									{submission.outdoorSeating ? <IconCheck size={12} /> : <IconX size={12} color="red" />}
-								</ThemeIcon>}
+								leftSection={
+									<ThemeIcon size="xs" variant="transparent">
+										{submission.outdoorSeating ? (
+											<IconCheck size={12} />
+										) : (
+											<IconX size={12} color="red" />
+										)}
+									</ThemeIcon>
+								}
 							>
 								Uteservering
 							</Badge>
 							<Badge
 								color={submission.afternoonSun ? "green" : "gray"}
-								leftSection={<ThemeIcon size="xs" variant="transparent">
-									{submission.afternoonSun ? <IconCheck size={12} /> : <IconX size={12} color="red" />}
-								</ThemeIcon>}
+								leftSection={
+									<ThemeIcon size="xs" variant="transparent">
+										{submission.afternoonSun ? (
+											<IconCheck size={12} />
+										) : (
+											<IconX size={12} color="red" />
+										)}
+									</ThemeIcon>
+								}
 							>
 								Eftermiddagssol
 							</Badge>
 							<Badge
 								color={submission.awTimes?.length ? "green" : "gray"}
-								leftSection={<ThemeIcon size="xs" variant="transparent">
-									{submission.awTimes?.length ? <IconCheck size={12} /> : <IconX size={12} color="red" />}
-								</ThemeIcon>}
+								leftSection={
+									<ThemeIcon size="xs" variant="transparent">
+										{submission.awTimes?.length ? (
+											<IconCheck size={12} />
+										) : (
+											<IconX size={12} color="red" />
+										)}
+									</ThemeIcon>
+								}
 							>
 								AW-tider
 							</Badge>
@@ -227,18 +277,26 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 					{/* AW Times */}
 					{submission.awTimes && submission.awTimes.length > 0 && (
 						<Paper p="md" withBorder>
-							<Title order={4} mb="sm" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+							<Title
+								order={4}
+								mb="sm"
+								style={{ display: "flex", alignItems: "center", gap: "8px" }}
+							>
 								<IconClock size={16} />
 								AW-tider
 							</Title>
 							<Stack gap="xs">
-								{submission.awTimes.map((awTime, index) => (
-									<Group key={index} justify="space-between">
+								{submission.awTimes.map((awTime) => (
+									<Group key={awTime.id} justify="space-between">
 										<Text size="sm">
-											{awTime.sameTimesAllWeek ? "Alla dagar" : `${WEEKDAY_NAMES[awTime.weekday as keyof typeof WEEKDAY_NAMES]}`}
+											{awTime.sameTimesAllWeek
+												? "Alla dagar"
+												: WEEKDAY_NAMES[
+														awTime.weekday as keyof typeof WEEKDAY_NAMES
+													]}
 										</Text>
 										<Text size="sm" fw={500}>
-											{awTime.startTime || "00:00"} - {awTime.endTime || "00:00"}
+											{awTime.startTime} - {awTime.endTime}
 										</Text>
 									</Group>
 								))}
@@ -247,22 +305,30 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 					)}
 
 					<Paper p="md" withBorder>
-						<Title order={4} mb="sm" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+						<Title
+							order={4}
+							mb="sm"
+							style={{ display: "flex", alignItems: "center", gap: "8px" }}
+						>
 							<IconMapPin size={16} />
 							Plats
 						</Title>
 						<Grid>
 							<Grid.Col span={6}>
-								<Text size="sm" c="dimmed">Latitude</Text>
+								<Text size="sm" c="dimmed">
+									Latitude
+								</Text>
 								<Text fw={500}>{submission.latitude}</Text>
 							</Grid.Col>
 							<Grid.Col span={6}>
-								<Text size="sm" c="dimmed">Longitude</Text>
+								<Text size="sm" c="dimmed">
+									Longitude
+								</Text>
 								<Text fw={500}>{submission.longitude}</Text>
 							</Grid.Col>
 						</Grid>
 
-						{(submission.urlMaps || submission.urlWebsite) && (
+						{(submission.urlMaps ?? submission.urlWebsite) && (
 							<>
 								<Divider my="sm" />
 								<Stack gap="sm">
@@ -278,7 +344,11 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 											>
 												Visa på Google Maps
 											</Button>
-											<Text size="xs" c="dimmed" style={{ wordBreak: 'break-all', maxWidth: '60%' }}>
+											<Text
+												size="xs"
+												c="dimmed"
+												style={{ wordBreak: "break-all", maxWidth: "60%" }}
+											>
 												{submission.urlMaps}
 											</Text>
 										</Group>
@@ -295,7 +365,11 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 											>
 												Webbplats
 											</Button>
-											<Text size="xs" c="dimmed" style={{ wordBreak: 'break-all', maxWidth: '60%' }}>
+											<Text
+												size="xs"
+												c="dimmed"
+												style={{ wordBreak: "break-all", maxWidth: "60%" }}
+											>
 												{submission.urlWebsite}
 											</Text>
 										</Group>
@@ -307,23 +381,28 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 
 					<Paper p="md" withBorder>
 						<Group>
-							<Text size="sm" c="dimmed">Senast uppdaterad</Text>
-							<Text fw={500}>{submission.updatedAt ? new Date(submission.updatedAt).toLocaleDateString('sv-SE') : "-"}</Text>
+							<Text size="sm" c="dimmed">
+								Senast uppdaterad
+							</Text>
+							<Text fw={500}>
+								{submission.updatedAt
+									? new Date(submission.updatedAt).toLocaleDateString("sv-SE")
+									: "-"}
+							</Text>
 						</Group>
 					</Paper>
 
 					<Group justify="space-between" mt="md">
-						<Button
-							variant="default"
-							onClick={onClose}
-						>
+						<Button variant="default" onClick={onClose}>
 							Stäng
 						</Button>
 						<Group>
 							<Button
 								color="red"
 								leftSection={<IconTrash size={16} />}
-								onClick={() => setDeleteConfirmOpen(true)}
+								onClick={() => {
+									setDeleteConfirmOpen(true);
+								}}
 								loading={approveMutation.isPending || deleteMutation.isPending}
 							>
 								Ta bort förslag
@@ -331,7 +410,9 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 							<Button
 								color="green"
 								leftSection={<IconCheck size={16} />}
-								onClick={() => setApproveConfirmOpen(true)}
+								onClick={() => {
+									setApproveConfirmOpen(true);
+								}}
 								loading={approveMutation.isPending || deleteMutation.isPending}
 							>
 								Godkänn förslag
@@ -344,24 +425,31 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 			{/* Delete Confirmation Modal */}
 			<Modal
 				opened={deleteConfirmOpen}
-				onClose={() => setDeleteConfirmOpen(false)}
+				onClose={() => {
+					setDeleteConfirmOpen(false);
+				}}
 				title={<Title order={2}>Bekräfta borttagning</Title>}
 				size="sm"
 			>
 				<Text mb="md">
-					Är du säker på att du vill ta bort förslaget "{submission.name}"? Denna åtgärd kan inte ångras.
+					Är du säker på att du vill ta bort förslaget "{submission.name}"?
+					Denna åtgärd kan inte ångras.
 				</Text>
 				<Group justify="flex-end">
 					<Button
 						variant="default"
-						onClick={() => setDeleteConfirmOpen(false)}
+						onClick={() => {
+							setDeleteConfirmOpen(false);
+						}}
 						disabled={deleteMutation.isPending}
 					>
 						Avbryt
 					</Button>
 					<Button
 						color="red"
-						onClick={onDeleteSubmission}
+						onClick={() => {
+							onDeleteSubmission();
+						}}
 						loading={deleteMutation.isPending}
 					>
 						Ta bort
@@ -372,24 +460,32 @@ export const ViewBeerLocationSubmissionDialog = ({ submission, open, onClose }: 
 			{/* Approve Confirmation Modal */}
 			<Modal
 				opened={approveConfirmOpen}
-				onClose={() => setApproveConfirmOpen(false)}
+				onClose={() => {
+					setApproveConfirmOpen(false);
+				}}
 				title={<Title order={2}>Bekräfta godkännande</Title>}
 				size="sm"
 			>
 				<Text mb="md">
-					Är du säker på att du vill godkänna förslaget "{submission.name}"? Platsen kommer att läggas till i systemet och förslaget tas bort från kön.
+					Är du säker på att du vill godkänna förslaget "{submission.name}"?
+					Platsen kommer att läggas till i systemet och förslaget tas bort från
+					kön.
 				</Text>
 				<Group justify="flex-end">
 					<Button
 						variant="default"
-						onClick={() => setApproveConfirmOpen(false)}
+						onClick={() => {
+							setApproveConfirmOpen(false);
+						}}
 						disabled={approveMutation.isPending || deleteMutation.isPending}
 					>
 						Avbryt
 					</Button>
 					<Button
 						color="green"
-						onClick={onApproveSubmission}
+						onClick={() => {
+							onApproveSubmission();
+						}}
 						loading={approveMutation.isPending || deleteMutation.isPending}
 					>
 						Godkänn

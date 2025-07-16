@@ -1,11 +1,8 @@
-export const getRandomIntInclusive = (
-	min: number = -1_000_000,
-	max: number = 0,
-) => {
+export const getRandomIntInclusive = (min = -1_000_000, max = 0) => {
 	const randomBuffer = new Uint32Array(1);
 	crypto.getRandomValues(randomBuffer);
 
-	let randomNumber = randomBuffer[0] / (0xffffffff + 1);
+	const randomNumber = randomBuffer[0] / (0xffffffff + 1);
 
 	min = Math.ceil(min);
 	max = Math.floor(max);
