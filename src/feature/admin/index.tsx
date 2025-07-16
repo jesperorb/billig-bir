@@ -1,4 +1,5 @@
 import { Outlet } from "@tanstack/react-router";
+
 import { AdminNavigation } from "./navigation";
 
 const AdminPage = () => {
@@ -7,7 +8,7 @@ const AdminPage = () => {
 			<AdminNavigation />
 			<Outlet />
 		</>
-	)
-}
+	);
+};
 
 export default AdminPage;

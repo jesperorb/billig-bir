@@ -1,13 +1,21 @@
+import { AppShell, Space, Title } from "@mantine/core";
+import {
+	IconPlus,
+	IconBeer,
+	IconBuildings,
+	IconBulb,
+} from "@tabler/icons-react";
+
 import { NavLink } from "@common/components/nav-link";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";
-import { AppShell, Space, Title } from "@mantine/core"
-import { IconPlus, IconBeer, IconBuildings, IconBulb } from "@tabler/icons-react";
 
 export const AdminNavigation = () => {
 	const toggleMenu = useToggleIsMenuOpen();
 	return (
 		<AppShell.Navbar>
-			<Title order={2} px="sm" pt="sm">Meny</Title>
+			<Title order={2} px="sm" pt="sm">
+				Meny
+			</Title>
 			<Space h="md" />
 			<NavLink
 				to="/admin/view-beer-locations"
@@ -35,4 +43,4 @@ export const AdminNavigation = () => {
 			/>
 		</AppShell.Navbar>
 	);
-}
+};

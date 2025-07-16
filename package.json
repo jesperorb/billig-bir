@@ -1,5 +1,10 @@
 {
-  "name": "billig-bir",
+  "name": "billig.beer",
+	"description": "Find the cheapest beer in Stockholm",
+	"author": {
+		"name": "Jesper Orb",
+		"email": "github@jesperorb.com"
+	},
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,6 +12,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+		"lint:fix": "eslint --fix .",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -34,6 +40,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.2",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.6",
     "eslint-plugin-react-dom": "^1.48.5",

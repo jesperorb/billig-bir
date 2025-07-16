@@ -1,9 +1,10 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { Modal, Button, Group, Stack, Text, ThemeIcon } from '@mantine/core';
-import { IconCheck, IconX, IconMapPinFilled } from '@tabler/icons-react';
-import type { MapRef } from 'react-map-gl/mapbox';
-import { Marker } from 'react-map-gl/mapbox';
-import MapContainer from '@feature/map/components/map-container';
+import { Modal, Button, Group, Stack, Text, ThemeIcon } from "@mantine/core";
+import { IconCheck, IconX, IconMapPinFilled } from "@tabler/icons-react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import type { MapRef } from "react-map-gl/mapbox";
+import { Marker } from "react-map-gl/mapbox";
+
+import MapContainer from "@feature/map/components/map-container";
 
 interface MapLocationPickerDialogProps {
 	opened: boolean;
@@ -18,12 +19,12 @@ export const MapLocationPickerDialog = ({
 	onClose,
 	onConfirm,
 	initialLatitude = 59.3293, // Stockholm default
-	initialLongitude = 18.0686
+	initialLongitude = 18.0686,
 }: MapLocationPickerDialogProps) => {
 	const mapRef = useRef<MapRef>(null);
 	const [currentCoords, setCurrentCoords] = useState({
 		latitude: initialLatitude,
-		longitude: initialLongitude
+		longitude: initialLongitude,
 	});
 
 	const handleMapMove = useCallback(() => {
@@ -31,7 +32,7 @@ export const MapLocationPickerDialog = ({
 			const center = mapRef.current.getCenter();
 			setCurrentCoords({
 				latitude: center.lat,
-				longitude: center.lng
+				longitude: center.lng,
 			});
 		}
 	}, []);
@@ -45,15 +46,15 @@ export const MapLocationPickerDialog = ({
 	useEffect(() => {
 		setCurrentCoords({
 			latitude: initialLatitude,
-			longitude: initialLongitude
+			longitude: initialLongitude,
 		});
-		
+
 		if (opened && mapRef.current) {
 			setTimeout(() => {
 				mapRef.current?.flyTo({
 					center: [initialLongitude, initialLatitude],
 					zoom: 15,
-					duration: 1000
+					duration: 1000,
 				});
 			}, 100);
 		}
@@ -67,19 +68,21 @@ export const MapLocationPickerDialog = ({
 			size="lg"
 			styles={{
 				body: { padding: 0 },
-				header: { paddingBottom: 'var(--mantine-spacing-md)' }
+				header: { paddingBottom: "var(--mantine-spacing-md)" },
 			}}
 		>
 			<Stack gap={0}>
-				<div style={{ position: 'relative', height: '400px', overflow: 'hidden' }}>
-					<MapContainer 
+				<div
+					style={{ position: "relative", height: "400px", overflow: "hidden" }}
+				>
+					<MapContainer
 						mapRef={mapRef}
 						initialViewState={{
 							longitude: initialLongitude,
 							latitude: initialLatitude,
-							zoom: 15
+							zoom: 15,
 						}}
-						style={{ width: '100%', height: '100%' }}
+						style={{ width: "100%", height: "100%" }}
 						onMove={handleMapMove}
 						interactive={true}
 					>
@@ -96,15 +99,17 @@ export const MapLocationPickerDialog = ({
 					</MapContainer>
 				</div>
 
-				<div style={{ padding: 'var(--mantine-spacing-md)' }}>
+				<div style={{ padding: "var(--mantine-spacing-md)" }}>
 					<Stack gap="md">
 						<Text size="sm" c="dimmed">
-							Panorera kartan för att välja position. Markören i mitten visar vald position.
+							Panorera kartan för att välja position. Markören i mitten visar
+							vald position.
 						</Text>
-						
+
 						<Group justify="space-between" align="center">
 							<Text size="sm">
-								<strong>Koordinater:</strong> {currentCoords.latitude}, {currentCoords.longitude}
+								<strong>Koordinater:</strong> {currentCoords.latitude},{" "}
+								{currentCoords.longitude}
 							</Text>
 						</Group>
 
