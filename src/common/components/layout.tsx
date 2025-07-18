@@ -1,16 +1,15 @@
 import { AppShell, Burger, Flex, Group, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "@tanstack/react-router";
-import { lazy, type PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
 
 import {
 	IsMenuOpenContext,
 	ToggleIsMenuOpenContext,
 } from "@common/context/menu-context";
 import { ThemeToggle } from "@common/theme/ThemeToggle";
-const InformationModal = lazy(
-	() => import("@common/components/information-modal"),
-);
+
+import InformationDialog from "./information.dialog";
 
 const AppWrapper = ({ children }: PropsWithChildren) => {
 	const [menuOpen, { toggle }] = useDisclosure();
@@ -46,7 +45,7 @@ const AppWrapper = ({ children }: PropsWithChildren) => {
 							</Group>
 							<Group h="100%" p="xs">
 								<ThemeToggle />
-								<InformationModal />
+								<InformationDialog />
 							</Group>
 						</Flex>
 					</AppShell.Header>
