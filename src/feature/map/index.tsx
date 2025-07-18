@@ -6,7 +6,7 @@ import {
 	VisuallyHidden,
 } from "@mantine/core";
 import { useMemo, useRef, useState } from "react";
-import { MapRef } from "react-map-gl/mapbox";
+import type { MapRef } from "react-map-gl/mapbox";
 
 import { useBeerLocations, useDistricts } from "@common/api/queries";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";

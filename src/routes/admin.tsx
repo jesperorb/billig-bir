@@ -1,18 +1,13 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-import Admin from "@feature/admin";
+import ApiClientWrapper from "@common/api/api-client-wrapper";
+import { AdminNavigation } from "@feature/admin/navigation";
 
 export const Route = createFileRoute("/admin")({
-	component: Admin,
-	beforeLoad: ({ context, location }) => {
-		if (!context.session) {
-			// eslint-disable-next-line @typescript-eslint/only-throw-error
-			throw redirect({
-				to: "/login",
-				search: {
-					redirect: location.href,
-				},
-			});
-		}
-	},
+	component: () => (
+		<ApiClientWrapper>
+			<AdminNavigation />
+			<Outlet />
+		</ApiClientWrapper>
+	),
 });
