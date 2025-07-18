@@ -1,8 +1,6 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useQuery } from "@tanstack/react-query";
 
-import { useApiClient } from "@common/api/api-client-context";
-import type { Database } from "@common/api/types";
 import type { BeerLocation } from "@common/types/beer-location";
 import type { District } from "@common/types/district";
 
@@ -16,18 +14,25 @@ export const commonQueryKeys = {
 	getBeerLocations: [commonBaseQueryKeys.getBeerLocations],
 };
 
-export const getDistricts = async (apiClient: SupabaseClient<Database>) => {
-	return apiClient
-		.from("district")
-		.select(
-			`
-				id,
-				name,
-				insideTolls:inside_tolls
-			`,
-		)
-		.order("name")
-		.overrideTypes<District[]>();
+export const districtsSelectQuery = `
+	id,
+	name,
+	insideTolls:inside_tolls
+`;
+
+export const getDistricts = async (): Promise<District[]> => {
+	const response = await fetch(
+		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/district?${districtsSelectQuery}`,
+		{
+			headers: {
+				apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+			},
+		},
+	);
+	if (response.ok) {
+		return response.json();
+	}
+	return [];
 };
 
 export const beerLocationsSelectQuery = `
@@ -59,28 +64,33 @@ export const beerLocationsSelectQuery = `
 	)
 `;
 
-export const getLocations = async (apiClient: SupabaseClient<Database>) => {
-	return apiClient
-		.from("location")
-		.select(beerLocationsSelectQuery)
-		.order("name")
-		.overrideTypes<BeerLocation[]>();
+export const getLocations = async (): Promise<BeerLocation[]> => {
+	const response = await fetch(
+		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/location?${beerLocationsSelectQuery}`,
+		{
+			headers: {
+				apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+			},
+		},
+	);
+	if (response.ok) {
+		return response.json();
+	}
+	return [];
 };
 
 export const useBeerLocations = () => {
-	const apiClient = useApiClient();
 	return useQuery({
 		queryKey: commonQueryKeys.getBeerLocations,
-		queryFn: () => getLocations(apiClient).then((data) => data.data),
+		queryFn: getLocations,
 		staleTime: 10 * 60 * 1000,
 	});
 };
 
 export const useDistricts = () => {
-	const apiClient = useApiClient();
 	return useQuery({
 		queryKey: commonQueryKeys.getDistricts,
-		queryFn: () => getDistricts(apiClient).then((data) => data.data),
+		queryFn: getDistricts,
 		staleTime: 10 * 60 * 1000,
 	});
 };
