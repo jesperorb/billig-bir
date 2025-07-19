@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TableRouteImport } from './routes/table'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +19,16 @@ import { Route as AdminViewBeerLocationsRouteImport } from './routes/admin/view-
 import { Route as AdminViewBeerLocationSubmissionsRouteImport } from './routes/admin/view-beer-location-submissions'
 import { Route as AdminAddBeerLocationRouteImport } from './routes/admin/add-beer-location'
 
+const TableRoute = TableRouteImport.update({
+  id: '/table',
+  path: '/table',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -58,6 +70,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/map': typeof MapRoute
+  '/table': typeof TableRoute
   '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
@@ -67,6 +81,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/map': typeof MapRoute
+  '/table': typeof TableRoute
   '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
@@ -77,6 +93,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/map': typeof MapRoute
+  '/table': typeof TableRoute
   '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
@@ -88,6 +106,8 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/map'
+    | '/table'
     | '/admin/add-beer-location'
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
@@ -97,6 +117,8 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/map'
+    | '/table'
     | '/admin/add-beer-location'
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
@@ -106,6 +128,8 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/map'
+    | '/table'
     | '/admin/add-beer-location'
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
@@ -116,10 +140,26 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
+  MapRoute: typeof MapRoute
+  TableRoute: typeof TableRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/table': {
+      id: '/table'
+      path: '/table'
+      fullPath: '/table'
+      preLoaderRoute: typeof TableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -192,6 +232,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
+  MapRoute: MapRoute,
+  TableRoute: TableRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
