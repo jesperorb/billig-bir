@@ -22,7 +22,7 @@ export const districtsSelectQuery = `
 
 export const getDistricts = async (): Promise<District[]> => {
 	const response = await fetch(
-		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/district?${districtsSelectQuery}`,
+		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/district?select=${districtsSelectQuery}`,
 		{
 			headers: {
 				apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
@@ -66,7 +66,7 @@ export const beerLocationsSelectQuery = `
 
 export const getLocations = async (): Promise<BeerLocation[]> => {
 	const response = await fetch(
-		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/location?${beerLocationsSelectQuery}`,
+		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/location?select=${beerLocationsSelectQuery}`,
 		{
 			headers: {
 				apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,

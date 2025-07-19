@@ -34,30 +34,60 @@ import { createLocalStorageManager } from "@common/utils/local-storage";
 
 interface BeerLocationTableProps {
 	data: BeerLocation[] | undefined;
-	actionColumn: {
+	actionColumn?: {
 		header: string;
 		icon: ReactNode;
 		onClick: (location: BeerLocation) => void;
 		ariaLabel: (location: BeerLocation) => string;
 	};
+	defaultSorting?: {
+		id: string;
+		desc?: boolean;
+	};
 }
+
+const DEFAULT_VISIBLE_COLUMNS: Record<keyof BeerLocation, boolean> = {
+	id: false,
+	name: true,
+	latitude: false,
+	longitude: false,
+	price: true,
+	pricePitcher: true,
+	priceAW: true,
+	awTimes: true,
+	outdoorSeating: true,
+	afternoonSun: true,
+	beerBrand: true,
+	centilitersStandard: true,
+	centilitersPitcher: true,
+	urlMaps: true,
+	urlWebsite: true,
+	updatedAt: false,
+	districts: true,
+};
 
 const STORAGE_KEY = "beer-location-table-visibility";
 const columnHelper = createColumnHelper<BeerLocation>();
 const columnVisibilityStorage = createLocalStorageManager<VisibilityState>(
 	STORAGE_KEY,
-	{},
+	DEFAULT_VISIBLE_COLUMNS,
 );
 
 export const BeerLocationTable = ({
 	data,
 	actionColumn,
+	defaultSorting,
 }: BeerLocationTableProps) => {
 	const [sorting, setSorting] = useState<SortingState>([
-		{
-			id: "name",
-			desc: false,
-		},
+		defaultSorting
+			? {
+					id: defaultSorting.id,
+					desc: defaultSorting.desc ?? false,
+				}
+			: {
+					id: "name",
+					desc: false,
+				},
 	]);
 
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
@@ -71,23 +101,27 @@ export const BeerLocationTable = ({
 
 	const columns = useMemo(
 		() => [
-			columnHelper.display({
-				id: "actions",
-				header: actionColumn.header,
-				cell: ({ row }) => (
-					<ActionIcon
-						onClick={() => {
-							actionColumn.onClick(row.original);
-						}}
-						p={0}
-						variant="subtle"
-						size="sm"
-						aria-label={actionColumn.ariaLabel(row.original)}
-					>
-						{actionColumn.icon}
-					</ActionIcon>
-				),
-			}),
+			...(actionColumn
+				? [
+						columnHelper.display({
+							id: "actions",
+							header: actionColumn.header,
+							cell: ({ row }) => (
+								<ActionIcon
+									onClick={() => {
+										actionColumn.onClick(row.original);
+									}}
+									p={0}
+									variant="subtle"
+									size="sm"
+									aria-label={actionColumn.ariaLabel(row.original)}
+								>
+									{actionColumn.icon}
+								</ActionIcon>
+							),
+						}),
+					]
+				: []),
 			columnHelper.accessor("name", {
 				header: "Namn",
 				enableSorting: true,
@@ -108,11 +142,6 @@ export const BeerLocationTable = ({
 				header: "Pris (AW)",
 				enableSorting: false,
 				cell: ({ getValue }) => getValue() ?? "-",
-			}),
-			columnHelper.display({
-				id: "centilitersAW",
-				header: "cl (AW)",
-				cell: ({ row }) => row.original.centilitersStandard,
 			}),
 			columnHelper.accessor("pricePitcher", {
 				header: "Pris (kanna)",
@@ -265,7 +294,10 @@ export const BeerLocationTable = ({
 					</Menu.Dropdown>
 				</Menu>
 			</Group>
-			<Table.ScrollContainer minWidth={500}>
+			<Table.ScrollContainer
+				minWidth={500}
+				style={{ border: "1px solid var(--mantine-color-gray-3)" }}
+			>
 				<Table
 					stickyHeader
 					striped

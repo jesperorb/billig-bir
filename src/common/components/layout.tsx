@@ -1,6 +1,6 @@
 import { AppShell, Burger, Flex, Group, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useNavigate } from "@tanstack/react-router";
+import { IconChevronLeft } from "@tabler/icons-react";
 import { type PropsWithChildren } from "react";
 
 import {
@@ -10,10 +10,14 @@ import {
 import { ThemeToggle } from "@common/theme/ThemeToggle";
 
 import InformationDialog from "./information.dialog";
+import { NavButton } from "./nav-button";
 
-const AppWrapper = ({ children }: PropsWithChildren) => {
+interface Props extends PropsWithChildren {
+	collapseMenuOnDesktop?: boolean;
+}
+
+const Layout = ({ children, collapseMenuOnDesktop = false }: Props) => {
 	const [menuOpen, { toggle }] = useDisclosure();
-	const navigate = useNavigate();
 	return (
 		<IsMenuOpenContext value={menuOpen}>
 			<ToggleIsMenuOpenContext value={toggle}>
@@ -22,11 +26,18 @@ const AppWrapper = ({ children }: PropsWithChildren) => {
 					navbar={{
 						width: 300,
 						breakpoint: "sm",
-						collapsed: { mobile: !menuOpen },
+						collapsed: { mobile: !menuOpen, desktop: collapseMenuOnDesktop },
 					}}
 				>
 					<AppShell.Header>
 						<Flex justify="space-between" align="center">
+							<NavButton
+								variant="white"
+								to="/"
+								leftSection={<IconChevronLeft />}
+							>
+								Start
+							</NavButton>
 							<Group h="100%" p="sm">
 								<Burger
 									opened={menuOpen}
@@ -34,14 +45,7 @@ const AppWrapper = ({ children }: PropsWithChildren) => {
 									hiddenFrom="sm"
 									size="sm"
 								/>
-								<Title
-									onClick={() => {
-										navigate({ to: "/" });
-									}}
-									order={1}
-								>
-									billig.beer
-								</Title>
+								<Title order={1}>billig.beer</Title>
 							</Group>
 							<Group h="100%" p="xs">
 								<ThemeToggle />
@@ -56,4 +60,4 @@ const AppWrapper = ({ children }: PropsWithChildren) => {
 	);
 };
 
-export default AppWrapper;
+export default Layout;

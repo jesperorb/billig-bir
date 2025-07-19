@@ -1,12 +1,15 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import ApiClientWrapper from "@common/api/api-client-wrapper";
+import Layout from "@common/components/layout";
 import Login from "@feature/auth";
 
 export const Route = createFileRoute("/login")({
 	component: () => (
 		<ApiClientWrapper>
-			<Login />
+			<Layout>
+				<Login />
+			</Layout>
 		</ApiClientWrapper>
 	),
 	beforeLoad: async ({ location }) => {

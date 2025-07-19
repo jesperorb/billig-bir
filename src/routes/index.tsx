@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import Map from "@feature/map";
+import Landing from "@feature/landing";
 
 export const Route = createFileRoute("/")({
-	component: Map,
+	component: Landing,
 });
