@@ -1,5 +1,6 @@
 import {
 	AppShell,
+	Group,
 	ScrollArea,
 	Stack,
 	Title,
@@ -9,6 +10,7 @@ import { useMemo, useRef, useState } from "react";
 import type { MapRef } from "react-map-gl/mapbox";
 
 import { useBeerLocations, useDistricts } from "@common/api/queries";
+import InformationActionsMobile from "@common/components/information-actions.mobile";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";
 import { BeerLocation } from "@common/types/beer-location";
 import { Filters, PriceType } from "@feature/map/filters";
@@ -96,7 +98,7 @@ const Map = () => {
 				<PriceTypeContext value={priceType}>
 					<AppShell.Navbar>
 						<ScrollArea scrollbars="y">
-							<Stack justify="space-around" h="100%" p="md">
+							<Stack justify="space-around" h="100%" p="md" pb="xl">
 								<FiltersForm
 									filters={filters}
 									setFilters={setFilters}
@@ -106,6 +108,9 @@ const Map = () => {
 									<CheapestBeer location={cheapestBeer} showOnMap={showOnMap} />
 								)}
 							</Stack>
+							<Group hiddenFrom="sm" w="100%" px="md" pb="xl">
+								<InformationActionsMobile />
+							</Group>
 						</ScrollArea>
 					</AppShell.Navbar>
 					<AppShell.Main>

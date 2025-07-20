@@ -20,7 +20,7 @@ const BeerLocationSubmissionDialog = lazy(
 	() => import("@feature/submissions/create-beer-location-submission.dialog"),
 );
 
-const InformationDialog = () => {
+const InformationActionsDesktop = () => {
 	const [modalOpened, { open, close }] = useDisclosure(false);
 	const [beerSubmissionDialogOpen, beerSubmissionDialogActions] =
 		useDisclosure(false);
@@ -85,4 +85,4 @@ const InformationDialog = () => {
 	);
 };
 
-export default InformationDialog;
+export default InformationActionsDesktop;
