@@ -11,6 +11,7 @@ import type { MapRef } from "react-map-gl/mapbox";
 
 import { useBeerLocations, useDistricts } from "@common/api/queries";
 import InformationActionsMobile from "@common/components/information-actions.mobile";
+import Layout from "@common/components/layout";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";
 import { BeerLocation } from "@common/types/beer-location";
 import { Filters, PriceType } from "@feature/map/filters";
@@ -93,7 +94,7 @@ const Map = () => {
 	};
 
 	return (
-		<>
+		<Layout>
 			<SetPriceTypeContext value={setPriceType}>
 				<PriceTypeContext value={priceType}>
 					<AppShell.Navbar>
@@ -123,7 +124,7 @@ const Map = () => {
 					</AppShell.Main>
 				</PriceTypeContext>
 			</SetPriceTypeContext>
-		</>
+		</Layout>
 	);
 };
 
