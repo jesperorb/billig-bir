@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 
 import { useApiClient } from "@common/api/api-client-context";
 import { useSession } from "@common/api/use-session";
+import Layout from "@common/components/layout";
 
 interface LoginFormData {
 	email: string;
@@ -38,49 +39,51 @@ const Login = () => {
 	}, [session, navigate]);
 
 	return (
-		<AppShell.Main px="lg">
-			<Container size={400}>
-				<Space h="md" />
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<Controller
-						name="email"
-						control={control}
-						rules={{
-							required: "Skriv in en email",
-							pattern: {
-								value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-								message: "Ange en giltig email-adress",
-							},
-						}}
-						render={({ field, fieldState }) => (
-							<TextInput
-								{...field}
-								label="Email"
-								type="email"
-								rightSection={<IconAt size={16} />}
-								error={fieldState.error?.message}
-							/>
-						)}
-					/>
+		<Layout>
+			<AppShell.Main px="lg">
+				<Container size={400}>
 					<Space h="md" />
-					<Controller
-						name="password"
-						control={control}
-						rules={{ required: "Skriv in ett lösenord" }}
-						render={({ field, fieldState }) => (
-							<TextInput
-								{...field}
-								label="Lösenord"
-								type="password"
-								error={fieldState.error?.message}
-							/>
-						)}
-					/>
-					<Space h="md" />
-					<Button type="submit">Logga in</Button>
-				</form>
-			</Container>
-		</AppShell.Main>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<Controller
+							name="email"
+							control={control}
+							rules={{
+								required: "Skriv in en email",
+								pattern: {
+									value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+									message: "Ange en giltig email-adress",
+								},
+							}}
+							render={({ field, fieldState }) => (
+								<TextInput
+									{...field}
+									label="Email"
+									type="email"
+									rightSection={<IconAt size={16} />}
+									error={fieldState.error?.message}
+								/>
+							)}
+						/>
+						<Space h="md" />
+						<Controller
+							name="password"
+							control={control}
+							rules={{ required: "Skriv in ett lösenord" }}
+							render={({ field, fieldState }) => (
+								<TextInput
+									{...field}
+									label="Lösenord"
+									type="password"
+									error={fieldState.error?.message}
+								/>
+							)}
+						/>
+						<Space h="md" />
+						<Button type="submit">Logga in</Button>
+					</form>
+				</Container>
+			</AppShell.Main>
+		</Layout>
 	);
 };
 
