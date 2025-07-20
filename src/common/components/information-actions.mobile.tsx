@@ -6,8 +6,9 @@ import {
 	IconExternalLink,
 	IconSettings,
 } from "@tabler/icons-react";
-import { useNavigate } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
+
+import { NavButton } from "./nav-button";
 
 const BeerLocationSubmissionDialog = lazy(
 	() => import("@feature/submissions/create-beer-location-submission.dialog"),
@@ -16,7 +17,6 @@ const BeerLocationSubmissionDialog = lazy(
 const InformationActionsMobile = () => {
 	const [beerSubmissionDialogOpen, beerSubmissionDialogActions] =
 		useDisclosure(false);
-	const navigate = useNavigate();
 
 	return (
 		<Stack gap="md" w="100%">
@@ -44,16 +44,9 @@ const InformationActionsMobile = () => {
 			>
 				Föreslå ny plats
 			</Button>
-			<Button
-				fullWidth
-				onClick={() => {
-					navigate({ to: "/admin/view-beer-locations" });
-					close();
-				}}
-				leftSection={<IconSettings />}
-			>
+			<NavButton fullWidth to="/admin" leftSection={<IconSettings />}>
 				Administrera
-			</Button>
+			</NavButton>
 			<Button
 				fullWidth
 				component="a"

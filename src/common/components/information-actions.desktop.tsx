@@ -13,8 +13,9 @@ import {
 	IconQuestionMark,
 	IconSettings,
 } from "@tabler/icons-react";
-import { useNavigate } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
+
+import { NavButton } from "./nav-button";
 
 const BeerLocationSubmissionDialog = lazy(
 	() => import("@feature/submissions/create-beer-location-submission.dialog"),
@@ -24,7 +25,6 @@ const InformationActionsDesktop = () => {
 	const [modalOpened, { open, close }] = useDisclosure(false);
 	const [beerSubmissionDialogOpen, beerSubmissionDialogActions] =
 		useDisclosure(false);
-	const navigate = useNavigate();
 
 	return (
 		<>
@@ -61,15 +61,9 @@ const InformationActionsDesktop = () => {
 					>
 						Föreslå ny plats
 					</Button>
-					<Button
-						onClick={() => {
-							navigate({ to: "/admin/view-beer-locations" });
-							close();
-						}}
-						leftSection={<IconSettings />}
-					>
+					<NavButton to="/admin" leftSection={<IconSettings />}>
 						Administrera
-					</Button>
+					</NavButton>
 					<Button
 						component="a"
 						href="https://github.com/jesperorb/billig-bir"

@@ -1,23 +1,41 @@
-import { type Session } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 
-import { useApiClient } from "@common/api/api-client-context";
+import { getSupabaseClient } from "./api-client";
+
+export const sessionBaseQueryKeys = {
+	get: "getSession",
+} as const;
+
+export const sessionQueryKeys = {
+	get: [sessionBaseQueryKeys.get],
+} as const;
 
 export const useSession = () => {
-	const apiClient = useApiClient();
-	const [session, setSession] = useState<Session | null>(null);
+	const queryClient = useQueryClient();
+	const apiClient = useRef(getSupabaseClient());
+	const session = useQuery({
+		queryKey: sessionQueryKeys.get,
+		queryFn: () =>
+			apiClient.current.auth
+				.getSession()
+				.then(({ data: { session } }) => session),
+	});
 	useEffect(() => {
-		apiClient.auth.getSession().then(({ data: { session } }) => {
-			setSession(session);
-		});
 		const {
 			data: { subscription },
-		} = apiClient.auth.onAuthStateChange((_event, session) => {
-			setSession(session);
+		} = apiClient.current.auth.onAuthStateChange((_event, session) => {
+			if (session === null) {
+				queryClient.invalidateQueries({
+					queryKey: sessionQueryKeys.get,
+				});
+			} else {
+				queryClient.setQueryData(sessionQueryKeys.get, session);
+			}
 		});
 		return () => {
 			subscription.unsubscribe();
 		};
-	}, [apiClient.auth]);
+	}, [apiClient.current.auth, queryClient]);
 	return session;
 };
