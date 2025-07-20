@@ -45,6 +45,7 @@ const ViewBeerLocationSubmissions = () => {
 			</Group>
 			<BeerLocationTable
 				data={data ?? undefined}
+				isLoading={isLoading}
 				actionColumn={{
 					header: "Visa",
 					icon: <IconEye />,
