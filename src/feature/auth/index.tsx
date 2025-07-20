@@ -32,7 +32,7 @@ const Login = () => {
 	};
 
 	useEffect(() => {
-		if (session?.user) {
+		if (session.data?.user) {
 			navigate({ to: "/admin" });
 		}
 	}, [session, navigate]);
