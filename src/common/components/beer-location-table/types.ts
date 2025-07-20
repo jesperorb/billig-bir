@@ -1,0 +1,24 @@
+import type { StyleProp, MantineSpacing } from "@mantine/core";
+import type { ReactNode } from "react";
+
+import type { BeerLocation } from "@common/types/beer-location";
+import type { District } from "@common/types/district";
+
+export type ColumnKeys = keyof BeerLocation | "pricePerCentiliter";
+
+export interface BeerLocationTableProps {
+	data: BeerLocation[] | undefined;
+	districts?: District[];
+	isLoading?: boolean;
+	actionColumn?: {
+		header: string;
+		icon: ReactNode;
+		onClick: (location: BeerLocation) => void;
+		ariaLabel: (location: BeerLocation) => string;
+	};
+	defaultSorting?: {
+		id: ColumnKeys;
+		desc?: boolean;
+	};
+	filterPadding?: StyleProp<MantineSpacing>;
+}

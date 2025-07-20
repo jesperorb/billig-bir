@@ -9,7 +9,7 @@ import {
 	useBeerLocations,
 	useDistricts,
 } from "@common/api/queries";
-import { BeerLocationTable } from "@common/components/beer-location-table";
+import { BeerLocationTable } from "@common/components/beer-location-table/table";
 import { BeerLocation } from "@common/types/beer-location";
 
 import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog";

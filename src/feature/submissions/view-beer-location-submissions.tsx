@@ -4,7 +4,7 @@ import { IconReload, IconEye } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { BeerLocationTable } from "@common/components/beer-location-table";
+import { BeerLocationTable } from "@common/components/beer-location-table/table";
 import { BeerLocation } from "@common/types/beer-location";
 
 import {

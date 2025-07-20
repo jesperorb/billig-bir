@@ -1,7 +1,7 @@
 import { createContext, use } from "react";
 
+import { PriceType } from "@common/types/common";
 import { noop } from "@common/utils/function";
-import { PriceType } from "@feature/map/filters";
 
 export const PriceTypeContext = createContext<PriceType>("price");
 export const SetPriceTypeContext =
