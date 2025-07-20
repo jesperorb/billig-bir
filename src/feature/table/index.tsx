@@ -2,6 +2,7 @@ import { AppShell, Container, Group, Title } from "@mantine/core";
 
 import { useBeerLocations } from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table";
+import InformationActionsMobile from "@common/components/information-actions.mobile";
 import Layout from "@common/components/layout";
 
 const ViewBeerLocationsTable = () => {
@@ -20,6 +21,11 @@ const ViewBeerLocationsTable = () => {
 					/>
 				</Container>
 			</AppShell.Main>
+			<AppShell.Navbar>
+				<Group hiddenFrom="sm" w="100%" px="md" pt="xl">
+					<InformationActionsMobile />
+				</Group>
+			</AppShell.Navbar>
 		</Layout>
 	);
 };
