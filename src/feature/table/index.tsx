@@ -1,23 +1,27 @@
 import { AppShell, Container, Group, Title } from "@mantine/core";
 
-import { useBeerLocations } from "@common/api/queries";
+import { useBeerLocations, useDistricts } from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table";
 import InformationActionsMobile from "@common/components/information-actions.mobile";
 import Layout from "@common/components/layout";
 
 const ViewBeerLocationsTable = () => {
-	const { data } = useBeerLocations();
+	const { data, isLoading } = useBeerLocations();
+	const { data: districts } = useDistricts();
 
 	return (
 		<Layout collapseMenuOnDesktop>
 			<AppShell.Main>
 				<Container>
-					<Group justify="space-between" p="sm">
+					<Group justify="space-between" py="sm">
 						<Title order={2}>Platser</Title>
 					</Group>
 					<BeerLocationTable
 						data={data ?? undefined}
+						districts={districts}
+						isLoading={isLoading}
 						defaultSorting={{ id: "price", desc: false }}
+						filterPadding={0}
 					/>
 				</Container>
 			</AppShell.Main>
