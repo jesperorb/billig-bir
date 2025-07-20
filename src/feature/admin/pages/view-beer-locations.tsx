@@ -4,7 +4,11 @@ import { IconPencil, IconReload } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { commonBaseQueryKeys, useBeerLocations } from "@common/api/queries";
+import {
+	commonBaseQueryKeys,
+	useBeerLocations,
+	useDistricts,
+} from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table";
 import { BeerLocation } from "@common/types/beer-location";
 
@@ -13,6 +17,7 @@ import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog"
 const ViewBeerLocations = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocations();
+	const { data: districts } = useDistricts();
 	const [modalOpened, { open, close }] = useDisclosure(false);
 	const [locationToEdit, setLocationToEdit] = useState<
 		BeerLocation | undefined
@@ -41,6 +46,8 @@ const ViewBeerLocations = () => {
 			</Group>
 			<BeerLocationTable
 				data={data ?? undefined}
+				districts={districts}
+				isLoading={isLoading}
 				actionColumn={{
 					header: "Redigera",
 					icon: <IconPencil />,

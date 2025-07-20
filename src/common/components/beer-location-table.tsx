@@ -8,6 +8,12 @@ import {
 	Checkbox,
 	Stack,
 	TextInput,
+	MultiSelect,
+	Skeleton,
+	Text,
+	Center,
+	type StyleProp,
+	type MantineSpacing,
 } from "@mantine/core";
 import {
 	IconCheck,
@@ -26,14 +32,18 @@ import {
 	useReactTable,
 	type SortingState,
 	type VisibilityState,
+	type ColumnFiltersState,
 } from "@tanstack/react-table";
 import { useMemo, useState, ReactNode, useEffect } from "react";
 
 import type { BeerLocation } from "@common/types/beer-location";
+import type { District } from "@common/types/district";
 import { createLocalStorageManager } from "@common/utils/local-storage";
 
 interface BeerLocationTableProps {
 	data: BeerLocation[] | undefined;
+	districts?: District[];
+	isLoading?: boolean;
 	actionColumn?: {
 		header: string;
 		icon: ReactNode;
@@ -44,6 +54,7 @@ interface BeerLocationTableProps {
 		id: string;
 		desc?: boolean;
 	};
+	filterPadding?: StyleProp<MantineSpacing>;
 }
 
 const DEFAULT_VISIBLE_COLUMNS: Record<keyof BeerLocation, boolean> = {
@@ -75,8 +86,11 @@ const columnVisibilityStorage = createLocalStorageManager<VisibilityState>(
 
 export const BeerLocationTable = ({
 	data,
+	districts,
+	isLoading = false,
 	actionColumn,
 	defaultSorting,
+	filterPadding = "sm",
 }: BeerLocationTableProps) => {
 	const [sorting, setSorting] = useState<SortingState>([
 		defaultSorting
@@ -93,7 +107,7 @@ export const BeerLocationTable = ({
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
 		() => columnVisibilityStorage.get(),
 	);
-	const [globalFilter, setGlobalFilter] = useState("");
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	useEffect(() => {
 		columnVisibilityStorage.set(columnVisibility);
@@ -125,10 +139,8 @@ export const BeerLocationTable = ({
 			columnHelper.accessor("name", {
 				header: "Namn",
 				enableSorting: true,
-			}),
-			columnHelper.accessor("beerBrand", {
-				header: "Ölmärke",
-				enableSorting: false,
+				enableColumnFilter: true,
+				filterFn: "includesString",
 			}),
 			columnHelper.accessor("price", {
 				header: "Pris",
@@ -152,6 +164,10 @@ export const BeerLocationTable = ({
 				header: "cl (kanna)",
 				enableSorting: false,
 				cell: ({ getValue }) => getValue() ?? "-",
+			}),
+			columnHelper.accessor("beerBrand", {
+				header: "Ölmärke",
+				enableSorting: false,
 			}),
 			columnHelper.accessor("outdoorSeating", {
 				header: "Uteservering",
@@ -198,6 +214,13 @@ export const BeerLocationTable = ({
 			columnHelper.display({
 				id: "districts",
 				header: "Stadsdel",
+				filterFn: (row, _columnId, filterValue: string[]) => {
+					if (!filterValue.length) return true;
+					if (!row.original.districts?.length) return false;
+					return row.original.districts.some((district) =>
+						filterValue.includes(district.id.toString()),
+					);
+				},
 				cell: ({ row }) =>
 					row.original.districts?.map((district) => district.name).join(", ") ??
 					"-",
@@ -232,18 +255,53 @@ export const BeerLocationTable = ({
 		}));
 	};
 
+	// Get current filter values
+	const districtsFilter = columnFilters.find(
+		(filter) => filter.id === "districts",
+	);
+	const selectedDistricts = districtsFilter
+		? (districtsFilter.value as string[])
+		: [];
+
+	const nameFilter = columnFilters.find((filter) => filter.id === "name");
+	const nameSearchValue = nameFilter ? (nameFilter.value as string) : "";
+
+	// Handle districts filter change
+	const handleDistrictsChange = (newSelectedDistricts: string[]) => {
+		setColumnFilters((prev) => {
+			const otherFilters = prev.filter((filter) => filter.id !== "districts");
+			if (newSelectedDistricts.length === 0) {
+				return otherFilters;
+			}
+			return [
+				...otherFilters,
+				{ id: "districts", value: newSelectedDistricts },
+			];
+		});
+	};
+
+	// Handle name filter change
+	const handleNameChange = (newNameValue: string) => {
+		setColumnFilters((prev) => {
+			const otherFilters = prev.filter((filter) => filter.id !== "name");
+			if (newNameValue.trim() === "") {
+				return otherFilters;
+			}
+			return [...otherFilters, { id: "name", value: newNameValue }];
+		});
+	};
+
 	const table = useReactTable({
 		data: data ?? [],
 		columns,
 		state: {
 			sorting,
 			columnVisibility,
-			globalFilter,
+			columnFilters,
 		},
 		onSortingChange: setSorting,
 		onColumnVisibilityChange: setColumnVisibility,
-		onGlobalFilterChange: setGlobalFilter,
-		globalFilterFn: "includesString",
+		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
@@ -255,18 +313,78 @@ export const BeerLocationTable = ({
 		return null;
 	};
 
+	// Render skeleton rows for loading state
+	const renderSkeletonRows = () => {
+		const visibleColumns = table.getVisibleFlatColumns();
+		return Array.from({ length: 3 }).map((_, index) => (
+			<Table.Tr key={`skeleton-row-${index.toString()}`}>
+				{visibleColumns.map((column) => (
+					<Table.Td key={column.id}>
+						<Skeleton height={20} radius="sm" />
+					</Table.Td>
+				))}
+			</Table.Tr>
+		));
+	};
+
+	// Render empty state
+	const renderEmptyState = () => {
+		const visibleColumns = table.getVisibleFlatColumns();
+		return (
+			<Table.Tr>
+				<Table.Td colSpan={visibleColumns.length}>
+					<Center py="xl">
+						<Text c="dimmed">Inga platser hittades</Text>
+					</Center>
+				</Table.Td>
+			</Table.Tr>
+		);
+	};
+
 	return (
 		<Stack gap="md">
-			<Group justify="space-between" align="flex-end" px="sm">
-				<TextInput
-					placeholder="Sök efter namn"
-					leftSection={<IconSearch size={16} />}
-					value={globalFilter}
-					onChange={(event) => {
-						setGlobalFilter(event.currentTarget.value);
-					}}
-					style={{ flexGrow: 1, maxWidth: 300 }}
-				/>
+			<Group justify="space-between" align="flex-end" px={filterPadding}>
+				<Group gap="md" style={{ flexGrow: 1 }}>
+					<TextInput
+						placeholder="Sök efter namn"
+						leftSection={<IconSearch size={16} />}
+						value={nameSearchValue}
+						onChange={(event) => {
+							handleNameChange(event.currentTarget.value);
+						}}
+						style={{ flexGrow: 1, minWidth: 300 }}
+					/>
+					{districts && districts.length > 0 && (
+						<MultiSelect
+							placeholder="Filtrera på stadsdelar"
+							data={[
+								{
+									group: "Innanför tullarna",
+									items: districts
+										.filter((district) => district.insideTolls)
+										.map((district) => ({
+											value: district.id.toString(),
+											label: district.name,
+										})),
+								},
+								{
+									group: "Utanför tullarna",
+									items: districts
+										.filter((district) => !district.insideTolls)
+										.map((district) => ({
+											value: district.id.toString(),
+											label: district.name,
+										})),
+								},
+							]}
+							value={selectedDistricts}
+							onChange={handleDistrictsChange}
+							searchable
+							clearable
+							style={{ flexGrow: 1, minWidth: 300 }}
+						/>
+					)}
+				</Group>
 				<Menu shadow="md" width={250}>
 					<Menu.Target>
 						<Button
@@ -342,15 +460,25 @@ export const BeerLocationTable = ({
 						))}
 					</Table.Thead>
 					<Table.Tbody>
-						{table.getRowModel().rows.map((row) => (
-							<Table.Tr key={row.id}>
-								{row.getVisibleCells().map((cell) => (
-									<Table.Td key={cell.id} style={{ whiteSpace: "nowrap" }}>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</Table.Td>
-								))}
-							</Table.Tr>
-						))}
+						{isLoading
+							? renderSkeletonRows()
+							: table.getRowModel().rows.length === 0
+								? renderEmptyState()
+								: table.getRowModel().rows.map((row) => (
+										<Table.Tr key={row.id}>
+											{row.getVisibleCells().map((cell) => (
+												<Table.Td
+													key={cell.id}
+													style={{ whiteSpace: "nowrap" }}
+												>
+													{flexRender(
+														cell.column.columnDef.cell,
+														cell.getContext(),
+													)}
+												</Table.Td>
+											))}
+										</Table.Tr>
+									))}
 					</Table.Tbody>
 				</Table>
 			</Table.ScrollContainer>
