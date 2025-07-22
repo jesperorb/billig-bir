@@ -1,5 +1,7 @@
 import type { Database } from "@common/api/types";
+import { BeerLocation } from "@common/types/beer-location";
 import type { BeerLocationFormData } from "@common/types/beer-location-form-data";
+import { PriceType } from "@common/types/common";
 
 type BeerLocationInsert = Database["public"]["Tables"]["location"]["Insert"];
 
@@ -21,3 +23,14 @@ export const beerLocationFormDataToSchema = (
 	url_maps: values.urlMaps,
 	url_website: values.urlWebsite,
 });
+
+export const getPriceForType =
+	(priceType: PriceType) =>
+	(location: BeerLocation): number =>
+		location[priceType] ?? location.price;
+
+export const getPricePerCl =
+	(priceType: PriceType) => (location: BeerLocation) =>
+		(
+			getPriceForType(priceType)(location) / location.centilitersStandard
+		).toFixed(2);

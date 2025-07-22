@@ -20,7 +20,6 @@ const ViewBeerLocationsTable = () => {
 						data={data ?? undefined}
 						districts={districts}
 						isLoading={isLoading}
-						defaultSorting={{ id: "pricePerCentiliter", desc: false }}
 						filterPadding={0}
 					/>
 				</Container>

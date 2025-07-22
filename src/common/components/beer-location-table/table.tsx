@@ -21,7 +21,8 @@ import { useMemo, useState, useEffect } from "react";
 
 import { BeerLocation } from "@common/types/beer-location";
 import type { PriceType } from "@common/types/common";
-import { getDistrictName } from "@common/utils/district";
+import { getPricePerCl } from "@common/utils/beer-location";
+import { getJoinedDistrictsNames } from "@common/utils/district";
 
 import { DistrictSelect } from "../district-select/district-select";
 
@@ -34,12 +35,12 @@ import { BeerLocationTableProps, ColumnKeys } from "./types";
 import {
 	columnHelper,
 	columnVisibilityStorage,
+	districtsFilterFn,
 	getFilter,
-	getNotFilter,
 	getOrEmpty,
-	getPriceForType,
 	getStringArrayFilterValue,
 	getStringFilterValue,
+	updateFilterValue,
 } from "./utils";
 
 export const BeerLocationTable = ({
@@ -102,30 +103,18 @@ export const BeerLocationTable = ({
 				header: "cl",
 				enableSorting: false,
 			}),
-			columnHelper.accessor((row) => row.price / row.centilitersStandard, {
+			columnHelper.accessor(getPricePerCl("price"), {
 				id: "pricePerCentiliter",
 				header: "kr/cl",
 				enableSorting: true,
-				cell: ({ row }) => {
-					const pricePerCl =
-						row.original.price / row.original.centilitersStandard;
-					return pricePerCl.toFixed(2);
-				},
+				cell: ({ row }) => getPricePerCl("price")(row.original),
 			}),
-			columnHelper.accessor(
-				(row) => getPriceForType(row, "priceAW") / row.centilitersStandard,
-				{
-					id: "priceAWPerCentiliter",
-					header: "kr/cl (AW)",
-					enableSorting: true,
-					cell: ({ row }) => {
-						const pricePerCl =
-							getPriceForType(row.original, "priceAW") /
-							row.original.centilitersStandard;
-						return pricePerCl.toFixed(2);
-					},
-				},
-			),
+			columnHelper.accessor(getPricePerCl("priceAW"), {
+				id: "priceAWPerCentiliter",
+				header: "kr/cl (AW)",
+				enableSorting: true,
+				cell: ({ row }) => getPricePerCl("priceAW")(row.original),
+			}),
 			columnHelper.accessor("priceAW", {
 				header: "Pris (AW)",
 				enableSorting: false,
@@ -165,15 +154,9 @@ export const BeerLocationTable = ({
 			columnHelper.display({
 				id: "districts",
 				header: "Stadsdel",
-				filterFn: (row, _columnId, filterValue: string[]) => {
-					if (!filterValue.length) return true;
-					if (!row.original.districts?.length) return false;
-					return row.original.districts.some((district) =>
-						filterValue.includes(district.id.toString()),
-					);
-				},
+				filterFn: districtsFilterFn,
 				cell: ({ row }) =>
-					getOrEmpty(row.original.districts?.map(getDistrictName).join(", ")),
+					getOrEmpty(getJoinedDistrictsNames(row.original.districts)),
 			}),
 			columnHelper.accessor("latitude", {
 				header: "Latitude",
@@ -203,49 +186,22 @@ export const BeerLocationTable = ({
 		getFilteredRowModel: getFilteredRowModel(),
 	});
 
-	const selectedDistricts = getStringArrayFilterValue(
-		columnFilters.find(getFilter("districts")),
-	);
-
-	const nameSearchValue = getStringFilterValue(
-		columnFilters.find(getFilter("name")),
-	);
-
 	const handleDistrictsChange = (newSelectedDistricts: string[]) => {
-		setColumnFilters((prev) => {
-			const otherFilters = prev.filter(getNotFilter("districts"));
-			if (newSelectedDistricts.length === 0) {
-				return otherFilters;
-			}
-			return [
-				...otherFilters,
-				{ id: "districts", value: newSelectedDistricts },
-			];
-		});
+		setColumnFilters(updateFilterValue("districts", newSelectedDistricts));
 	};
 
-	const handleNameChange = (newNameValue: string) => {
-		setColumnFilters((prev) => {
-			const otherFilters = prev.filter(getNotFilter("name"));
-			if (newNameValue.trim() === "") {
-				return otherFilters;
-			}
-			return [...otherFilters, { id: "name", value: newNameValue }];
-		});
-	};
-
-	const updatedColumnVisibility = (columnId: ColumnKeys, visible: boolean) => {
+	const updatedColumnVisibility = (
+		columnId: ColumnKeys,
+		visible: boolean | "toggle",
+	) => {
 		setColumnVisibility((prev) => ({
 			...prev,
-			[columnId]: visible,
+			[columnId]: visible === "toggle" ? !prev[columnId] : visible,
 		}));
 	};
 
 	const toggleColumnVisiblity = (columnId: ColumnKeys) => {
-		setColumnVisibility((prev) => ({
-			...prev,
-			[columnId]: !prev[columnId] ? true : false,
-		}));
+		updatedColumnVisibility(columnId, "toggle");
 	};
 
 	const togglePricePerClColumn = (value: string | null) => {
@@ -271,16 +227,18 @@ export const BeerLocationTable = ({
 						label="Sök"
 						placeholder="Sök efter namn"
 						leftSection={<IconSearch size={16} />}
-						value={nameSearchValue}
+						value={getStringFilterValue(columnFilters.find(getFilter("name")))}
 						onChange={(event) => {
-							handleNameChange(event.currentTarget.value);
+							setColumnFilters(updateFilterValue("name", event.target.value));
 						}}
 						style={{ flexGrow: 1, minWidth: 300 }}
 					/>
 					{districts && districts.length > 0 && (
 						<DistrictSelect
 							districts={districts}
-							value={selectedDistricts}
+							value={getStringArrayFilterValue(
+								columnFilters.find(getFilter("districts")),
+							)}
 							onChange={handleDistrictsChange}
 						/>
 					)}

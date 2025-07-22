@@ -10,6 +10,10 @@ export const isOutsideTolls = (district: District): boolean =>
 
 export const getDistrictName = (district: District): string => district.name;
 
+export const getJoinedDistrictsNames = (
+	districts: District[] | undefined,
+): string => districts?.map(getDistrictName).join(", ") ?? "";
+
 export const districtToSelectItem = (district: District): ComboboxItem => ({
 	value: district.id.toString(),
 	label: district.name,
