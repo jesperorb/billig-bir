@@ -230,11 +230,11 @@ export const ViewBeerLocationSubmissionDialog = ({
 						</Title>
 						<Group gap="sm">
 							<Badge
-								color={submission.outdoorSeating ? "green" : "gray"}
+								color={submission.outdoorSeating ? "teal" : "gray"}
 								leftSection={
 									<ThemeIcon size="xs" variant="transparent">
 										{submission.outdoorSeating ? (
-											<IconCheck size={12} />
+											<IconCheck size={12} color="white" />
 										) : (
 											<IconX size={12} color="red" />
 										)}
@@ -244,11 +244,11 @@ export const ViewBeerLocationSubmissionDialog = ({
 								Uteservering
 							</Badge>
 							<Badge
-								color={submission.afternoonSun ? "green" : "gray"}
+								color={submission.afternoonSun ? "teal" : "gray"}
 								leftSection={
 									<ThemeIcon size="xs" variant="transparent">
 										{submission.afternoonSun ? (
-											<IconCheck size={12} />
+											<IconCheck size={12} color="white" />
 										) : (
 											<IconX size={12} color="red" />
 										)}
