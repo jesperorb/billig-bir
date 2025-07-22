@@ -4,12 +4,13 @@ import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 
 import type { BeerLocation } from "@common/types/beer-location";
 
+import type { ColumnKeys } from "./types";
 import { getAccessorFromColumn } from "./utils";
 
 interface ColumnVisibilityMenuProps {
 	columns: ColumnDef<BeerLocation>[];
 	columnVisibility: VisibilityState;
-	onToggleColumnVisibility: (columnId: string) => void;
+	onToggleColumnVisibility: (columnId: ColumnKeys) => void;
 }
 
 export const ColumnVisibilityMenu = ({
@@ -41,7 +42,7 @@ export const ColumnVisibilityMenu = ({
 							label={typeof column.header === "string" ? column.header : value}
 							checked={columnVisibility[value]}
 							onChange={() => {
-								onToggleColumnVisibility(value);
+								onToggleColumnVisibility(value as ColumnKeys);
 							}}
 						/>
 					</Menu.Item>

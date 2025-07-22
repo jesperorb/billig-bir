@@ -30,7 +30,7 @@ import { ColumnVisibilityMenu } from "./column-visibility-menu";
 import { AVAILABLE_SORTABLE_PRICE_TYPES, DEFAULT_SORTING } from "./constants";
 import { TableHead } from "./table-head";
 import { TableRows } from "./table-rows";
-import { BeerLocationTableProps } from "./types";
+import { BeerLocationTableProps, ColumnKeys } from "./types";
 import {
 	columnHelper,
 	columnVisibilityStorage,
@@ -102,16 +102,25 @@ export const BeerLocationTable = ({
 				header: "cl",
 				enableSorting: false,
 			}),
+			columnHelper.accessor((row) => row.price / row.centilitersStandard, {
+				id: "pricePerCentiliter",
+				header: "kr/cl",
+				enableSorting: true,
+				cell: ({ row }) => {
+					const pricePerCl =
+						row.original.price / row.original.centilitersStandard;
+					return pricePerCl.toFixed(2);
+				},
+			}),
 			columnHelper.accessor(
-				(row) =>
-					getPriceForType(row, selectedPriceType) / row.centilitersStandard,
+				(row) => getPriceForType(row, "priceAW") / row.centilitersStandard,
 				{
-					id: "pricePerCentiliter",
-					header: "kr/cl",
+					id: "priceAWPerCentiliter",
+					header: "kr/cl (AW)",
 					enableSorting: true,
 					cell: ({ row }) => {
 						const pricePerCl =
-							getPriceForType(row.original, selectedPriceType) /
+							getPriceForType(row.original, "priceAW") /
 							row.original.centilitersStandard;
 						return pricePerCl.toFixed(2);
 					},
@@ -175,15 +184,24 @@ export const BeerLocationTable = ({
 				enableSorting: false,
 			}),
 		],
-		[actionColumn, selectedPriceType],
+		[actionColumn],
 	);
 
-	const toggleColumnVisiblity = (columnId: string) => {
-		setColumnVisibility((prev) => ({
-			...prev,
-			[columnId]: !prev[columnId] ? true : false,
-		}));
-	};
+	const table = useReactTable({
+		data: data ?? [],
+		columns,
+		state: {
+			sorting,
+			columnVisibility,
+			columnFilters,
+		},
+		onSortingChange: setSorting,
+		onColumnVisibilityChange: setColumnVisibility,
+		onColumnFiltersChange: setColumnFilters,
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+	});
 
 	const selectedDistricts = getStringArrayFilterValue(
 		columnFilters.find(getFilter("districts")),
@@ -216,21 +234,34 @@ export const BeerLocationTable = ({
 		});
 	};
 
-	const table = useReactTable({
-		data: data ?? [],
-		columns,
-		state: {
-			sorting,
-			columnVisibility,
-			columnFilters,
-		},
-		onSortingChange: setSorting,
-		onColumnVisibilityChange: setColumnVisibility,
-		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-	});
+	const updatedColumnVisibility = (columnId: ColumnKeys, visible: boolean) => {
+		setColumnVisibility((prev) => ({
+			...prev,
+			[columnId]: visible,
+		}));
+	};
+
+	const toggleColumnVisiblity = (columnId: ColumnKeys) => {
+		setColumnVisibility((prev) => ({
+			...prev,
+			[columnId]: !prev[columnId] ? true : false,
+		}));
+	};
+
+	const togglePricePerClColumn = (value: string | null) => {
+		if (!value) return;
+		const valueAs = value as PriceType;
+		setSelectedPriceType(valueAs);
+		if (valueAs === "price") {
+			updatedColumnVisibility("pricePerCentiliter", true);
+			updatedColumnVisibility("priceAWPerCentiliter", false);
+			table.setSorting([{ id: "pricePerCentiliter", desc: false }]);
+		} else {
+			updatedColumnVisibility("priceAWPerCentiliter", true);
+			updatedColumnVisibility("pricePerCentiliter", false);
+			table.setSorting([{ id: "priceAWPerCentiliter", desc: false }]);
+		}
+	};
 
 	return (
 		<Stack gap="md">
@@ -257,11 +288,7 @@ export const BeerLocationTable = ({
 						label="Pristyp (kr/cl)"
 						data={AVAILABLE_SORTABLE_PRICE_TYPES}
 						value={selectedPriceType}
-						onChange={(value) => {
-							if (value) {
-								setSelectedPriceType(value as PriceType);
-							}
-						}}
+						onChange={togglePricePerClColumn}
 						style={{ minWidth: 150 }}
 					/>
 				</Group>

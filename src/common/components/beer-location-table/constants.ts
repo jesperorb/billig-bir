@@ -25,6 +25,7 @@ export const DEFAULT_VISIBLE_COLUMNS: Record<ColumnKeys, boolean> = {
 	longitude: false,
 	price: true,
 	pricePerCentiliter: true,
+	priceAWPerCentiliter: false,
 	pricePitcher: false,
 	priceAW: false,
 	awTimes: true,
