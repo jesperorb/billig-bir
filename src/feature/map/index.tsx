@@ -14,16 +14,14 @@ import InformationActionsMobile from "@common/components/information-actions.mob
 import Layout from "@common/components/layout";
 import { useToggleIsMenuOpen } from "@common/context/menu-context";
 import { BeerLocation } from "@common/types/beer-location";
-import { Filters, PriceType } from "@feature/map/filters";
+import type { PriceType } from "@common/types/common";
+import { getPriceForType } from "@common/utils/beer-location";
+import { Filters } from "@feature/map/filters";
 import {
 	PriceTypeContext,
 	SetPriceTypeContext,
 } from "@feature/map/price-type-context";
-import {
-	getCheapestLocation,
-	getStandardAdjustedPrice,
-	priceStepsMarkMax,
-} from "@feature/map/utils";
+import { getCheapestLocation, priceStepsMarkMax } from "@feature/map/utils";
 
 import { CheapestBeer } from "./components/cheapest-beer";
 import { FiltersForm } from "./components/filters-form";
@@ -50,11 +48,7 @@ const Map = () => {
 			data?.filter((location) =>
 				Object.entries(filters).every(([key, value]) => {
 					if (key === "price" && typeof value === "number") {
-						const hasValidSelectedPriceType =
-							location[priceType] && location[priceType] <= value;
-						return priceType === "price"
-							? getStandardAdjustedPrice(location) <= value
-							: hasValidSelectedPriceType;
+						return getPriceForType(priceType)(location) <= value;
 					}
 					if (key === "districts" && Array.isArray(value)) {
 						// If no districts selected or all districts selected, show all locations
@@ -80,8 +74,8 @@ const Map = () => {
 	);
 
 	const cheapestBeer = useMemo(
-		() => getCheapestLocation(filteredBeerLocations),
-		[filteredBeerLocations],
+		() => getCheapestLocation(priceType)(filteredBeerLocations),
+		[priceType, filteredBeerLocations],
 	);
 
 	const showOnMap = (location: BeerLocation) => {

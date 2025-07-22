@@ -2,9 +2,9 @@ import { HoverCard, Paper, Text } from "@mantine/core";
 import { Marker } from "react-map-gl/mapbox";
 
 import type { BeerLocation } from "@common/types/beer-location";
+import { getPriceForType } from "@common/utils/beer-location";
 
 import { usePriceType } from "../price-type-context";
-import { getPriceBySelectedPriceType } from "../utils";
 
 import { CardContent } from "./card-content";
 
@@ -33,7 +33,7 @@ export const MapMarkers = ({ beerLocations }: Props) => {
 								radius="50%"
 							>
 								<Text size="xs" fw={700}>
-									{getPriceBySelectedPriceType(priceType)(location)}
+									{getPriceForType(priceType)(location)}
 								</Text>
 							</Paper>
 						</HoverCard.Target>

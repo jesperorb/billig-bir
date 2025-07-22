@@ -16,8 +16,8 @@ import {
 } from "@tabler/icons-react";
 
 import { type BeerLocation } from "@common/types/beer-location";
-import { type PriceType } from "@feature/map/filters";
-import { getPriceBySelectedPriceType } from "@feature/map/utils";
+import { PriceType } from "@common/types/common";
+import { getPriceForType } from "@common/utils/beer-location";
 
 import { AwTimesList } from "./aw-times-list";
 
@@ -31,7 +31,7 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 		<Stack gap="sm">
 			<Text fw={500}>{location.name}</Text>
 			<Badge color="teal">
-				{`${getPriceBySelectedPriceType(priceType)(location)?.toString() ?? "N/A"} kr / ${priceType === "pricePitcher" && location.centilitersPitcher ? location.centilitersPitcher.toString() : "40"} cl`}
+				{`${getPriceForType(priceType)(location).toString()} kr / ${priceType === "pricePitcher" && location.centilitersPitcher ? location.centilitersPitcher.toString() : "40"} cl`}
 			</Badge>
 			<Text c="dimmed">Typ: {location.beerBrand}</Text>
 			{location.centilitersStandard !== 40 && (

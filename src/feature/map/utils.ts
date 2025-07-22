@@ -1,34 +1,20 @@
-import { type BeerLocation } from "@common/types/beer-location";
-import { PriceType } from "@common/types/common";
-
-export const getPriceAdjustedFor40cl = (price: number, centiliters: number) =>
-	Number((price / centiliters) * 40);
-
-export const getStandardAdjustedPrice = (location: BeerLocation) =>
-	location.centilitersStandard === 40
-		? location.price
-		: Math.floor(
-				getPriceAdjustedFor40cl(location.price, location.centilitersStandard),
-			);
-
-export const getPriceBySelectedPriceType =
-	(priceType: PriceType) => (location: BeerLocation) =>
-		priceType === "price"
-			? getStandardAdjustedPrice(location)
-			: location[priceType];
+import type { BeerLocation } from "@common/types/beer-location";
+import type { PriceType } from "@common/types/common";
+import { getPriceForType } from "@common/utils/beer-location";
 
 export const getPrice = (location: BeerLocation) => location.price;
 
-export const getCheapestLocation = (
-	locations: BeerLocation[],
-): BeerLocation | undefined =>
-	locations.reduce(
-		(minLocation, location) =>
-			getStandardAdjustedPrice(location) < getStandardAdjustedPrice(minLocation)
-				? location
-				: minLocation,
-		locations[0],
-	);
+export const getCheapestLocation =
+	(priceType: PriceType) =>
+	(locations: BeerLocation[]): BeerLocation | undefined =>
+		locations.reduce(
+			(minLocation, location) =>
+				getPriceForType(priceType)(location) <
+				getPriceForType(priceType)(minLocation)
+					? location
+					: minLocation,
+			locations[0],
+		);
 
 export const priceStepsMarks: { value: number; label: number }[] = [
 	{ value: 0, label: 0 },
