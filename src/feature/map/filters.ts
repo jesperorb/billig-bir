@@ -7,8 +7,3 @@ export type Filters = Pick<
 > & { districts: District[] };
 
 export type FilterKey = keyof Filters;
-
-export type PriceType = keyof Pick<
-	BeerLocation,
-	"price" | "priceAW" | "pricePitcher"
->;

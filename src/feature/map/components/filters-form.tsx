@@ -11,8 +11,9 @@ import {
 	MultiSelect,
 } from "@mantine/core";
 
+import { PriceType } from "@common/types/common";
 import { District } from "@common/types/district";
-import { FilterKey, Filters, PriceType } from "@feature/map/filters";
+import { FilterKey, Filters } from "@feature/map/filters";
 import { useSetPriceType, usePriceType } from "@feature/map/price-type-context";
 import { priceStepsMarkMax, priceStepsMarks } from "@feature/map/utils";
 
@@ -38,7 +39,7 @@ export const FiltersForm = ({ filters, setFilters, districts }: Props) => {
 			<Radio.Group
 				value={priceType}
 				onChange={(newPriceType) => {
-					setPriceType(newPriceType as PriceType);
+					setPriceType(newPriceType as unknown as PriceType);
 				}}
 				name="priceType"
 				label="Pristyp"
