@@ -475,12 +475,19 @@ export const BeerLocationForm = ({
 										<Controller
 											name={`awTimes.${index}.startTime`}
 											control={control}
-											render={({ field: fieldProps }) => (
+											rules={{
+												pattern: {
+													value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+													message: "Ange tid i format HH:MM (t.ex. 15:30)",
+												},
+											}}
+											render={({ field: fieldProps, fieldState }) => (
 												<TextInput
 													{...fieldProps}
 													label="Starttid"
 													placeholder="HH:MM"
 													style={{ flex: 1 }}
+													error={fieldState.error?.message}
 												/>
 											)}
 										/>
@@ -488,12 +495,19 @@ export const BeerLocationForm = ({
 										<Controller
 											name={`awTimes.${index}.endTime`}
 											control={control}
-											render={({ field: fieldProps }) => (
+											rules={{
+												pattern: {
+													value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+													message: "Ange tid i format HH:MM (t.ex. 17:00)",
+												},
+											}}
+											render={({ field: fieldProps, fieldState }) => (
 												<TextInput
 													{...fieldProps}
 													label="Sluttid"
 													placeholder="HH:MM"
 													style={{ flex: 1 }}
+													error={fieldState.error?.message}
 												/>
 											)}
 										/>
