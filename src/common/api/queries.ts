@@ -36,7 +36,7 @@ export const getDistricts = async (): Promise<District[]> => {
 };
 
 export const getBeerLocationsSelectQuery = (
-	type?: "default" | "submission",
+	type: "default" | "submission" = "default",
 ) => `
 	id,
 	name,

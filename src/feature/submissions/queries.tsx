@@ -55,19 +55,27 @@ export const createBeerLocationSubmission =
 			);
 		}
 
-		if (values.districtId) {
-			await createLocationDistrictSubmission(apiClient)(
-				values.districtId,
-				locationData.id,
-			);
-		}
-		if (values.awTimes?.length) {
-			for (const time of values.awTimes) {
-				await createAwTimeSubmission(apiClient)({
-					value: time,
-					locationId: locationData.id,
-				});
+		try {
+			if (values.districtId) {
+				await createLocationDistrictSubmission(apiClient)(
+					values.districtId,
+					locationData.id,
+				);
 			}
+			if (values.awTimes?.length) {
+				for (const time of values.awTimes) {
+					await createAwTimeSubmission(apiClient)({
+						value: time,
+						locationId: locationData.id,
+					});
+				}
+			}
+		} catch (error) {
+			await deleteBeerLocationSubmission(apiClient)({
+				...values,
+				id: locationData.id,
+			});
+			throw error;
 		}
 	};
 
