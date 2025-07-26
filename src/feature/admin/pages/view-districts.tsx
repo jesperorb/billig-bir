@@ -7,7 +7,7 @@ import { useDistricts, commonBaseQueryKeys } from "@common/api/queries";
 import type { District } from "@common/types/district";
 
 import { CreateDistrictDialog } from "../components/create-district.dialog";
-import { DistrictsTable } from "../components/districts-table";
+import { DistrictsTable } from "../components/districts-table/districts-table";
 import { EditDistrictDialog } from "../components/edit-district.dialog";
 import {
 	useUpdateDistrict,
@@ -37,39 +37,29 @@ const ViewDistricts = () => {
 		setSelectedDistrict(null);
 	};
 
-	const handleSubmitEdit = async (district: District) => {
-		await updateMutation.mutateAsync(district);
+	const invalidate = async () => {
 		await queryClient.invalidateQueries({
 			queryKey: [commonBaseQueryKeys.getDistricts],
 		});
+	};
+
+	const handleSubmitEdit = async (district: District) => {
+		await updateMutation.mutateAsync(district);
+		await invalidate();
 		handleCloseEditDialog();
 	};
 
 	const handleDeleteDistrict = async (district: District) => {
 		await deleteMutation.mutateAsync(district.id);
-		await queryClient.invalidateQueries({
-			queryKey: [commonBaseQueryKeys.getDistricts],
-		});
+		await invalidate();
 		handleCloseEditDialog();
 	};
 
 	const handleCreateDistrict = async (data: District) => {
 		await createMutation.mutateAsync(data);
-		await queryClient.invalidateQueries({
-			queryKey: [commonBaseQueryKeys.getDistricts],
-		});
+		await invalidate();
 		setCreateDialogOpened(false);
 	};
-
-	if (isLoading) {
-		return (
-			<AppShell.Main>
-				<Title order={2} mb="lg">
-					Laddar stadsdelar...
-				</Title>
-			</AppShell.Main>
-		);
-	}
 
 	return (
 		<>
@@ -77,15 +67,6 @@ const ViewDistricts = () => {
 				<Group justify="space-between" p="sm">
 					<Title order={2}>Stadsdelar</Title>
 					<Group>
-						<Button
-							leftSection={<IconPlus size={16} />}
-							onClick={() => {
-								setCreateDialogOpened(true);
-							}}
-							disabled={isLoading}
-						>
-							Skapa stadsdel
-						</Button>
 						<Button
 							loading={isLoading}
 							rightSection={<IconReload />}
@@ -99,8 +80,21 @@ const ViewDistricts = () => {
 						</Button>
 					</Group>
 				</Group>
+				<Group display="flex" w="100%" p="sm" mb="lg" justify="end">
+					<Button
+						w={{ base: "100%", md: "initial" }}
+						leftSection={<IconPlus size={16} />}
+						onClick={() => {
+							setCreateDialogOpened(true);
+						}}
+						disabled={isLoading}
+					>
+						Lägg till stadsdel
+					</Button>
+				</Group>
 				<DistrictsTable
 					data={districts ?? undefined}
+					isLoading={isLoading}
 					actionColumn={{
 						header: "Redigera",
 						icon: <IconEdit size={16} />,

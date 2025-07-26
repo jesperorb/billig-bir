@@ -2,9 +2,10 @@ import {
 	ActionIcon,
 	Table,
 	Group,
-	Stack,
 	TextInput,
 	Select,
+	Space,
+	Box,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import {
@@ -19,28 +20,32 @@ import {
 } from "@tanstack/react-table";
 import { useMemo, useState, useEffect } from "react";
 
+import { DistrictSelect } from "@common/components/district-select/district-select";
+import { BooleanCell } from "@common/components/table/boolean-cell";
+import { ColumnVisibilityMenu } from "@common/components/table/column-visibility-menu";
+import { TableHead } from "@common/components/table/table-head";
+import { TableRows } from "@common/components/table/table-rows";
 import { BeerLocation } from "@common/types/beer-location";
 import type { PriceType } from "@common/types/common";
 import { getPricePerCl } from "@common/utils/beer-location";
 import { getJoinedDistrictsNames } from "@common/utils/district";
-
-import { DistrictSelect } from "../district-select/district-select";
-
-import { BooleanCell } from "./boolean-cell";
-import { ColumnVisibilityMenu } from "./column-visibility-menu";
-import { AVAILABLE_SORTABLE_PRICE_TYPES, DEFAULT_SORTING } from "./constants";
-import { TableHead } from "./table-head";
-import { TableRows } from "./table-rows";
-import { BeerLocationTableProps, ColumnKeys } from "./types";
 import {
-	columnHelper,
-	columnVisibilityStorage,
-	districtsFilterFn,
 	getFilter,
 	getOrEmpty,
 	getStringArrayFilterValue,
 	getStringFilterValue,
+} from "@common/utils/table";
+
+import { AVAILABLE_SORTABLE_PRICE_TYPES } from "./constants";
+import { BeerLocationTableProps, ColumnKeys } from "./types";
+import {
+	columnHelper,
+	beerLocationTableColumnVisibilityStorage,
+	districtsFilterFn,
 	updateFilterValue,
+	beerLocationTableSortingStorage,
+	getDefaultColumnVisiblity,
+	getDefaultPriceType,
 } from "./utils";
 
 export const BeerLocationTable = ({
@@ -48,23 +53,27 @@ export const BeerLocationTable = ({
 	districts,
 	isLoading = false,
 	actionColumn,
-	defaultSorting,
 	filterPadding = "sm",
 }: BeerLocationTableProps) => {
-	const [sorting, setSorting] = useState<SortingState>([
-		{ ...DEFAULT_SORTING, ...defaultSorting },
-	]);
+	const [sorting, setSorting] = useState<SortingState>(() =>
+		beerLocationTableSortingStorage.get(),
+	);
 
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-		() => columnVisibilityStorage.get(),
+		() => getDefaultColumnVisiblity(),
 	);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const [selectedPriceType, setSelectedPriceType] =
-		useState<PriceType>("price");
+	const [selectedPriceType, setSelectedPriceType] = useState<PriceType>(() =>
+		getDefaultPriceType(),
+	);
 
 	useEffect(() => {
-		columnVisibilityStorage.set(columnVisibility);
+		beerLocationTableColumnVisibilityStorage.set(columnVisibility);
 	}, [columnVisibility]);
+
+	useEffect(() => {
+		beerLocationTableSortingStorage.set(sorting);
+	}, [sorting]);
 
 	const columns = useMemo(
 		() => [
@@ -99,6 +108,11 @@ export const BeerLocationTable = ({
 				header: "Pris",
 				enableSorting: true,
 			}),
+			columnHelper.accessor("priceAW", {
+				header: "Pris (AW)",
+				enableSorting: false,
+				cell: ({ getValue }) => getOrEmpty(getValue()),
+			}),
 			columnHelper.accessor("centilitersStandard", {
 				header: "cl",
 				enableSorting: false,
@@ -114,11 +128,6 @@ export const BeerLocationTable = ({
 				header: "kr/cl (AW)",
 				enableSorting: true,
 				cell: ({ row }) => getPricePerCl("priceAW")(row.original),
-			}),
-			columnHelper.accessor("priceAW", {
-				header: "Pris (AW)",
-				enableSorting: false,
-				cell: ({ getValue }) => getOrEmpty(getValue()),
 			}),
 			columnHelper.accessor("pricePitcher", {
 				header: "Pris (kanna)",
@@ -211,55 +220,57 @@ export const BeerLocationTable = ({
 		if (valueAs === "price") {
 			updatedColumnVisibility("pricePerCentiliter", true);
 			updatedColumnVisibility("priceAWPerCentiliter", false);
+			updatedColumnVisibility("price", true);
 			table.setSorting([{ id: "pricePerCentiliter", desc: false }]);
 		} else {
 			updatedColumnVisibility("priceAWPerCentiliter", true);
 			updatedColumnVisibility("pricePerCentiliter", false);
+			updatedColumnVisibility("priceAW", true);
 			table.setSorting([{ id: "priceAWPerCentiliter", desc: false }]);
 		}
 	};
 
 	return (
-		<Stack gap="md">
+		<>
 			<Group justify="space-between" align="flex-end" px={filterPadding}>
-				<Group gap="md" style={{ flexGrow: 1 }}>
-					<TextInput
-						label="Sök"
-						placeholder="Sök efter namn"
-						leftSection={<IconSearch size={16} />}
-						value={getStringFilterValue(columnFilters.find(getFilter("name")))}
-						onChange={(event) => {
-							setColumnFilters(updateFilterValue("name", event.target.value));
-						}}
-						style={{ flexGrow: 1, minWidth: 300 }}
-					/>
-					{districts && districts.length > 0 && (
-						<DistrictSelect
-							districts={districts}
-							value={getStringArrayFilterValue(
-								columnFilters.find(getFilter("districts")),
-							)}
-							onChange={handleDistrictsChange}
-						/>
+				<TextInput
+					label="Sök"
+					placeholder="Sök efter namn"
+					leftSection={<IconSearch size={16} />}
+					value={getStringFilterValue(
+						columnFilters.find(getFilter<ColumnKeys>("name")),
 					)}
-					<Select
-						label="Pristyp (kr/cl)"
-						data={AVAILABLE_SORTABLE_PRICE_TYPES}
-						value={selectedPriceType}
-						onChange={togglePricePerClColumn}
-						style={{ minWidth: 150 }}
-					/>
-				</Group>
-				<ColumnVisibilityMenu
-					columns={columns as ColumnDef<BeerLocation>[]}
-					columnVisibility={columnVisibility}
-					onToggleColumnVisibility={toggleColumnVisiblity}
+					onChange={(event) => {
+						setColumnFilters(updateFilterValue("name", event.target.value));
+					}}
+					style={{ flexGrow: 1, minWidth: 200 }}
 				/>
+				{districts && districts.length > 0 && (
+					<DistrictSelect
+						districts={districts}
+						value={getStringArrayFilterValue(
+							columnFilters.find(getFilter<ColumnKeys>("districts")),
+						)}
+						onChange={handleDistrictsChange}
+					/>
+				)}
+				<Select
+					label="Pristyp (kr/cl)"
+					data={AVAILABLE_SORTABLE_PRICE_TYPES}
+					value={selectedPriceType}
+					onChange={togglePricePerClColumn}
+					style={{ flexGrow: 1, minWidth: 200 }}
+				/>
+				<Box mt="xs" maw={{ sm: 300 }} style={{ flexGrow: 1, minWidth: 200 }}>
+					<ColumnVisibilityMenu
+						columns={columns as ColumnDef<BeerLocation>[]}
+						columnVisibility={columnVisibility}
+						onToggleColumnVisibility={toggleColumnVisiblity}
+					/>
+				</Box>
 			</Group>
-			<Table.ScrollContainer
-				minWidth={500}
-				style={{ border: "1px solid var(--mantine-color-gray-3)" }}
-			>
+			<Space h="lg" />
+			<Table.ScrollContainer minWidth={500}>
 				<Table
 					stickyHeader
 					striped
@@ -277,6 +288,7 @@ export const BeerLocationTable = ({
 					</Table.Tbody>
 				</Table>
 			</Table.ScrollContainer>
-		</Stack>
+			<Space h="xl" />
+		</>
 	);
 };

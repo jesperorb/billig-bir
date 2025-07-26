@@ -17,7 +17,7 @@ import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog"
 const ViewBeerLocations = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocations();
-	const { data: districts } = useDistricts();
+	const { data: districts, isLoading: isLoadingDistricts } = useDistricts();
 	const [modalOpened, { open, close }] = useDisclosure(false);
 	const [locationToEdit, setLocationToEdit] = useState<
 		BeerLocation | undefined
@@ -57,7 +57,7 @@ const ViewBeerLocations = () => {
 			/>
 			<EditBeerLocationDialog
 				location={locationToEdit}
-				isLoading={isLoading}
+				isLoading={isLoading || isLoadingDistricts}
 				open={modalOpened}
 				onClose={close}
 			/>

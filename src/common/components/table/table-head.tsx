@@ -1,15 +1,17 @@
 import { Group, Table } from "@mantine/core";
 import { flexRender, type HeaderGroup } from "@tanstack/react-table";
 
-import type { BeerLocation } from "@common/types/beer-location";
+import { SortIcon } from "@common/components/table/sort-icon";
 
-import { SortIcon } from "./sort-icon";
+import { getCommonPinningStyles } from "./utils";
 
-interface Props {
-	headerGroups: HeaderGroup<BeerLocation>[];
+interface Props<Type extends object> {
+	headerGroups: HeaderGroup<Type>[];
 }
 
-export const TableHead = ({ headerGroups }: Props) => {
+export const TableHead = <Type extends object>({
+	headerGroups,
+}: Props<Type>) => {
 	return (
 		<Table.Thead>
 			{headerGroups.map((headerGroup) => (
@@ -18,6 +20,7 @@ export const TableHead = ({ headerGroups }: Props) => {
 						<Table.Th
 							key={header.id}
 							style={{
+								...getCommonPinningStyles(header.column),
 								cursor: header.column.getCanSort() ? "pointer" : "default",
 								userSelect: "none",
 								whiteSpace: "nowrap",

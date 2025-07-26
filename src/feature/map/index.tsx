@@ -41,8 +41,6 @@ const Map = () => {
 	const { data } = useBeerLocations();
 	const { data: districts } = useDistricts();
 
-	console.log(data);
-
 	const filteredBeerLocations = useMemo(
 		() =>
 			data?.filter((location) =>

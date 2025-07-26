@@ -2,28 +2,32 @@ import { Button, Checkbox, Menu } from "@mantine/core";
 import { IconColumns } from "@tabler/icons-react";
 import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 
-import type { BeerLocation } from "@common/types/beer-location";
+import { getAccessorFromColumn } from "@common/utils/table";
 
-import type { ColumnKeys } from "./types";
-import { getAccessorFromColumn } from "./utils";
-
-interface ColumnVisibilityMenuProps {
-	columns: ColumnDef<BeerLocation>[];
+interface ColumnVisibilityMenuProps<
+	Type extends object,
+	ColumnKeys extends string,
+> {
+	columns: ColumnDef<Type>[];
 	columnVisibility: VisibilityState;
 	onToggleColumnVisibility: (columnId: ColumnKeys) => void;
 }
 
-export const ColumnVisibilityMenu = ({
+export const ColumnVisibilityMenu = <
+	Type extends object,
+	ColumnKeys extends string,
+>({
 	columns,
 	columnVisibility,
 	onToggleColumnVisibility,
-}: ColumnVisibilityMenuProps) => (
-	<Menu shadow="md" width={250}>
+}: ColumnVisibilityMenuProps<Type, ColumnKeys>) => (
+	<Menu shadow="md">
 		<Menu.Target>
 			<Button
 				leftSection={<IconColumns size={16} />}
 				variant="outline"
 				size="sm"
+				w="100%"
 			>
 				Kolumner
 			</Button>

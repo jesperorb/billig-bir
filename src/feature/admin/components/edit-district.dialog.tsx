@@ -1,4 +1,4 @@
-import { Modal, Title, Group, Button } from "@mantine/core";
+import { Modal, Group, Button } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 
 import type { District } from "@common/types/district";
@@ -40,7 +40,7 @@ export const EditDistrictDialog = ({
 		<Modal
 			opened={opened}
 			onClose={onClose}
-			title={<Title order={3}>Redigera stadsdel</Title>}
+			title="Redigera stadsdel"
 			size="md"
 		>
 			<DistrictForm
