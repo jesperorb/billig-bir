@@ -7,7 +7,7 @@ import Layout from "@common/components/layout";
 
 const ViewBeerLocationsTable = () => {
 	const { data, isLoading } = useBeerLocations();
-	const { data: districts } = useDistricts();
+	const { data: districts, isLoading: isLoadingDistricts } = useDistricts();
 
 	return (
 		<Layout collapseMenuOnDesktop>
@@ -19,7 +19,7 @@ const ViewBeerLocationsTable = () => {
 					<BeerLocationTable
 						data={data ?? undefined}
 						districts={districts}
-						isLoading={isLoading}
+						isLoading={isLoading || isLoadingDistricts}
 						filterPadding={0}
 					/>
 				</Container>

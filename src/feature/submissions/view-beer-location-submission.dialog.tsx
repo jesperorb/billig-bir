@@ -10,7 +10,7 @@ import {
 	Badge,
 	Grid,
 	ThemeIcon,
-	Notification,
+	Drawer,
 } from "@mantine/core";
 import {
 	IconCheck,
@@ -28,8 +28,8 @@ import { useState } from "react";
 
 import { commonBaseQueryKeys } from "@common/api/queries";
 import { WEEKDAY_NAMES } from "@common/constants";
+import { useNotification } from "@common/notifications/use-notification";
 import type { BeerLocation } from "@common/types/beer-location";
-import { NotificationType } from "@common/types/common";
 
 import {
 	useDeleteBeerLocationSubmission,
@@ -50,9 +50,7 @@ export const ViewBeerLocationSubmissionDialog = ({
 }: Props) => {
 	const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 	const [approveConfirmOpen, setApproveConfirmOpen] = useState(false);
-	const [showNotification, setShowNotification] = useState<
-		NotificationType | undefined
-	>(undefined);
+	const showNotification = useNotification();
 	const queryClient = useQueryClient();
 	const deleteMutation = useDeleteBeerLocationSubmission();
 	const approveMutation = useApproveBeerLocationSubmission();
@@ -72,18 +70,20 @@ export const ViewBeerLocationSubmissionDialog = ({
 		try {
 			await deleteMutation.mutateAsync(submission);
 			invalidateQueries();
-			setShowNotification("success");
+			showNotification(
+				"success",
+				"Platsförlag borttaget",
+				"Platsförslaget har tagits bort",
+			);
 			onClose();
 			setDeleteConfirmOpen(false);
-			setTimeout(() => {
-				setShowNotification(undefined);
-			}, 2000);
 		} catch (error) {
 			console.error("Error deleting submission:", error);
-			setShowNotification("error");
-			setTimeout(() => {
-				setShowNotification(undefined);
-			}, 3000);
+			showNotification(
+				"error",
+				"Något gick fel",
+				"Försök igen eller kontakta en katt om problemet kvarstår",
+			);
 		}
 	};
 
@@ -93,18 +93,20 @@ export const ViewBeerLocationSubmissionDialog = ({
 			await approveMutation.mutateAsync(submission);
 			await deleteMutation.mutateAsync(submission);
 			invalidateQueries();
-			setShowNotification("success");
+			showNotification(
+				"success",
+				"Platsförslaget godkänt",
+				"Förslaget har godkänts och platsen har lagts till",
+			);
 			onClose();
 			setApproveConfirmOpen(false);
-			setTimeout(() => {
-				setShowNotification(undefined);
-			}, 2000);
 		} catch (error) {
 			console.error("Error approving submission:", error);
-			setShowNotification("error");
-			setTimeout(() => {
-				setShowNotification(undefined);
-			}, 3000);
+			showNotification(
+				"error",
+				"Något gick fel",
+				"Försök igen eller kontakta en katt om problemet kvarstår",
+			);
 		}
 	};
 
@@ -112,36 +114,7 @@ export const ViewBeerLocationSubmissionDialog = ({
 
 	return (
 		<>
-			{showNotification && (
-				<Notification
-					title={
-						showNotification === "success"
-							? "Åtgärd slutförd!"
-							: "Något gick fel"
-					}
-					color={showNotification === "error" ? "red" : "green"}
-					styles={{
-						root: {
-							position: "fixed",
-							top: "2rem",
-							right: "2rem",
-							zIndex: 9999999,
-						},
-					}}
-					withBorder
-					withCloseButton
-					onClose={() => {
-						setShowNotification(undefined);
-					}}
-					icon={showNotification === "success" ? <IconCheck /> : <IconX />}
-				>
-					{showNotification === "success"
-						? "Åtgärden har slutförts framgångsrikt"
-						: "Försök igen eller kontakta en katt om problemet kvarstår"}
-				</Notification>
-			)}
-
-			<Modal
+			<Drawer
 				opened={open}
 				onClose={onClose}
 				title={<Title order={2}>Platsförslag: {submission.name}</Title>}
@@ -420,7 +393,7 @@ export const ViewBeerLocationSubmissionDialog = ({
 						</Group>
 					</Group>
 				</Stack>
-			</Modal>
+			</Drawer>
 
 			{/* Delete Confirmation Modal */}
 			<Modal
@@ -428,7 +401,7 @@ export const ViewBeerLocationSubmissionDialog = ({
 				onClose={() => {
 					setDeleteConfirmOpen(false);
 				}}
-				title={<Title order={2}>Bekräfta borttagning</Title>}
+				title="Bekräfta borttagning"
 				size="sm"
 			>
 				<Text mb="md">
@@ -463,7 +436,7 @@ export const ViewBeerLocationSubmissionDialog = ({
 				onClose={() => {
 					setApproveConfirmOpen(false);
 				}}
-				title={<Title order={2}>Bekräfta godkännande</Title>}
+				title="Bekräfta godkännande"
 				size="sm"
 			>
 				<Text mb="md">

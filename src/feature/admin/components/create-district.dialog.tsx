@@ -1,4 +1,4 @@
-import { Modal, Title } from "@mantine/core";
+import { Modal } from "@mantine/core";
 
 import type { District } from "@common/types/district";
 
@@ -26,7 +26,7 @@ export const CreateDistrictDialog = ({
 		<Modal
 			opened={opened}
 			onClose={onClose}
-			title={<Title order={3}>Skapa ny stadsdel</Title>}
+			title="Skapa ny stadsdel"
 			size="md"
 		>
 			<DistrictForm

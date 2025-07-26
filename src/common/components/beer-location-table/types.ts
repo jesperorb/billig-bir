@@ -19,9 +19,5 @@ export interface BeerLocationTableProps {
 		onClick: (location: BeerLocation) => void;
 		ariaLabel: (location: BeerLocation) => string;
 	};
-	defaultSorting?: {
-		id: ColumnKeys;
-		desc?: boolean;
-	};
 	filterPadding?: StyleProp<MantineSpacing>;
 }

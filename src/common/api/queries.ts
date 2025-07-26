@@ -35,7 +35,9 @@ export const getDistricts = async (): Promise<District[]> => {
 	return [];
 };
 
-export const beerLocationsSelectQuery = `
+export const getBeerLocationsSelectQuery = (
+	type?: "default" | "submission",
+) => `
 	id,
 	name,
 	latitude,
@@ -54,8 +56,8 @@ export const beerLocationsSelectQuery = `
 	districts:district(
 		id,
 		name
-	)
-	awTimes:aw_time (
+	),
+	awTimes:aw_time${type === "default" ? "" : "_submission"}(
 		weekday,
 		startTime:start_time,
 		endTime:end_time,
@@ -66,7 +68,7 @@ export const beerLocationsSelectQuery = `
 
 export const getLocations = async (): Promise<BeerLocation[]> => {
 	const response = await fetch(
-		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/location?select=${beerLocationsSelectQuery}`,
+		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/location?select=${getBeerLocationsSelectQuery()}`,
 		{
 			headers: {
 				apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,

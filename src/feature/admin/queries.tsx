@@ -74,7 +74,6 @@ export const updateBeerLocation =
 			.from("location")
 			.update(beerLocationFormDataToSchema(removeEmptyStrings(values)))
 			.eq("id", values.id);
-		console.log(values);
 		if (values.districtId && values.id) {
 			await deleteLocationDistrict(apiClient)(values.id);
 			await createLocationDistrict(apiClient)(values.districtId, values.id);

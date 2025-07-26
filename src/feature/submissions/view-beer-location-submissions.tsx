@@ -4,6 +4,7 @@ import { IconReload, IconEye } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
+import { useDistricts } from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table/table";
 import { BeerLocation } from "@common/types/beer-location";
 
@@ -16,6 +17,7 @@ import { ViewBeerLocationSubmissionDialog } from "./view-beer-location-submissio
 const ViewBeerLocationSubmissions = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocationSubmissions();
+	const { data: districts, isLoading: isLoadingDistricts } = useDistricts();
 	const [modalOpened, { open, close }] = useDisclosure(false);
 	const [submissionToView, setSubmissionToView] = useState<
 		BeerLocation | undefined
@@ -45,7 +47,8 @@ const ViewBeerLocationSubmissions = () => {
 			</Group>
 			<BeerLocationTable
 				data={data ?? undefined}
-				isLoading={isLoading}
+				isLoading={isLoading || isLoadingDistricts}
+				districts={districts}
 				actionColumn={{
 					header: "Visa",
 					icon: <IconEye />,

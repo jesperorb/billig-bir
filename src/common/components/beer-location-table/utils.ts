@@ -1,53 +1,56 @@
 import {
-	ColumnDef,
-	ColumnFilter,
 	ColumnFiltersState,
 	createColumnHelper,
 	FilterFn,
+	SortingState,
 	type VisibilityState,
 } from "@tanstack/react-table";
 
 import type { BeerLocation } from "@common/types/beer-location";
+import { PriceType } from "@common/types/common";
 import { createLocalStorageManager } from "@common/utils/local-storage";
+import { getNotFilter } from "@common/utils/table";
 
 import {
 	BEER_LOCATION_TABLE_VISIBILITY_STORAGE_KEY,
-	DEFAULT_VISIBLE_COLUMNS,
+	BEER_LOCATION_DEFAULT_VISIBLE_COLUMNS,
+	BEER_LOCATION_TABLE_SORTING_STORAGE_KEY,
+	BEER_LOCATION_DEFAULT_SORTING,
 } from "./constants";
 import { ColumnKeys } from "./types";
 
 export const columnHelper = createColumnHelper<BeerLocation>();
-export const columnVisibilityStorage =
+export const beerLocationTableColumnVisibilityStorage =
 	createLocalStorageManager<VisibilityState>(
 		BEER_LOCATION_TABLE_VISIBILITY_STORAGE_KEY,
-		DEFAULT_VISIBLE_COLUMNS,
+		BEER_LOCATION_DEFAULT_VISIBLE_COLUMNS,
 	);
 
-export const getAccessorFromColumn = (
-	column: ColumnDef<BeerLocation>,
-): string => {
-	if (column.id) {
-		return column.id;
-	}
-	return "accessorKey" in column ? column.accessorKey : "";
+export const beerLocationTableSortingStorage =
+	createLocalStorageManager<SortingState>(
+		BEER_LOCATION_TABLE_SORTING_STORAGE_KEY,
+		[BEER_LOCATION_DEFAULT_SORTING],
+	);
+
+export const getDefaultColumnVisiblity = () => {
+	const storedVisibility = beerLocationTableColumnVisibilityStorage.get();
+	const storedSorting = beerLocationTableSortingStorage.get();
+	const sortedByPricePerCentiliter = storedSorting.some(
+		(sorting) => sorting.id === "pricePerCentiliter",
+	);
+	return {
+		pricePerCentiliter: sortedByPricePerCentiliter,
+		priceAWPerCentiliter: !sortedByPricePerCentiliter,
+		...storedVisibility,
+	};
 };
 
-export const getOrEmpty = (value?: string | number): string =>
-	value?.toString() ?? "-";
-
-export const getFilter = (id: ColumnKeys) => (filter: ColumnFilter) =>
-	filter.id === id;
-
-export const getNotFilter = (id: ColumnKeys) => (filter: ColumnFilter) =>
-	filter.id !== id;
-
-export const getStringFilterValue = (
-	filter: ColumnFilter | undefined,
-): string => (filter ? (filter.value as string) : "");
-
-export const getStringArrayFilterValue = (
-	filter: ColumnFilter | undefined,
-): string[] => (filter ? (filter.value as string[]) : []);
+export const getDefaultPriceType = (): PriceType =>
+	beerLocationTableSortingStorage
+		.get()
+		.some((sort) => sort.id === "pricePerCentiliter")
+		? "price"
+		: "priceAW";
 
 export const districtsFilterFn: FilterFn<BeerLocation> = (
 	row,

@@ -18,7 +18,10 @@ export const AVAILABLE_SORTABLE_PRICE_TYPES: {
 	},
 ];
 
-export const DEFAULT_VISIBLE_COLUMNS: Record<ColumnKeys, boolean> = {
+export const BEER_LOCATION_DEFAULT_VISIBLE_COLUMNS: Record<
+	ColumnKeys,
+	boolean
+> = {
 	id: false,
 	name: true,
 	latitude: false,
@@ -27,7 +30,7 @@ export const DEFAULT_VISIBLE_COLUMNS: Record<ColumnKeys, boolean> = {
 	pricePerCentiliter: true,
 	priceAWPerCentiliter: false,
 	pricePitcher: false,
-	priceAW: false,
+	priceAW: true,
 	awTimes: true,
 	outdoorSeating: true,
 	afternoonSun: true,
@@ -40,10 +43,13 @@ export const DEFAULT_VISIBLE_COLUMNS: Record<ColumnKeys, boolean> = {
 	districts: true,
 };
 
-export const DEFAULT_SORTING: ColumnSort = {
+export const BEER_LOCATION_DEFAULT_SORTING: ColumnSort = {
 	id: "pricePerCentiliter",
 	desc: false,
 };
 
 export const BEER_LOCATION_TABLE_VISIBILITY_STORAGE_KEY =
 	"beer-location-table-visibility";
+
+export const BEER_LOCATION_TABLE_SORTING_STORAGE_KEY =
+	"beer-location-table-sorting";

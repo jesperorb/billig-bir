@@ -14,7 +14,7 @@ import {
 	IsMenuOpenContext,
 	ToggleIsMenuOpenContext,
 } from "@common/context/menu-context";
-import { ThemeToggle } from "@common/theme/ThemeToggle";
+import { ThemeToggle } from "@common/theme/theme-toggle";
 
 import InformationActionsDesktop from "./information-actions.desktop";
 import { NavButton } from "./nav-button";

@@ -2,7 +2,7 @@ import { type SupabaseClient } from "@supabase/supabase-js";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useApiClient } from "@common/api/api-client-context";
-import { beerLocationsSelectQuery } from "@common/api/queries";
+import { getBeerLocationsSelectQuery } from "@common/api/queries";
 import { type Database } from "@common/api/types";
 import { BeerLocation } from "@common/types/beer-location";
 import type {
@@ -188,7 +188,7 @@ export const getBeerLocationSubmissions = async (
 ) => {
 	return apiClient
 		.from("location_submission")
-		.select(beerLocationsSelectQuery)
+		.select(getBeerLocationsSelectQuery("submission"))
 		.order("name")
 		.overrideTypes<BeerLocation[]>();
 };
