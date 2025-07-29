@@ -58,10 +58,9 @@ const Layout = ({ children, collapseMenuOnDesktop = false }: Props) => {
 							>
 								<Box>
 									<NavButton
-										variant="transparent"
+										variant="subtle"
 										justify="start"
 										pl={0}
-										size="compact-sm"
 										to="/"
 										leftSection={<IconChevronLeft />}
 									>

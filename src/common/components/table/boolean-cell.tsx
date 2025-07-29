@@ -8,11 +8,11 @@ interface BooleanCellProps {
 
 export const BooleanCell = ({ value, size = "xs" }: BooleanCellProps) => {
 	return value ? (
-		<ThemeIcon size={size}>
+		<ThemeIcon color="hops.7" size={size}>
 			<IconCheck />
 		</ThemeIcon>
 	) : (
-		<ThemeIcon color="red" size={size}>
+		<ThemeIcon color="red.8" size={size}>
 			<IconX />
 		</ThemeIcon>
 	);

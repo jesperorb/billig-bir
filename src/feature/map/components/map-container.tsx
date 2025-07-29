@@ -6,6 +6,7 @@ import {
 	DEFAULT_STYLING,
 	INITIAL_VIEW_STATE,
 	MAPBOX_TOKEN,
+	MAX_BOUNDS,
 } from "@feature/map/constants";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -33,6 +34,7 @@ const MapContainer = ({
 			ref={mapRef}
 			mapboxAccessToken={MAPBOX_TOKEN}
 			initialViewState={initialViewState}
+			maxBounds={MAX_BOUNDS}
 			style={style}
 			mapStyle={
 				colorScheme === "light"

@@ -42,20 +42,17 @@ const InformationActionsMobile = ({ showAdministerButton = true }: Props) => {
 			<Button
 				fullWidth
 				leftSection={<IconBeer size={16} />}
+				variant="light"
 				onClick={() => {
 					beerSubmissionDialogActions.open();
 				}}
 			>
 				Föreslå ny plats
 			</Button>
-			{showAdministerButton && (
-				<NavButton fullWidth to="/admin" leftSection={<IconSettings />}>
-					Administrera
-				</NavButton>
-			)}
 			<Button
 				fullWidth
 				component="a"
+				variant="light"
 				href="https://github.com/jesperorb/billig-bir"
 				leftSection={<IconBrandGithub />}
 				rightSection={<IconExternalLink />}
@@ -63,6 +60,16 @@ const InformationActionsMobile = ({ showAdministerButton = true }: Props) => {
 			>
 				GitHub
 			</Button>
+			{showAdministerButton && (
+				<NavButton
+					fullWidth
+					to="/admin"
+					variant="light"
+					leftSection={<IconSettings />}
+				>
+					Administrera
+				</NavButton>
+			)}
 		</Stack>
 	);
 };
