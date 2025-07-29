@@ -1,5 +1,5 @@
 import { type CSSProperties } from "react";
-import { type ViewState } from "react-map-gl/mapbox";
+import { LngLatBoundsLike, type ViewState } from "react-map-gl/mapbox";
 
 export const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -15,6 +15,11 @@ export const INITIAL_VIEW_STATE: Partial<ViewState> = {
 	latitude: INITIAL_CENTER.latitude,
 	zoom: INITIAL_ZOOM,
 };
+
+export const MAX_BOUNDS: LngLatBoundsLike = [
+	[17.6, 59.1], // Southwest corner (longitude, latitude)
+	[18.5, 59.55], // Northeast corner (longitude, latitude)
+];
 
 export const DEFAULT_STYLING: CSSProperties = {
 	width: "100%",

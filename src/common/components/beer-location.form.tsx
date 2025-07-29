@@ -287,19 +287,21 @@ export const BeerLocationForm = ({
 							rules={{
 								required: "Fyll i latitude",
 								min: {
-									value: -90,
-									message: "Latitud måste vara mellan -90 och 90",
+									value: 59.1,
+									message:
+										"Latitud måste vara mellan 59.1 och 59.55 (Stockholm)",
 								},
 								max: {
-									value: 90,
-									message: "Latitud måste vara mellan -90 och 90",
+									value: 59.55,
+									message:
+										"Latitud måste vara mellan 59.1 och 59.55 (Stockholm)",
 								},
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
 									{...field}
 									label="Latitud"
-									placeholder="Fyll i latitud med ett värde mellan -90 och 90"
+									placeholder="Fyll i latitud för Stockholm (59.1 - 59.55)"
 									error={fieldState.error?.message}
 									withAsterisk
 								/>
@@ -310,21 +312,23 @@ export const BeerLocationForm = ({
 							name="longitude"
 							control={control}
 							rules={{
-								required: "Fyll i longitude med ett värde mellan -180 och 180",
+								required: "Fyll i longitude",
 								min: {
-									value: -180,
-									message: "Longitud måste vara mellan -180 och 180",
+									value: 17.6,
+									message:
+										"Longitud måste vara mellan 17.6 och 18.5 (Stockholm)",
 								},
 								max: {
-									value: 180,
-									message: "Longitud måste vara mellan -180 och 180",
+									value: 18.5,
+									message:
+										"Longitud måste vara mellan 17.6 och 18.5 (Stockholm)",
 								},
 							}}
 							render={({ field, fieldState }) => (
 								<NumberInput
 									{...field}
 									label="Longitud"
-									placeholder="Fyll i longitud"
+									placeholder="Fyll i longitud för Stockholm (17.6 - 18.5)"
 									error={fieldState.error?.message}
 									withAsterisk
 								/>

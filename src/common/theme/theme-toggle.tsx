@@ -14,7 +14,7 @@ export const ThemeToggle = () => {
 			onClick={() => {
 				setColorScheme(colorScheme === "light" ? "dark" : "light");
 			}}
-			variant="default"
+			variant="light"
 			size="xl"
 			aria-label={
 				colorScheme === "light" ? "Byt till mörkt läge" : "Byt till ljust läge"

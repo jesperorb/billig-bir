@@ -28,7 +28,7 @@ const InformationActionsDesktop = () => {
 
 	return (
 		<>
-			<ActionIcon variant="filled" size="xl" aria-label="Mer" onClick={open}>
+			<ActionIcon variant="light" size="xl" aria-label="Mer" onClick={open}>
 				<IconQuestionMark />
 			</ActionIcon>
 			<Modal opened={modalOpened} onClose={close} title="Mer">
@@ -56,11 +56,9 @@ const InformationActionsDesktop = () => {
 					>
 						Föreslå ny plats
 					</Button>
-					<NavButton to="/admin" leftSection={<IconSettings />}>
-						Administrera
-					</NavButton>
 					<Button
 						component="a"
+						variant="light"
 						href="https://github.com/jesperorb/billig-bir"
 						leftSection={<IconBrandGithub />}
 						rightSection={<IconExternalLink />}
@@ -68,6 +66,9 @@ const InformationActionsDesktop = () => {
 					>
 						GitHub
 					</Button>
+					<NavButton variant="light" to="/admin" leftSection={<IconSettings />}>
+						Administrera
+					</NavButton>
 				</Stack>
 			</Modal>
 		</>

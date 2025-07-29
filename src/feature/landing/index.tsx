@@ -17,7 +17,7 @@ const Landing = () => {
 					<NavButton
 						to="/table"
 						size="xl"
-						variant="outline"
+						variant="light"
 						rightSection={<IconTable />}
 					>
 						Visa tabell

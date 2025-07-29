@@ -7,6 +7,8 @@ import {
 	Tooltip,
 	Text,
 	Stack,
+	ThemeIcon,
+	Flex,
 } from "@mantine/core";
 import {
 	IconSun,
@@ -17,7 +19,7 @@ import {
 
 import { type BeerLocation } from "@common/types/beer-location";
 import { PriceType } from "@common/types/common";
-import { getPriceForType } from "@common/utils/beer-location";
+import { getPriceForType, getPricePerCl } from "@common/utils/beer-location";
 
 import { AwTimesList } from "./aw-times-list";
 
@@ -27,60 +29,46 @@ export interface CardContentProps {
 }
 
 export const CardContent = ({ location, priceType }: CardContentProps) => {
+	const cl =
+		priceType === "pricePitcher" && location.centilitersPitcher
+			? location.centilitersPitcher.toString()
+			: location.centilitersStandard;
 	return (
 		<Stack gap="sm">
 			<Text fw={500}>{location.name}</Text>
-			<Badge color="teal">
-				{`${getPriceForType(priceType)(location).toString()} kr / ${priceType === "pricePitcher" && location.centilitersPitcher ? location.centilitersPitcher.toString() : "40"} cl`}
-			</Badge>
-			<Text>Typ: {location.beerBrand}</Text>
-			{location.centilitersStandard !== 40 && (
-				<Badge color="dark">
-					{`${location.price.toString()} kr / ${location.centilitersStandard.toString()} cl`}
+			<Flex wrap={"wrap"} gap="xs">
+				<Badge color="wine.6">
+					{`${getPriceForType(priceType)(location).toString()} kr / ${cl.toString()} cl`}
 				</Badge>
-			)}
+				<Badge color="dark">{`${getPricePerCl(priceType)(location).toString()} kr / cl`}</Badge>
+			</Flex>
+			<Text c="dimmed">Typ: {location.beerBrand}</Text>
 			<Divider />
 			<Group gap="xs">
 				{location.afternoonSun ? (
 					<Tooltip label="Eftermiddagssol">
-						<IconSun
-							aria-label="Eftermiddagssol"
-							stroke={1.5}
-							style={{
-								color: "var(--mantine-color-teal-filled)",
-							}}
-						/>
+						<ThemeIcon color="hops.8" variant="filled">
+							<IconSun aria-label="Eftermiddagssol" stroke={1.5} />
+						</ThemeIcon>
 					</Tooltip>
 				) : (
 					<Tooltip label="Ej eftermiddagssol">
-						<IconSunOff
-							aria-label="Ej eftermiddagssol"
-							stroke={1.5}
-							style={{
-								color: "var(--mantine-color-red-filled)",
-							}}
-						/>
+						<ThemeIcon color="gray.6" variant="outline">
+							<IconSunOff aria-label="Ej eftermiddagssol" stroke={1.5} />
+						</ThemeIcon>
 					</Tooltip>
 				)}
 				{location.outdoorSeating ? (
 					<Tooltip label="Uteservering">
-						<IconBeach
-							aria-label="Uteservering"
-							stroke={1.5}
-							style={{
-								color: "var(--mantine-color-teal-filled)",
-							}}
-						/>
+						<ThemeIcon color="hops.8" variant="filled">
+							<IconBeach aria-label="Uteservering" stroke={1.5} />
+						</ThemeIcon>
 					</Tooltip>
 				) : (
 					<Tooltip label="Ej uteservering">
-						<IconBeachOff
-							aria-label="Ej uteservering"
-							stroke={1.5}
-							style={{
-								color: "var(--mantine-color-red-filled)",
-							}}
-						/>
+						<ThemeIcon color="gray.6" variant="outline">
+							<IconBeachOff aria-label="Ej uteservering" stroke={1.5} />
+						</ThemeIcon>
 					</Tooltip>
 				)}
 			</Group>

@@ -25,7 +25,7 @@ export const MapMarkers = ({ beerLocations }: Props) => {
 					<HoverCard>
 						<HoverCard.Target>
 							<Box
-								bg="teal.9"
+								bg="wine.7"
 								c="white"
 								p="xs"
 								w="2rem"
@@ -35,7 +35,7 @@ export const MapMarkers = ({ beerLocations }: Props) => {
 									justifyContent: "center",
 									alignItems: "center",
 									borderRadius: "50%",
-									boxShadow: theme.shadows.lg,
+									boxShadow: theme.shadows.xl,
 								})}
 							>
 								<Text size="xs" fw={700}>
