@@ -1,4 +1,4 @@
-import { HoverCard, Paper, Text } from "@mantine/core";
+import { Box, HoverCard, Text } from "@mantine/core";
 import { Marker } from "react-map-gl/mapbox";
 
 import type { BeerLocation } from "@common/types/beer-location";
@@ -24,18 +24,24 @@ export const MapMarkers = ({ beerLocations }: Props) => {
 				>
 					<HoverCard>
 						<HoverCard.Target>
-							<Paper
-								bg="teal.8"
+							<Box
+								bg="teal.9"
 								c="white"
 								p="xs"
-								withBorder
-								shadow="xl"
-								radius="50%"
+								w="2rem"
+								h="2rem"
+								style={(theme) => ({
+									display: "flex",
+									justifyContent: "center",
+									alignItems: "center",
+									borderRadius: "50%",
+									boxShadow: theme.shadows.lg,
+								})}
 							>
 								<Text size="xs" fw={700}>
 									{getPriceForType(priceType)(location)}
 								</Text>
-							</Paper>
+							</Box>
 						</HoverCard.Target>
 						<HoverCard.Dropdown>
 							<CardContent location={location} priceType={priceType} />
