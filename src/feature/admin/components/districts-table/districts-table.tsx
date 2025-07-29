@@ -54,6 +54,8 @@ export const DistrictsTable = ({
 			columnHelper.display({
 				id: "actions",
 				header: actionColumn.header,
+				maxSize: 80,
+				size: 80,
 				cell: ({ row }) => (
 					<ActionIcon
 						onClick={() => {
@@ -71,6 +73,8 @@ export const DistrictsTable = ({
 			columnHelper.accessor("name", {
 				header: "Namn",
 				enableSorting: true,
+				maxSize: 150,
+				size: 150,
 			}),
 			columnHelper.accessor("insideTolls", {
 				header: "Innanför tullarna",
@@ -107,6 +111,12 @@ export const DistrictsTable = ({
 	const table = useReactTable({
 		data: data ?? [],
 		columns,
+		initialState: {
+			columnPinning: {
+				left: ["name"],
+				right: ["actions"],
+			},
+		},
 		state: {
 			sorting,
 			columnVisibility,

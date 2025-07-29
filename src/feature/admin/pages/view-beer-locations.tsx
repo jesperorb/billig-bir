@@ -1,6 +1,6 @@
 import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconPencil } from "@tabler/icons-react";
+import { IconEye } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -49,8 +49,8 @@ const ViewBeerLocations = () => {
 				districts={districts}
 				isLoading={isLoading}
 				actionColumn={{
-					header: "Redigera",
-					icon: <IconPencil />,
+					header: "Visa",
+					icon: <IconEye />,
 					onClick: handleEditClick,
 					ariaLabel: (location) => `Redigera ${location.name}`,
 				}}

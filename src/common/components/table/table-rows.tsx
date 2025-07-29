@@ -32,7 +32,6 @@ export const TableRows = <Type extends object>({
 							key={cell.id}
 							style={{
 								...getCommonPinningStyles(cell.column),
-								whiteSpace: "nowrap",
 							}}
 						>
 							{flexRender(cell.column.columnDef.cell, cell.getContext())}

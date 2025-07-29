@@ -1,5 +1,5 @@
 import { AppShell } from "@mantine/core";
-import { IconEdit } from "@tabler/icons-react";
+import { IconEye } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -77,8 +77,8 @@ const ViewDistricts = () => {
 					data={districts ?? undefined}
 					isLoading={isLoading}
 					actionColumn={{
-						header: "Redigera",
-						icon: <IconEdit size={16} />,
+						header: "Visa",
+						icon: <IconEye size={16} />,
 						onClick: handleEditDistrict,
 						ariaLabel: (district) => `Redigera ${district.name}`,
 					}}
