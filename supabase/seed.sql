@@ -73,30 +73,14 @@ INSERT INTO public.district (name, inside_tolls) VALUES
   ('Nacka', false),
   ('Reimersholme', true);
 
--- Insert aw_time records (some for individual days, some for all week)
+-- Insert aw_time records (for O'learys Centralen)
 INSERT INTO public.aw_time (weekday, start_time, end_time, same_times_all_week) VALUES
-  -- Same times all week entries (using Monday as representative day)
-  (0, '15:00:00', '18:00:00', true),  -- id: 1 (Monday-Friday 15-18)
-  (0, '16:00:00', '19:00:00', true),  -- id: 2 (Monday-Friday 16-19)
-  (0, '17:00:00', '20:00:00', true),  -- id: 3 (Monday-Friday 17-20)
-  (0, '15:30:00', '18:30:00', true),  -- id: 4 (Monday-Friday 15:30-18:30)
-  (0, '16:30:00', '19:30:00', true),  -- id: 5 (Monday-Friday 16:30-19:30)
-  
-  -- Individual day entries for locations with multiple aw times
-  (0, '15:00:00', '18:00:00', false), -- id: 6 (Monday)
-  (1, '15:00:00', '18:00:00', false), -- id: 7 (Tuesday)
-  (2, '15:00:00', '18:00:00', false), -- id: 8 (Wednesday)
-  (3, '15:00:00', '18:00:00', false), -- id: 9 (Thursday)
-  (4, '15:00:00', '18:00:00', false), -- id: 10 (Friday)
-  
-  -- Second set of individual day entries
-  (0, '16:00:00', '19:00:00', false), -- id: 11 (Monday)
-  (1, '16:00:00', '19:00:00', false), -- id: 12 (Tuesday)
-  (2, '16:00:00', '19:00:00', false), -- id: 13 (Wednesday)
-  (3, '16:00:00', '19:00:00', false), -- id: 14 (Thursday)
-  (4, '16:00:00', '19:00:00', false); -- id: 15 (Friday)
+  -- O'learys Centralen individual day entries
+  (0, '16:00:00', '18:00:00', false), -- id: 1 (Monday)
+  (1, '16:00:00', '18:00:00', false), -- id: 2 (Tuesday)
+  (2, '16:00:00', '18:00:00', false); -- id: 3 (Wednesday)
 
--- Insert 10 locations
+-- Insert production locations
 INSERT INTO public.location (
   name, 
   latitude, 
@@ -112,45 +96,43 @@ INSERT INTO public.location (
   centiliters_pitcher, 
   beer_brand
 ) VALUES
-  ('Akkurat Bar', 59.3183, 18.0685, true, false, 'https://maps.google.com/?q=Akkurat+Bar+Stockholm', 'https://akkurat.se', 85, 65, 450, 40, 180, 'Pilsner Urquell'),
-  ('Brewdog Stockholm', 59.3293, 18.0686, false, false, 'https://maps.google.com/?q=Brewdog+Stockholm', 'https://brewdog.com', 95, 75, 500, 40, 180, 'Punk IPA'),
-  ('Monks Café', 59.3147, 18.0723, true, true, 'https://maps.google.com/?q=Monks+Cafe+Stockholm', 'https://monks.se', 78, 58, 420, 40, 180, 'Stella Artois'),
-  ('Tuborgbaren', 59.3265, 18.0704, false, false, 'https://maps.google.com/?q=Tuborgbaren+Stockholm', 'https://tuborgbaren.se', 72, 52, 380, 40, 180, 'Tuborg'),
-  ('Wirströms Pub', 59.3156, 18.0647, true, true, 'https://maps.google.com/?q=Wirstrom+Pub+Stockholm', 'https://wirstrom.se', 88, 68, 460, 40, 180, 'Guinness'),
-  ('Pickwick Pub', 59.3223, 18.0512, true, false, 'https://maps.google.com/?q=Pickwick+Pub+Stockholm', 'https://pickwick.se', 82, 62, 440, 40, 180, 'London Pride'),
-  ('Södra Teatern', 59.3142, 18.0734, true, true, 'https://maps.google.com/?q=Sodra+Teatern+Stockholm', 'https://sodrateater.com', 92, 72, 480, 40, 180, 'Carlsberg'),
-  ('Berns Salonger', 59.3325, 18.0734, false, false, 'https://maps.google.com/?q=Berns+Stockholm', 'https://berns.se', 125, null, 650, 40, 180, 'Heineken'),
-  ('Sturehof', 59.3345, 18.0756, true, false, 'https://maps.google.com/?q=Sturehof+Stockholm', 'https://sturehof.com', 110, null, 580, 40, 180, 'Stella Artois'),
-  ('Mosebacke Etablissement', 59.3156, 18.0812, true, true, 'https://maps.google.com/?q=Mosebacke+Stockholm', 'https://mosebacke.se', 89, null, 470, 40, 180, 'Pripps Blå');
+  ('O''learys Centralen', 59.3307648940387, 18.0593531415575, true, false, 'https://maps.app.goo.gl/4MNdP27BZ4RVU6yZA', 'https://olearys.se/stockholm-central/food/', 105, 89, null, 40, null, 'Norrlands guld'),
+  ('Laughing Duck', 59.3321126429971, 18.0575052842367, true, false, 'https://maps.app.goo.gl/cJQm71jBisVRMthh6', 'https://laughingduck.se/', 49, null, null, 40, null, 'Gränges'),
+  ('Kungsbiljarden', 59.3318981882231, 18.0515030984511, true, true, 'https://maps.app.goo.gl/UZC1sQZyKCdVPP8M6', 'https://kungsbiljarden.se/matmeny/', 59, null, null, 40, null, 'Heineken'),
+  ('Da Antonio e Lucia', 59.3179427725633, 18.1555131246945, true, true, 'https://maps.app.goo.gl/bJijz6maaHzCCxzw7?g_st=ipc', null, 95, null, null, 40, null, 'Birra Poretti'),
+  ('Båten Gustavsberg VII', 59.3071493628784, 18.3224462560667, true, true, null, 'https://www.stromma.com/sv-se/stockholm/utflykter/dagsutflykter/ta-baten-till-artipelag/', 97, null, null, 50, null, 'Mariestad'),
+  ('Reimersholme Hotell', 59.3180787295785, 18.0251944431421, true, true, 'https://maps.app.goo.gl/HUTz2X6J5gCwGRgR7', 'https://reimersholmehotel.se', 72, null, null, 40, null, 'St Eriks Ljus Lager'),
+  ('Vapiano', 59.3306652868022, 18.0598846076465, true, true, 'https://maps.app.goo.gl/7Nr3D8m65pkrMdgk6', 'http://vapiano.se/', 69, null, null, 40, null, 'Birra Poretti'),
+  ('Dagnys', 59.3306660708826, 18.0576700162376, false, false, 'https://maps.app.goo.gl/AvnXEnAfY48Aim5z6', null, 69, null, null, 40, null, 'Sofiero'),
+  ('Greek Taverna Giamas', 59.3297109940649, 18.0607212291334, true, true, 'https://maps.app.goo.gl/vgjQhG3HHhNayw5h7', 'https://greektaverna.se/meny/', 55, null, null, 40, null, 'Inte Mythos'),
+  ('The Lobby', 59.3337555536363, 18.0568473341268, false, false, 'https://maps.app.goo.gl/KTD3kZtC1r97fwYAA', 'http://www.thelobbysthlm.nu/', 39, null, null, 40, null, 'Fat 21'),
+  ('Scandic Downtown Camper', 59.3313718169187, 18.0655643554777, true, false, 'https://maps.app.goo.gl/d9eQK2Z6gnkXdX1H7', 'https://www.scandichotels.com/sv/hotell/downtown-camper-by-scandic/campfire', 86, null, null, 40, null, 'Mariestad'),
+  ('Scandic Continental', 59.3311819348837, 18.0596204419085, true, true, 'https://maps.app.goo.gl/FBhrquQhDYANmP8y8', 'https://www.scandichotels.se/hotell/sverige/stockholm/scandic-continental/restaurang-bar/capital', 86, null, null, 40, null, 'Mariestad'),
+  ('Perini', 59.3312227072964, 18.0576781554006, true, true, 'https://maps.app.goo.gl/Wo7KeXJ4Yufvc4oM9', 'http://www.perini.se/', 89, null, null, 40, null, 'Birra Poretti'),
+  ('Bistro Sickla', 59.30526523381, 18.1213862108696, true, true, 'https://maps.app.goo.gl/dCFEDXqJXjxYA2jb6', null, 78, null, null, 50, null, 'Eriksberg Karaktär');
 
 -- Link locations to districts
 INSERT INTO public.location_district (location_id, district_id) VALUES
-  (1, 1), -- Akkurat Bar -> Södermalm
-  (2, 3), -- Brewdog -> Norrmalm/City
-  (3, 1), -- Monks Café -> Södermalm
-  (4, 5), -- Tuborgbaren -> Vasastan
-  (5, 1), -- Wirströms Pub -> Södermalm
-  (6, 4), -- Pickwick Pub -> Kungsholmen
-  (7, 1), -- Södra Teatern -> Södermalm
-  (8, 3), -- Berns -> Norrmalm/City
-  (9, 6), -- Sturehof -> Östermalm
-  (10, 1); -- Mosebacke -> Södermalm
+  (1, 3), -- O'learys Centralen -> Norrmalm/City
+  (2, 3), -- Laughing Duck -> Norrmalm/City
+  (3, 3), -- Kungsbiljarden -> Norrmalm/City
+  (4, 9), -- Da Antonio e Lucia -> Nacka
+  (5, 8), -- Båten Gustavsberg VII -> Mordor
+  (6, 10), -- Reimersholme Hotell -> Reimersholme
+  (7, 3), -- Vapiano -> Norrmalm/City
+  (8, 3), -- Dagnys -> Norrmalm/City
+  (9, 3), -- Greek Taverna Giamas -> Norrmalm/City
+  (10, 3), -- The Lobby -> Norrmalm/City
+  (11, 3), -- Scandic Downtown Camper -> Norrmalm/City
+  (12, 3), -- Scandic Continental -> Norrmalm/City
+  (13, 3), -- Perini -> Norrmalm/City
+  (14, 9); -- Bistro Sickla -> Nacka
 
--- Link 7 locations to aw times
--- 5 locations with same_times_all_week = true (single aw time each)
+-- Link locations to aw times
+-- Only O'learys Centralen has aw times
 INSERT INTO public.location_aw_time (location_id, aw_time_id) VALUES
-  (1, 1), -- Akkurat Bar -> same times all week (15-18)
-  (2, 2), -- Brewdog -> same times all week (16-19)
-  (3, 3), -- Monks Café -> same times all week (17-20)
-  (4, 4), -- Tuborgbaren -> same times all week (15:30-18:30)
-  (5, 5); -- Wirströms Pub -> same times all week (16:30-19:30)
-
--- 2 locations with multiple aw times (individual days)
-INSERT INTO public.location_aw_time (location_id, aw_time_id) VALUES
-  -- Pickwick Pub (location 6) - Monday to Friday schedule
-  (6, 6), (6, 7), (6, 8), (6, 9), (6, 10),
-  -- Södra Teatern (location 7) - Monday to Friday schedule with different times
-  (7, 11), (7, 12), (7, 13), (7, 14), (7, 15);
+  -- O'learys Centralen (location 1) - Monday to Wednesday schedule
+  (1, 1), (1, 2), (1, 3);
 
 -- Insert aw_time_submission records for location submissions
 INSERT INTO public.aw_time_submission (weekday, start_time, end_time, same_times_all_week) VALUES

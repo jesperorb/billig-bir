@@ -33,7 +33,7 @@ export const CardContent = ({ location, priceType }: CardContentProps) => {
 			<Badge color="teal">
 				{`${getPriceForType(priceType)(location).toString()} kr / ${priceType === "pricePitcher" && location.centilitersPitcher ? location.centilitersPitcher.toString() : "40"} cl`}
 			</Badge>
-			<Text c="dimmed">Typ: {location.beerBrand}</Text>
+			<Text>Typ: {location.beerBrand}</Text>
 			{location.centilitersStandard !== 40 && (
 				<Badge color="dark">
 					{`${location.price.toString()} kr / ${location.centilitersStandard.toString()} cl`}
