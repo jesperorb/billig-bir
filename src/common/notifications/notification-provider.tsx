@@ -45,7 +45,7 @@ export const NotificationProvider = ({
 							left: "1rem",
 							right: "1rem",
 							zIndex: 9999999,
-							"@media (min-width: 768px)": {
+							"@media (min-width: 48em)": {
 								left: "auto",
 								right: "2rem",
 								top: "2rem",

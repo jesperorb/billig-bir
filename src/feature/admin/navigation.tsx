@@ -20,16 +20,18 @@ export const AdminNavigation = () => {
 				<Group>
 					<NavigationLinks toggleMenu={toggleMenu} />
 				</Group>
-				<Button
-					m="md"
-					onClick={async () => {
-						await apiClient.auth.signOut();
-						navigate({ to: "/" });
-						close();
-					}}
-				>
-					Logga ut
-				</Button>
+				<Group m="sm">
+					<Button
+						fullWidth
+						onClick={async () => {
+							await apiClient.auth.signOut();
+							navigate({ to: "/" });
+							close();
+						}}
+					>
+						Logga ut
+					</Button>
+				</Group>
 			</Stack>
 		</AppShell.Navbar>
 	);

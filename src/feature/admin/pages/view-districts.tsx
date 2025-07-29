@@ -1,5 +1,5 @@
-import { AppShell, Title, Button, Group } from "@mantine/core";
-import { IconEdit, IconReload, IconPlus } from "@tabler/icons-react";
+import { AppShell } from "@mantine/core";
+import { IconEdit } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -9,6 +9,7 @@ import type { District } from "@common/types/district";
 import { CreateDistrictDialog } from "../components/create-district.dialog";
 import { DistrictsTable } from "../components/districts-table/districts-table";
 import { EditDistrictDialog } from "../components/edit-district.dialog";
+import { PageHeader } from "../components/page-header";
 import {
 	useUpdateDistrict,
 	useCreateDistrict,
@@ -64,34 +65,14 @@ const ViewDistricts = () => {
 	return (
 		<>
 			<AppShell.Main>
-				<Group justify="space-between" p="sm">
-					<Title order={2}>Stadsdelar</Title>
-					<Group>
-						<Button
-							loading={isLoading}
-							rightSection={<IconReload />}
-							onClick={() => {
-								queryClient.invalidateQueries({
-									queryKey: [commonBaseQueryKeys.getDistricts],
-								});
-							}}
-						>
-							Ladda om
-						</Button>
-					</Group>
-				</Group>
-				<Group display="flex" w="100%" p="sm" mb="lg" justify="end">
-					<Button
-						w={{ base: "100%", md: "initial" }}
-						leftSection={<IconPlus size={16} />}
-						onClick={() => {
-							setCreateDialogOpened(true);
-						}}
-						disabled={isLoading}
-					>
-						Lägg till stadsdel
-					</Button>
-				</Group>
+				<PageHeader
+					title="Stadsdelar"
+					onAdd={() => {
+						setCreateDialogOpened(true);
+					}}
+					onReload={invalidate}
+					isLoading={isLoading}
+				/>
 				<DistrictsTable
 					data={districts ?? undefined}
 					isLoading={isLoading}

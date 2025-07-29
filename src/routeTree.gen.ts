@@ -18,7 +18,6 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminViewDistrictsRouteImport } from './routes/admin/view-districts'
 import { Route as AdminViewBeerLocationsRouteImport } from './routes/admin/view-beer-locations'
 import { Route as AdminViewBeerLocationSubmissionsRouteImport } from './routes/admin/view-beer-location-submissions'
-import { Route as AdminAddBeerLocationRouteImport } from './routes/admin/add-beer-location'
 
 const TableRoute = TableRouteImport.update({
   id: '/table',
@@ -66,11 +65,6 @@ const AdminViewBeerLocationSubmissionsRoute =
     path: '/view-beer-location-submissions',
     getParentRoute: () => AdminRoute,
   } as any)
-const AdminAddBeerLocationRoute = AdminAddBeerLocationRouteImport.update({
-  id: '/add-beer-location',
-  path: '/add-beer-location',
-  getParentRoute: () => AdminRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -78,7 +72,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/table': typeof TableRoute
-  '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
@@ -89,7 +82,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/table': typeof TableRoute
-  '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
@@ -102,7 +94,6 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/table': typeof TableRoute
-  '/admin/add-beer-location': typeof AdminAddBeerLocationRoute
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
@@ -116,7 +107,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/map'
     | '/table'
-    | '/admin/add-beer-location'
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
@@ -127,7 +117,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/map'
     | '/table'
-    | '/admin/add-beer-location'
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
@@ -139,7 +128,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/map'
     | '/table'
-    | '/admin/add-beer-location'
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
@@ -219,18 +207,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminViewBeerLocationSubmissionsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/add-beer-location': {
-      id: '/admin/add-beer-location'
-      path: '/add-beer-location'
-      fullPath: '/admin/add-beer-location'
-      preLoaderRoute: typeof AdminAddBeerLocationRouteImport
-      parentRoute: typeof AdminRoute
-    }
   }
 }
 
 interface AdminRouteChildren {
-  AdminAddBeerLocationRoute: typeof AdminAddBeerLocationRoute
   AdminViewBeerLocationSubmissionsRoute: typeof AdminViewBeerLocationSubmissionsRoute
   AdminViewBeerLocationsRoute: typeof AdminViewBeerLocationsRoute
   AdminViewDistrictsRoute: typeof AdminViewDistrictsRoute
@@ -238,7 +218,6 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminAddBeerLocationRoute: AdminAddBeerLocationRoute,
   AdminViewBeerLocationSubmissionsRoute: AdminViewBeerLocationSubmissionsRoute,
   AdminViewBeerLocationsRoute: AdminViewBeerLocationsRoute,
   AdminViewDistrictsRoute: AdminViewDistrictsRoute,

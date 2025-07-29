@@ -14,7 +14,11 @@ const BeerLocationSubmissionDialog = lazy(
 	() => import("@feature/submissions/create-beer-location-submission.dialog"),
 );
 
-const InformationActionsMobile = () => {
+interface Props {
+	showAdministerButton?: boolean;
+}
+
+const InformationActionsMobile = ({ showAdministerButton = true }: Props) => {
 	const [beerSubmissionDialogOpen, beerSubmissionDialogActions] =
 		useDisclosure(false);
 
@@ -44,9 +48,11 @@ const InformationActionsMobile = () => {
 			>
 				Föreslå ny plats
 			</Button>
-			<NavButton fullWidth to="/admin" leftSection={<IconSettings />}>
-				Administrera
-			</NavButton>
+			{showAdministerButton && (
+				<NavButton fullWidth to="/admin" leftSection={<IconSettings />}>
+					Administrera
+				</NavButton>
+			)}
 			<Button
 				fullWidth
 				component="a"

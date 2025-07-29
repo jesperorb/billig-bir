@@ -8,10 +8,14 @@ import type { BeerLocationFormData } from "@common/types/beer-location-form-data
 import { useCreateBeerLocationSubmission } from "./queries";
 
 interface Props {
+	open?: boolean;
 	onClose: () => void;
 }
 
-const BeerLocationSubmissionDialogContent = ({ onClose }: Props) => {
+const CreateBeerLocationSubmissionDialogContent = ({
+	open,
+	onClose,
+}: Props) => {
 	const mutation = useCreateBeerLocationSubmission();
 	const { data: districts } = useDistricts();
 	const showNotification = useNotification();
@@ -36,7 +40,12 @@ const BeerLocationSubmissionDialogContent = ({ onClose }: Props) => {
 	};
 
 	return (
-		<Drawer opened onClose={onClose} title="Föreslå ny plats" size="xl">
+		<Drawer
+			opened={open ?? true}
+			onClose={onClose}
+			title="Föreslå ny plats"
+			size="xl"
+		>
 			<BeerLocationForm
 				loading={mutation.isPending}
 				submitButtonText="Skicka"
@@ -48,4 +57,4 @@ const BeerLocationSubmissionDialogContent = ({ onClose }: Props) => {
 	);
 };
 
-export default BeerLocationSubmissionDialogContent;
+export default CreateBeerLocationSubmissionDialogContent;

@@ -27,7 +27,6 @@ export const ColumnVisibilityMenu = <
 				leftSection={<IconColumns size={16} />}
 				variant="outline"
 				size="sm"
-				w="100%"
 			>
 				Kolumner
 			</Button>

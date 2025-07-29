@@ -1,15 +1,16 @@
 import ApiClientWrapper from "@common/api/api-client-wrapper";
 
-import BeerLocationSubmissionDialogContent from "./create-beer-location-submission.content";
+import CreateBeerLocationSubmissionDialogContent from "./create-beer-location-submission.content";
 
 interface Props {
 	onClose: () => void;
+	open?: boolean;
 }
 
-const BeerLocationSubmissionDialog = ({ onClose }: Props) => (
+const CreateBeerLocationSubmissionDialog = ({ open, onClose }: Props) => (
 	<ApiClientWrapper>
-		<BeerLocationSubmissionDialogContent onClose={onClose} />
+		<CreateBeerLocationSubmissionDialogContent open={open} onClose={onClose} />
 	</ApiClientWrapper>
 );
 
-export default BeerLocationSubmissionDialog;
+export default CreateBeerLocationSubmissionDialog;

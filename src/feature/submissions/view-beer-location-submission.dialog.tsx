@@ -117,7 +117,7 @@ export const ViewBeerLocationSubmissionDialog = ({
 			<Drawer
 				opened={open}
 				onClose={onClose}
-				title={<Title order={2}>Platsförslag: {submission.name}</Title>}
+				title={`Platsförslag: ${submission.name}`}
 				size="lg"
 			>
 				<Stack gap="md">
@@ -203,7 +203,8 @@ export const ViewBeerLocationSubmissionDialog = ({
 						</Title>
 						<Group gap="sm">
 							<Badge
-								color={submission.outdoorSeating ? "teal" : "gray"}
+								color={submission.outdoorSeating ? "teal" : "dark"}
+								variant="light"
 								leftSection={
 									<ThemeIcon size="xs" variant="transparent">
 										{submission.outdoorSeating ? (
@@ -217,7 +218,8 @@ export const ViewBeerLocationSubmissionDialog = ({
 								Uteservering
 							</Badge>
 							<Badge
-								color={submission.afternoonSun ? "teal" : "gray"}
+								color={submission.afternoonSun ? "teal" : "dark"}
+								variant="light"
 								leftSection={
 									<ThemeIcon size="xs" variant="transparent">
 										{submission.afternoonSun ? (
@@ -231,7 +233,8 @@ export const ViewBeerLocationSubmissionDialog = ({
 								Eftermiddagssol
 							</Badge>
 							<Badge
-								color={submission.awTimes?.length ? "green" : "gray"}
+								color={submission.awTimes?.length ? "green" : "dark"}
+								variant="light"
 								leftSection={
 									<ThemeIcon size="xs" variant="transparent">
 										{submission.awTimes?.length ? (
@@ -352,18 +355,20 @@ export const ViewBeerLocationSubmissionDialog = ({
 						)}
 					</Paper>
 
-					<Paper p="md" withBorder>
-						<Group>
-							<Text size="sm" c="dimmed">
-								Senast uppdaterad
-							</Text>
-							<Text fw={500}>
-								{submission.updatedAt
-									? new Date(submission.updatedAt).toLocaleDateString("sv-SE")
-									: "-"}
-							</Text>
-						</Group>
-					</Paper>
+					{submission.updatedAt && (
+						<Paper p="md" withBorder>
+							<Group>
+								<Text size="sm" c="dimmed">
+									Senast uppdaterad
+								</Text>
+								<Text fw={500}>
+									{submission.updatedAt
+										? new Date(submission.updatedAt).toLocaleDateString("sv-SE")
+										: "-"}
+								</Text>
+							</Group>
+						</Paper>
+					)}
 
 					<Group justify="space-between" mt="md">
 						<Button variant="default" onClick={onClose}>

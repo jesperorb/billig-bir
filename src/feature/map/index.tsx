@@ -101,7 +101,7 @@ const Map = () => {
 									<CheapestBeer location={cheapestBeer} showOnMap={showOnMap} />
 								)}
 							</Stack>
-							<Group hiddenFrom="sm" w="100%" px="md" pb="xl">
+							<Group w="100%" px="md" pb="xl">
 								<InformationActionsMobile />
 							</Group>
 						</ScrollArea>

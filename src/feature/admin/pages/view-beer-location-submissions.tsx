@@ -1,50 +1,52 @@
-import { AppShell, Button, Group, Title } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconReload, IconEye } from "@tabler/icons-react";
+import { IconEye } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { useDistricts } from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table/table";
 import { BeerLocation } from "@common/types/beer-location";
-
 import {
 	useBeerLocationSubmissions,
 	createBeerLocationSubmissionQueryKeys,
-} from "./queries";
-import { ViewBeerLocationSubmissionDialog } from "./view-beer-location-submission.dialog";
+} from "@feature//submissions/queries";
+import CreateBeerLocationSubmissionDialog from "@feature/submissions/create-beer-location-submission.dialog";
+import { ViewBeerLocationSubmissionDialog } from "@feature/submissions/view-beer-location-submission.dialog";
+
+import { PageHeader } from "../components/page-header";
 
 const ViewBeerLocationSubmissions = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocationSubmissions();
 	const { data: districts, isLoading: isLoadingDistricts } = useDistricts();
-	const [modalOpened, { open, close }] = useDisclosure(false);
+	const [editModalOpen, editModalActions] = useDisclosure(false);
+	const [createModalOpen, createModalActions] = useDisclosure(false);
+
 	const [submissionToView, setSubmissionToView] = useState<
 		BeerLocation | undefined
 	>(undefined);
 
 	const handleViewClick = (submission: BeerLocation) => {
 		setSubmissionToView(submission);
-		open();
+		editModalActions.open();
+	};
+
+	const invalidate = async () => {
+		await queryClient.invalidateQueries({
+			queryKey:
+				createBeerLocationSubmissionQueryKeys.getBeerLocationSubmissions,
+		});
 	};
 
 	return (
 		<AppShell.Main>
-			<Group justify="space-between" p="sm">
-				<Title order={2}>Platsförslag</Title>
-				<Button
-					loading={isLoading}
-					rightSection={<IconReload />}
-					onClick={() => {
-						queryClient.invalidateQueries({
-							queryKey:
-								createBeerLocationSubmissionQueryKeys.getBeerLocationSubmissions,
-						});
-					}}
-				>
-					Ladda om
-				</Button>
-			</Group>
+			<PageHeader
+				title="Platsförslag"
+				onReload={invalidate}
+				onAdd={createModalActions.open}
+				isLoading={isLoading || isLoadingDistricts}
+			/>
 			<BeerLocationTable
 				data={data ?? undefined}
 				isLoading={isLoading || isLoadingDistricts}
@@ -58,8 +60,12 @@ const ViewBeerLocationSubmissions = () => {
 			/>
 			<ViewBeerLocationSubmissionDialog
 				submission={submissionToView}
-				open={modalOpened}
+				open={editModalOpen}
 				onClose={close}
+			/>
+			<CreateBeerLocationSubmissionDialog
+				onClose={createModalActions.close}
+				open={createModalOpen}
 			/>
 		</AppShell.Main>
 	);

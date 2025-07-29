@@ -1,6 +1,6 @@
-import { AppShell, Button, Group, Title } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconPencil, IconReload } from "@tabler/icons-react";
+import { IconPencil } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -12,13 +12,16 @@ import {
 import { BeerLocationTable } from "@common/components/beer-location-table/table";
 import { BeerLocation } from "@common/types/beer-location";
 
+import CreateBeerLocationDialog from "../components/create-beer-location.dialog";
 import { EditBeerLocationDialog } from "../components/edit-beer-location.dialog";
+import { PageHeader } from "../components/page-header";
 
 const ViewBeerLocations = () => {
 	const queryClient = useQueryClient();
 	const { data, isLoading } = useBeerLocations();
 	const { data: districts, isLoading: isLoadingDistricts } = useDistricts();
-	const [modalOpened, { open, close }] = useDisclosure(false);
+	const [editModalOpen, editModalActions] = useDisclosure(false);
+	const [createModalOpen, createModalActions] = useDisclosure(false);
 	const [locationToEdit, setLocationToEdit] = useState<
 		BeerLocation | undefined
 	>(undefined);
@@ -28,22 +31,19 @@ const ViewBeerLocations = () => {
 		open();
 	};
 
+	const invalidate = () => {
+		queryClient.invalidateQueries({
+			queryKey: [commonBaseQueryKeys.getBeerLocations],
+		});
+	};
+
 	return (
 		<AppShell.Main>
-			<Group justify="space-between" p="sm">
-				<Title order={2}>Platser</Title>
-				<Button
-					loading={isLoading}
-					rightSection={<IconReload />}
-					onClick={() => {
-						queryClient.invalidateQueries({
-							queryKey: [commonBaseQueryKeys.getBeerLocations],
-						});
-					}}
-				>
-					Ladda om
-				</Button>
-			</Group>
+			<PageHeader
+				title="Platser"
+				onAdd={createModalActions.open}
+				onReload={invalidate}
+			/>
 			<BeerLocationTable
 				data={data ?? undefined}
 				districts={districts}
@@ -55,11 +55,15 @@ const ViewBeerLocations = () => {
 					ariaLabel: (location) => `Redigera ${location.name}`,
 				}}
 			/>
+			<CreateBeerLocationDialog
+				open={createModalOpen}
+				onClose={createModalActions.open}
+			/>
 			<EditBeerLocationDialog
-				location={locationToEdit}
 				isLoading={isLoading || isLoadingDistricts}
-				open={modalOpened}
-				onClose={close}
+				location={locationToEdit}
+				open={editModalOpen}
+				onClose={editModalActions.close}
 			/>
 		</AppShell.Main>
 	);

@@ -1,4 +1,4 @@
-import { AppShell, Container, Title } from "@mantine/core";
+import { Drawer } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { commonBaseQueryKeys, useDistricts } from "@common/api/queries";
@@ -8,7 +8,12 @@ import { BeerLocationFormData } from "@common/types/beer-location-form-data";
 
 import { useCreateBeerLocation } from "../queries";
 
-const AddBeerLocation = () => {
+interface Props {
+	open: boolean;
+	onClose: () => void;
+}
+
+const CreateBeerLocationDialog = ({ open, onClose }: Props) => {
 	const mutation = useCreateBeerLocation();
 	const queryClient = useQueryClient();
 	const { data: districts } = useDistricts();
@@ -40,19 +45,14 @@ const AddBeerLocation = () => {
 	};
 
 	return (
-		<AppShell.Main>
-			<Container pt="md">
-				<Title order={2} mb="lg">
-					Lägg till plats
-				</Title>
-				<BeerLocationForm
-					onSubmit={onSubmit}
-					loading={mutation.isPending}
-					districts={districts ?? undefined}
-				/>
-			</Container>
-		</AppShell.Main>
+		<Drawer opened={open} onClose={onClose} title="Lägg till plats" size="xl">
+			<BeerLocationForm
+				onSubmit={onSubmit}
+				loading={mutation.isPending}
+				districts={districts ?? undefined}
+			/>
+		</Drawer>
 	);
 };
 
-export default AddBeerLocation;
+export default CreateBeerLocationDialog;
