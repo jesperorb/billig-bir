@@ -82,6 +82,8 @@ export const BeerLocationTable = ({
 						columnHelper.display({
 							id: "actions",
 							header: actionColumn.header,
+							maxSize: 60,
+							size: 60,
 							cell: ({ row }) => (
 								<ActionIcon
 									onClick={() => {
@@ -103,6 +105,7 @@ export const BeerLocationTable = ({
 				enableSorting: true,
 				enableColumnFilter: true,
 				filterFn: "includesString",
+				minSize: 180,
 			}),
 			columnHelper.accessor("price", {
 				header: "Pris",
@@ -182,6 +185,12 @@ export const BeerLocationTable = ({
 	const table = useReactTable({
 		data: data ?? [],
 		columns,
+		initialState: {
+			columnPinning: {
+				left: ["name"],
+				right: actionColumn ? ["actions"] : undefined,
+			},
+		},
 		state: {
 			sorting,
 			columnVisibility,
@@ -289,9 +298,11 @@ export const BeerLocationTable = ({
 				<Table
 					stickyHeader
 					striped
-					highlightOnHover
 					tabularNums
 					withColumnBorders
+					style={{
+						width: table.getTotalSize(),
+					}}
 				>
 					<TableHead headerGroups={table.getHeaderGroups()} />
 					<Table.Tbody>

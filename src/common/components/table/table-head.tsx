@@ -23,7 +23,6 @@ export const TableHead = <Type extends object>({
 								...getCommonPinningStyles(header.column),
 								cursor: header.column.getCanSort() ? "pointer" : "default",
 								userSelect: "none",
-								whiteSpace: "nowrap",
 							}}
 							onClick={header.column.getToggleSortingHandler()}
 						>

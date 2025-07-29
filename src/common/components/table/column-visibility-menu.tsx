@@ -36,7 +36,7 @@ export const ColumnVisibilityMenu = <
 			<Menu.Label>Synliga kolumner</Menu.Label>
 			{columns.map((column) => {
 				const value = getAccessorFromColumn(column);
-				if (value === "actions") {
+				if (value === "actions" || value === "name") {
 					return null;
 				}
 				return (

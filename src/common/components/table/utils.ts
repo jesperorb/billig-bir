@@ -12,9 +12,9 @@ export const getCommonPinningStyles = <Type extends object>(
 
 	return {
 		boxShadow: isLastLeftPinnedColumn
-			? "-4px 0 4px -4px gray inset"
+			? "-4px 0 4px -4px var(--mantine-color-gray-4) inset"
 			: isFirstRightPinnedColumn
-				? "4px 0 4px -4px gray inset"
+				? "4px 0 4px -4px var(--mantine-color-gray-4) inset"
 				: undefined,
 		left:
 			isPinned === "left"
@@ -28,5 +28,6 @@ export const getCommonPinningStyles = <Type extends object>(
 		position: isPinned ? "sticky" : "relative",
 		width: column.getSize(),
 		zIndex: isPinned ? 1 : 0,
+		backgroundColor: "var(--mantine-color-body)",
 	};
 };
