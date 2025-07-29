@@ -28,15 +28,10 @@ const InformationActionsDesktop = () => {
 
 	return (
 		<>
-			<ActionIcon
-				variant="filled"
-				size="xl"
-				aria-label="Information"
-				onClick={open}
-			>
+			<ActionIcon variant="filled" size="xl" aria-label="Mer" onClick={open}>
 				<IconQuestionMark />
 			</ActionIcon>
-			<Modal opened={modalOpened} onClose={close} title="Information">
+			<Modal opened={modalOpened} onClose={close} title="Mer">
 				<Stack gap="md">
 					<Suspense
 						fallback={

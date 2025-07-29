@@ -1,9 +1,4 @@
-import {
-	IconBeer,
-	IconBuildings,
-	IconBulb,
-	IconPlus,
-} from "@tabler/icons-react";
+import { IconBeer, IconBuildings, IconBulb } from "@tabler/icons-react";
 
 import { NavLink } from "@common/components/nav-link";
 
@@ -30,12 +25,6 @@ export const NavigationLinks = ({ toggleMenu }: Props) => {
 				to="/admin/view-districts"
 				label="Stadsdelar"
 				leftSection={<IconBuildings />}
-				onClick={toggleMenu}
-			/>
-			<NavLink
-				to="/admin/add-beer-location"
-				label="Lägg till plats"
-				leftSection={<IconPlus />}
 				onClick={toggleMenu}
 			/>
 		</>

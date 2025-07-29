@@ -56,16 +56,18 @@ const Layout = ({ children, collapseMenuOnDesktop = false }: Props) => {
 									height: "100%",
 								}}
 							>
-								<NavButton
-									variant="transparent"
-									justify="start"
-									pl={0}
-									size="compact-sm"
-									to="/"
-									leftSection={<IconChevronLeft />}
-								>
-									Start
-								</NavButton>
+								<Box>
+									<NavButton
+										variant="transparent"
+										justify="start"
+										pl={0}
+										size="compact-sm"
+										to="/"
+										leftSection={<IconChevronLeft />}
+									>
+										Start
+									</NavButton>
+								</Box>
 								<Title order={1} size="h3">
 									billig.beer
 								</Title>

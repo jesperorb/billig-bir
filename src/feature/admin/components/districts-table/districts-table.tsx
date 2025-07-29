@@ -1,11 +1,11 @@
 import {
 	ActionIcon,
 	Table,
-	Group,
 	TextInput,
 	ThemeIcon,
 	Space,
-	Box,
+	Grid,
+	Flex,
 } from "@mantine/core";
 import { IconSearch, IconCheck, IconX } from "@tabler/icons-react";
 import {
@@ -123,24 +123,27 @@ export const DistrictsTable = ({
 
 	return (
 		<>
-			<Group justify="space-between" align="flex-end" mx="sm">
-				<TextInput
-					placeholder="Sök efter namn"
-					leftSection={<IconSearch size={16} />}
-					value={globalFilter}
-					onChange={(event) => {
-						setGlobalFilter(event.currentTarget.value);
-					}}
-					style={{ flexGrow: 1, minWidth: 200 }}
-				/>
-				<Box mt="xs" maw={{ sm: 300 }} style={{ flexGrow: 1, minWidth: 200 }}>
-					<ColumnVisibilityMenu
-						columns={columns as ColumnDef<District>[]}
-						columnVisibility={columnVisibility}
-						onToggleColumnVisibility={toggleColumnVisiblity}
+			<Grid px="sm">
+				<Grid.Col>
+					<TextInput
+						label="Sök"
+						placeholder="Sök efter namn"
+						leftSection={<IconSearch size={16} />}
+						value={globalFilter}
+						onChange={(event) => {
+							setGlobalFilter(event.currentTarget.value);
+						}}
 					/>
-				</Box>
-			</Group>
+				</Grid.Col>
+			</Grid>
+			<Space h="sm" />
+			<Flex px="sm" justify="flex-end">
+				<ColumnVisibilityMenu
+					columns={columns as ColumnDef<District>[]}
+					columnVisibility={columnVisibility}
+					onToggleColumnVisibility={toggleColumnVisiblity}
+				/>
+			</Flex>
 			<Space h="lg" />
 			<Table.ScrollContainer minWidth={390}>
 				<Table

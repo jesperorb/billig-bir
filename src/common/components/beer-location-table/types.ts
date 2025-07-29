@@ -11,7 +11,7 @@ export type ColumnKeys =
 
 export interface BeerLocationTableProps {
 	data: BeerLocation[] | undefined;
-	districts?: District[];
+	districts: District[] | undefined;
 	isLoading?: boolean;
 	actionColumn?: {
 		header: string;
