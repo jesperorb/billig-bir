@@ -37,7 +37,7 @@ export const DEFAULT_FORM_VALUES: BeerLocationFormData = {
 	centilitersPitcher: undefined,
 	urlMaps: "",
 	urlWebsite: "",
-	districtId: undefined,
+	districtIds: undefined,
 };
 
 export const DEFAULT_AW_TIME_VALUE: AWStartAndEndTimesFormData = {
