@@ -10,6 +10,7 @@ import {
 	useDistricts,
 } from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table/table";
+import { TableWrapper } from "@common/components/table/table-wrapper";
 import { BeerLocation } from "@common/types/beer-location";
 
 import CreateBeerLocationDialog from "../components/create-beer-location.dialog";
@@ -28,7 +29,7 @@ const ViewBeerLocations = () => {
 
 	const handleEditClick = (location: BeerLocation) => {
 		setLocationToEdit(location);
-		open();
+		editModalActions.open();
 	};
 
 	const invalidate = () => {
@@ -39,22 +40,27 @@ const ViewBeerLocations = () => {
 
 	return (
 		<AppShell.Main>
-			<PageHeader
-				title="Platser"
-				onAdd={createModalActions.open}
-				onReload={invalidate}
-			/>
-			<BeerLocationTable
-				data={data ?? undefined}
-				districts={districts}
-				isLoading={isLoading}
-				actionColumn={{
-					header: "Visa",
-					icon: <IconEye />,
-					onClick: handleEditClick,
-					ariaLabel: (location) => `Redigera ${location.name}`,
-				}}
-			/>
+			<TableWrapper
+				header={
+					<PageHeader
+						title="Platser"
+						onAdd={createModalActions.open}
+						onReload={invalidate}
+					/>
+				}
+			>
+				<BeerLocationTable
+					data={data ?? undefined}
+					districts={districts}
+					isLoading={isLoading}
+					actionColumn={{
+						header: "Visa",
+						icon: <IconEye />,
+						onClick: handleEditClick,
+						ariaLabel: (location) => `Redigera ${location.name}`,
+					}}
+				/>
+			</TableWrapper>
 			<CreateBeerLocationDialog
 				open={createModalOpen}
 				onClose={createModalActions.open}

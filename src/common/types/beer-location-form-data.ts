@@ -9,5 +9,5 @@ export interface AWStartAndEndTimesFormData extends AWStartAndEndTimes {
 
 export interface BeerLocationFormData extends Omit<BeerLocation, "awTimes"> {
 	awTimes?: AWStartAndEndTimesFormData[];
-	districtId?: number;
+	districtIds?: string[];
 }

@@ -53,7 +53,7 @@ export const theme = createTheme({
 			"#422006", // darkest foam
 		],
 	},
-	white: "#fffef9",
+	white: "#f8f7f6",
 	components: {
 		Button: Button.extend({
 			defaultProps: {

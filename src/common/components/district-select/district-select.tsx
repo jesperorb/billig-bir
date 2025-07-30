@@ -8,24 +8,32 @@ interface Props {
 	districts: District[];
 	onChange: (value: string[]) => void;
 	style?: MantineStyleProp;
+	error?: string;
+	defaultValue?: string[];
+	placeholder?: string;
 }
 
 const defaultStyle = { flexGrow: 1, minWidth: 200 };
 
 export const DistrictSelect = ({
 	value,
+	defaultValue,
 	districts,
 	onChange,
+	error,
+	placeholder,
 	style = defaultStyle,
 }: Props) => (
 	<MultiSelect
 		label="Stadsdelar"
-		placeholder="Filtrera på stadsdelar"
+		placeholder={placeholder ?? "Filtrera på stadsdelar"}
 		data={districtToSelectItemGroups(districts)}
+		defaultValue={defaultValue}
 		value={value}
 		onChange={onChange}
 		searchable
 		clearable
 		style={style}
+		error={error}
 	/>
 );
