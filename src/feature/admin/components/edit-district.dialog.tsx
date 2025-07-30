@@ -1,4 +1,4 @@
-import { Modal, Group, Button } from "@mantine/core";
+import { Modal, Group, Button, Drawer } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 
 import type { District } from "@common/types/district";
@@ -37,11 +37,11 @@ export const EditDistrictDialog = ({
 	};
 
 	return (
-		<Modal
+		<Drawer
 			opened={opened}
 			onClose={onClose}
 			title="Redigera stadsdel"
-			size="md"
+			size="xl"
 		>
 			<DistrictForm
 				defaultValues={district ?? undefined}
@@ -70,6 +70,6 @@ export const EditDistrictDialog = ({
 					</Button>
 				</Group>
 			)}
-		</Modal>
+		</Drawer>
 	);
 };

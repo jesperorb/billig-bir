@@ -63,7 +63,7 @@ const ViewBeerLocations = () => {
 			</TableWrapper>
 			<CreateBeerLocationDialog
 				open={createModalOpen}
-				onClose={createModalActions.open}
+				onClose={createModalActions.close}
 			/>
 			<EditBeerLocationDialog
 				isLoading={isLoading || isLoadingDistricts}

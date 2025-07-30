@@ -1,4 +1,4 @@
-import { Modal, Button, Group, Text } from "@mantine/core";
+import { Modal, Button, Group, Text, Drawer } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -62,11 +62,11 @@ export const EditBeerLocationDialog = ({
 
 	return (
 		<>
-			<Modal
+			<Drawer
 				opened={open}
 				onClose={onClose}
 				title={`Redigera ${location?.name ?? ""}`}
-				size="auto"
+				size="xl"
 			>
 				{location && (
 					<BeerLocationForm
@@ -92,7 +92,7 @@ export const EditBeerLocationDialog = ({
 						Ta bort plats
 					</Button>
 				</Group>
-			</Modal>
+			</Drawer>
 
 			<Modal
 				opened={deleteConfirmOpen}

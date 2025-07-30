@@ -74,7 +74,7 @@ export const DistrictForm = ({
 							Avbryt
 						</Button>
 					)}
-					<Button type="submit" loading={loading}>
+					<Button type="submit" color="hops.7" loading={loading}>
 						{submitButtonText}
 					</Button>
 				</Group>

@@ -1,4 +1,4 @@
-import { Modal } from "@mantine/core";
+import { Drawer } from "@mantine/core";
 
 import type { District } from "@common/types/district";
 
@@ -23,11 +23,11 @@ export const CreateDistrictDialog = ({
 	};
 
 	return (
-		<Modal
+		<Drawer
 			opened={opened}
 			onClose={onClose}
 			title="Skapa ny stadsdel"
-			size="md"
+			size="xl"
 		>
 			<DistrictForm
 				loading={loading}
@@ -35,6 +35,6 @@ export const CreateDistrictDialog = ({
 				onSubmit={handleSubmit}
 				onCancel={onClose}
 			/>
-		</Modal>
+		</Drawer>
 	);
 };

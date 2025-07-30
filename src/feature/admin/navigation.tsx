@@ -23,6 +23,7 @@ export const AdminNavigation = () => {
 				<Group m="sm">
 					<Button
 						fullWidth
+						variant="outline"
 						onClick={async () => {
 							await apiClient.auth.signOut();
 							navigate({ to: "/" });
