@@ -30,6 +30,7 @@ export const PageHeader = ({ title, onAdd, onReload, isLoading }: Props) => {
 							rightSection={<IconPlus size={16} />}
 							onClick={onAdd}
 							fullWidth
+							color="hops.7"
 							loading={isLoading}
 							aria-label={`Lägg till ${title.toLocaleUpperCase()}`}
 						>
@@ -41,6 +42,7 @@ export const PageHeader = ({ title, onAdd, onReload, isLoading }: Props) => {
 							loading={isLoading}
 							rightSection={<IconReload />}
 							fullWidth
+							variant="outline"
 							onClick={onReload}
 						>
 							Ladda om
