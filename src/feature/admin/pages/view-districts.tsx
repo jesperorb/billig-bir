@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { useDistricts, commonBaseQueryKeys } from "@common/api/queries";
+import { TableWrapper } from "@common/components/table/table-wrapper";
 import type { District } from "@common/types/district";
 
 import { CreateDistrictDialog } from "../components/create-district.dialog";
@@ -65,24 +66,29 @@ const ViewDistricts = () => {
 	return (
 		<>
 			<AppShell.Main>
-				<PageHeader
-					title="Stadsdelar"
-					onAdd={() => {
-						setCreateDialogOpened(true);
-					}}
-					onReload={invalidate}
-					isLoading={isLoading}
-				/>
-				<DistrictsTable
-					data={districts ?? undefined}
-					isLoading={isLoading}
-					actionColumn={{
-						header: "Visa",
-						icon: <IconEye size={16} />,
-						onClick: handleEditDistrict,
-						ariaLabel: (district) => `Redigera ${district.name}`,
-					}}
-				/>
+				<TableWrapper
+					header={
+						<PageHeader
+							title="Stadsdelar"
+							onAdd={() => {
+								setCreateDialogOpened(true);
+							}}
+							onReload={invalidate}
+							isLoading={isLoading}
+						/>
+					}
+				>
+					<DistrictsTable
+						data={districts ?? undefined}
+						isLoading={isLoading}
+						actionColumn={{
+							header: "Visa",
+							icon: <IconEye size={16} />,
+							onClick: handleEditDistrict,
+							ariaLabel: (district) => `Redigera ${district.name}`,
+						}}
+					/>
+				</TableWrapper>
 			</AppShell.Main>
 			<EditDistrictDialog
 				opened={editDialogOpened}

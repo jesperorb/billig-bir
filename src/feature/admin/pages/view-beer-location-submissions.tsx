@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { useDistricts } from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table/table";
+import { TableWrapper } from "@common/components/table/table-wrapper";
 import { BeerLocation } from "@common/types/beer-location";
 import {
 	useBeerLocationSubmissions,
@@ -41,27 +42,32 @@ const ViewBeerLocationSubmissions = () => {
 
 	return (
 		<AppShell.Main>
-			<PageHeader
-				title="Platsförslag"
-				onReload={invalidate}
-				onAdd={createModalActions.open}
-				isLoading={isLoading || isLoadingDistricts}
-			/>
-			<BeerLocationTable
-				data={data ?? undefined}
-				isLoading={isLoading || isLoadingDistricts}
-				districts={districts}
-				actionColumn={{
-					header: "Visa",
-					icon: <IconEye />,
-					onClick: handleViewClick,
-					ariaLabel: (submission) => `Visa ${submission.name}`,
-				}}
-			/>
+			<TableWrapper
+				header={
+					<PageHeader
+						title="Platsförslag"
+						onReload={invalidate}
+						onAdd={createModalActions.open}
+						isLoading={isLoading || isLoadingDistricts}
+					/>
+				}
+			>
+				<BeerLocationTable
+					data={data ?? undefined}
+					isLoading={isLoading || isLoadingDistricts}
+					districts={districts}
+					actionColumn={{
+						header: "Visa",
+						icon: <IconEye />,
+						onClick: handleViewClick,
+						ariaLabel: (submission) => `Visa ${submission.name}`,
+					}}
+				/>
+			</TableWrapper>
 			<ViewBeerLocationSubmissionDialog
 				submission={submissionToView}
 				open={editModalOpen}
-				onClose={close}
+				onClose={editModalActions.close}
 			/>
 			<CreateBeerLocationSubmissionDialog
 				onClose={createModalActions.close}

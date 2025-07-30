@@ -35,6 +35,7 @@ import {
 } from "@common/types/beer-location-form-data";
 import { District } from "@common/types/district";
 
+import { DistrictSelect } from "./district-select/district-select";
 import { MapLocationPickerDialog } from "./map-location-picker.dialog";
 
 interface Props {
@@ -345,47 +346,20 @@ export const BeerLocationForm = ({
 						</Button>
 					</Box>
 
-					{districts && districts.length > 0 && (
-						<Controller
-							name="districtId"
-							control={control}
-							render={({ field, fieldState }) => (
-								<Select
-									{...field}
-									value={field.value?.toString()}
-									defaultValue={defaultValues.districts?.[0]?.id.toString()}
-									onChange={(value) => {
-										field.onChange(value ? parseInt(value) : undefined);
-									}}
-									label="Stadsdel"
-									placeholder="Välj stadsdel"
-									data={[
-										{
-											group: "Innanför tullarna",
-											items: districts
-												.filter((district) => district.insideTolls)
-												.map((district) => ({
-													value: district.id.toString(),
-													label: district.name,
-												})),
-										},
-										{
-											group: "Utanför tullarna",
-											items: districts
-												.filter((district) => !district.insideTolls)
-												.map((district) => ({
-													value: district.id.toString(),
-													label: district.name,
-												})),
-										},
-									]}
-									error={fieldState.error?.message}
-									searchable
-									clearable
-								/>
-							)}
-						/>
-					)}
+					<Controller
+						name="districtIds"
+						control={control}
+						defaultValue={defaultValues.districts?.map((d) => d.id.toString())}
+						render={({ field, fieldState }) => (
+							<DistrictSelect
+								placeholder="Välj stadsdelar"
+								value={field.value ?? []}
+								districts={districts ?? []}
+								onChange={field.onChange}
+								error={fieldState.error?.message}
+							/>
+						)}
+					/>
 
 					<Controller
 						name="urlMaps"

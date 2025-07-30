@@ -7,14 +7,11 @@ import {
 	Stack,
 	Paper,
 	Divider,
-	Badge,
 	Grid,
-	ThemeIcon,
 	Drawer,
 } from "@mantine/core";
 import {
 	IconCheck,
-	IconX,
 	IconTrash,
 	IconMapPin,
 	IconClock,
@@ -27,6 +24,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { commonBaseQueryKeys } from "@common/api/queries";
+import { BooleanBadge } from "@common/components/boolean-badge";
 import { WEEKDAY_NAMES } from "@common/constants";
 import { useNotification } from "@common/notifications/use-notification";
 import type { BeerLocation } from "@common/types/beer-location";
@@ -191,62 +189,28 @@ export const ViewBeerLocationSubmissionDialog = ({
 						</Stack>
 					</Paper>
 
-					{/* Features */}
 					<Paper p="md" withBorder>
 						<Title
 							order={4}
 							mb="sm"
 							style={{ display: "flex", alignItems: "center", gap: "8px" }}
 						>
-							<IconAdjustments size={16} />
+							<IconAdjustments size={16} aria-hidden="true" />
 							Egenskaper
 						</Title>
 						<Group gap="sm">
-							<Badge
-								color={submission.outdoorSeating ? "teal" : "dark"}
-								variant="light"
-								leftSection={
-									<ThemeIcon size="xs" variant="transparent">
-										{submission.outdoorSeating ? (
-											<IconCheck size={12} color="white" />
-										) : (
-											<IconX size={12} color="red" />
-										)}
-									</ThemeIcon>
-								}
-							>
-								Uteservering
-							</Badge>
-							<Badge
-								color={submission.afternoonSun ? "teal" : "dark"}
-								variant="light"
-								leftSection={
-									<ThemeIcon size="xs" variant="transparent">
-										{submission.afternoonSun ? (
-											<IconCheck size={12} color="white" />
-										) : (
-											<IconX size={12} color="red" />
-										)}
-									</ThemeIcon>
-								}
-							>
-								Eftermiddagssol
-							</Badge>
-							<Badge
-								color={submission.awTimes?.length ? "green" : "dark"}
-								variant="light"
-								leftSection={
-									<ThemeIcon size="xs" variant="transparent">
-										{submission.awTimes?.length ? (
-											<IconCheck size={12} />
-										) : (
-											<IconX size={12} color="red" />
-										)}
-									</ThemeIcon>
-								}
-							>
-								AW-tider
-							</Badge>
+							<BooleanBadge
+								value={submission.outdoorSeating}
+								label="Uteservering"
+							/>
+							<BooleanBadge
+								value={submission.afternoonSun}
+								label="Eftermiddagssol"
+							/>
+							<BooleanBadge
+								value={Boolean(submission.awTimes?.length)}
+								label="AW-tider"
+							/>
 						</Group>
 					</Paper>
 
@@ -370,13 +334,11 @@ export const ViewBeerLocationSubmissionDialog = ({
 						</Paper>
 					)}
 
-					<Group justify="space-between" mt="md">
-						<Button variant="default" onClick={onClose}>
-							Stäng
-						</Button>
-						<Group>
+					<Grid>
+						<Grid.Col span={{ base: 12, sm: 6 }}>
 							<Button
 								color="red"
+								fullWidth
 								leftSection={<IconTrash size={16} />}
 								onClick={() => {
 									setDeleteConfirmOpen(true);
@@ -385,8 +347,11 @@ export const ViewBeerLocationSubmissionDialog = ({
 							>
 								Ta bort förslag
 							</Button>
+						</Grid.Col>
+						<Grid.Col span={{ base: 12, sm: 6 }}>
 							<Button
 								color="green"
+								fullWidth
 								leftSection={<IconCheck size={16} />}
 								onClick={() => {
 									setApproveConfirmOpen(true);
@@ -395,8 +360,8 @@ export const ViewBeerLocationSubmissionDialog = ({
 							>
 								Godkänn förslag
 							</Button>
-						</Group>
-					</Group>
+						</Grid.Col>
+					</Grid>
 				</Stack>
 			</Drawer>
 

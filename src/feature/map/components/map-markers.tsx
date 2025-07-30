@@ -25,7 +25,7 @@ export const MapMarkers = ({ beerLocations }: Props) => {
 					<HoverCard>
 						<HoverCard.Target>
 							<Box
-								bg="wine.7"
+								bg="gold.7"
 								c="white"
 								p="xs"
 								w="2rem"

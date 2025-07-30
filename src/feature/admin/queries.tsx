@@ -43,58 +43,115 @@ const createBeerLocationQueryKeys = {
 export const createBeerLocation =
 	(apiClient: SupabaseClient<Database>) =>
 	async (values: BeerLocationFormData) => {
-		const { data: locationData } = await apiClient
+		const { data: locationData, error: locationError } = await apiClient
 			.from("location")
 			.insert(beerLocationFormDataToSchema(removeEmptyStrings(values)))
 			.select()
 			.single();
-		if (values.districtId && locationData?.id) {
-			await createLocationDistrict(apiClient)(
-				values.districtId,
-				locationData.id,
-			);
+
+		if (locationError) {
+			throw new Error(`Failed to create location: ${locationError.message}`);
 		}
-		if (values.awTimes?.length && locationData) {
-			const { data: awTimesData } = await apiClient
-				.from("aw_time")
-				.insert(awTimesFormDataToSchema(values.awTimes))
-				.select();
-			if (awTimesData?.length) {
-				await apiClient
-					.from("location_aw_time")
-					.insert(locationAwTimesDataToSchema(awTimesData, locationData.id));
+
+		try {
+			if (values.districtIds && locationData.id) {
+				for (const districtId of values.districtIds) {
+					await createLocationDistrict(apiClient)(
+						Number(districtId),
+						locationData.id,
+					);
+				}
 			}
+			if (values.awTimes?.length) {
+				const { data: awTimesData, error: awTimesError } = await apiClient
+					.from("aw_time")
+					.insert(awTimesFormDataToSchema(values.awTimes))
+					.select();
+
+				if (awTimesError) {
+					throw new Error(`Failed to create aw times: ${awTimesError.message}`);
+				}
+
+				if (awTimesData.length) {
+					const { error: locationAwTimesError } = await apiClient
+						.from("location_aw_time")
+						.insert(locationAwTimesDataToSchema(awTimesData, locationData.id));
+
+					if (locationAwTimesError) {
+						throw new Error(
+							`Failed to create location aw time relations: ${locationAwTimesError.message}`,
+						);
+					}
+				}
+			}
+		} catch (error) {
+			await deleteBeerLocation(apiClient)({
+				...values,
+				id: locationData.id,
+			});
+			throw error;
 		}
 	};
 
 export const updateBeerLocation =
 	(apiClient: SupabaseClient<Database>) =>
 	async (values: BeerLocationFormData) => {
-		await apiClient
+		const { error: updateError } = await apiClient
 			.from("location")
-			.update(beerLocationFormDataToSchema(removeEmptyStrings(values)))
+			.update({
+				...beerLocationFormDataToSchema(removeEmptyStrings(values)),
+				id: undefined,
+			})
 			.eq("id", values.id);
-		if (values.districtId && values.id) {
+
+		if (updateError) {
+			throw new Error(`Failed to update location: ${updateError.message}`);
+		}
+
+		if (values.districtIds && values.id) {
 			await deleteLocationDistrict(apiClient)(values.id);
-			await createLocationDistrict(apiClient)(values.districtId, values.id);
+			for (const districtId of values.districtIds) {
+				await createLocationDistrict(apiClient)(Number(districtId), values.id);
+			}
 		}
 		if (!values.awTimes?.length) return;
 		const times = awTimesFormDataToSchema(values.awTimes);
 		const toUpdate = times.filter(awTimeHasId);
 		const toCreate = times.filter(awTimeHasNoId);
-		if (!toUpdate.length) return;
-		for (const time of toUpdate) {
-			await apiClient.from("aw_time").update(time).eq("id", time.id);
+		if (toUpdate.length) {
+			for (const time of toUpdate) {
+				const { error: updateAwTimeError } = await apiClient
+					.from("aw_time")
+					.update({ ...time, id: undefined })
+					.eq("id", time.id);
+
+				if (updateAwTimeError) {
+					throw new Error(
+						`Failed to update aw time: ${updateAwTimeError.message}`,
+					);
+				}
+			}
 		}
 		for (const time of toCreate) {
-			const { data: awTimesToCreate } = await apiClient
-				.from("aw_time")
-				.insert(time)
-				.select();
-			if (!awTimesToCreate?.length) return;
-			await apiClient
+			const { data: awTimesToCreate, error: createAwTimeError } =
+				await apiClient.from("aw_time").insert(time).select();
+
+			if (createAwTimeError) {
+				throw new Error(
+					`Failed to create aw time: ${createAwTimeError.message}`,
+				);
+			}
+
+			if (!awTimesToCreate.length) return;
+			const { error: locationAwTimeError } = await apiClient
 				.from("location_aw_time")
 				.insert(locationAwTimesDataToSchema(awTimesToCreate, values.id));
+
+			if (locationAwTimeError) {
+				throw new Error(
+					`Failed to create location aw time relation: ${locationAwTimeError.message}`,
+				);
+			}
 		}
 	};
 
@@ -109,18 +166,40 @@ export const deleteBeerLocation =
 		if (values.districts?.length) {
 			await deleteLocationDistrict(apiClient)(values.id);
 		}
-		await apiClient.from("location").delete().eq("id", values.id);
+		const { error } = await apiClient
+			.from("location")
+			.delete()
+			.eq("id", values.id);
+
+		if (error) {
+			throw new Error(`Failed to delete location: ${error.message}`);
+		}
 	};
 
 export const deleteAwTime =
 	(apiClient: SupabaseClient<Database>) =>
 	async (value: AWStartAndEndTimesFormData) => {
 		if (value.id < 0) return;
-		await apiClient
+
+		const { error: relationError } = await apiClient
 			.from("location_aw_time")
 			.delete()
 			.eq("aw_time_id", value.id);
-		await apiClient.from("aw_time").delete().eq("id", value.id);
+
+		if (relationError) {
+			throw new Error(
+				`Failed to delete location aw time relation: ${relationError.message}`,
+			);
+		}
+
+		const { error: awTimeError } = await apiClient
+			.from("aw_time")
+			.delete()
+			.eq("id", value.id);
+
+		if (awTimeError) {
+			throw new Error(`Failed to delete aw time: ${awTimeError.message}`);
+		}
 	};
 
 export const createAwTime =
@@ -132,58 +211,90 @@ export const createAwTime =
 		value: AWStartAndEndTimesFormData;
 		locationId: number;
 	}) => {
-		const response = await apiClient
+		const { data: awTimeData, error: awTimeError } = await apiClient
 			.from("aw_time")
 			.insert(awTimeFormDataToSchema(value))
 			.select()
 			.single();
-		if (response.data) {
-			await apiClient
-				.from("location_aw_time")
-				.insert({ location_id: locationId, aw_time_id: response.data.id });
+
+		if (awTimeError) {
+			throw new Error(`Failed to create aw time: ${awTimeError.message}`);
+		}
+
+		const { error: relationError } = await apiClient
+			.from("location_aw_time")
+			.insert({ location_id: locationId, aw_time_id: awTimeData.id });
+
+		if (relationError) {
+			throw new Error(
+				`Failed to create location aw time relation: ${relationError.message}`,
+			);
 		}
 	};
 
 export const createLocationDistrict =
 	(apiClient: SupabaseClient<Database>) =>
 	async (districtId: number, locationId: number) => {
-		await apiClient
+		const { error } = await apiClient
 			.from("location_district")
 			.upsert({ district_id: districtId, location_id: locationId })
 			.select();
+
+		if (error) {
+			throw new Error(`Failed to create location district: ${error.message}`);
+		}
 	};
 
 export const deleteLocationDistrict =
 	(apiClient: SupabaseClient<Database>) => async (locationId: number) => {
-		await apiClient
+		const { error } = await apiClient
 			.from("location_district")
 			.delete()
 			.eq("location_id", locationId);
+
+		if (error) {
+			throw new Error(`Failed to delete location district: ${error.message}`);
+		}
 	};
 
 export const updateDistrict =
 	(apiClient: SupabaseClient<Database>) => async (district: District) => {
-		await apiClient
+		const { error } = await apiClient
 			.from("district")
 			.update({
 				name: district.name,
 				inside_tolls: district.insideTolls,
 			})
 			.eq("id", district.id);
+
+		if (error) {
+			throw new Error(`Failed to update district: ${error.message}`);
+		}
 	};
 
 export const createDistrict =
 	(apiClient: SupabaseClient<Database>) =>
 	async (district: { name: string; insideTolls: boolean }) => {
-		await apiClient.from("district").insert({
+		const { error } = await apiClient.from("district").insert({
 			name: district.name,
 			inside_tolls: district.insideTolls,
 		});
+
+		if (error) {
+			throw new Error(`Failed to create district: ${error.message}`);
+		}
 	};
 
 export const deleteDistrict =
 	(apiClient: SupabaseClient<Database>) => async (districtId: number) => {
-		await apiClient.from("district").delete().eq("id", districtId);
+		const { error } = await apiClient
+			.from("district")
+			.delete()
+			.eq("id", districtId);
+
+		if (error) {
+			throw new Error(`Failed to delete district: ${error.message}`);
+		}
 	};
 
 export const useCreateBeerLocation = () => {

@@ -56,11 +56,13 @@ export const createBeerLocationSubmission =
 		}
 
 		try {
-			if (values.districtId) {
-				await createLocationDistrictSubmission(apiClient)(
-					values.districtId,
-					locationData.id,
-				);
+			if (values.districtIds) {
+				for (const districtId of values.districtIds) {
+					await createLocationDistrictSubmission(apiClient)(
+						Number(districtId),
+						locationData.id,
+					);
+				}
 			}
 			if (values.awTimes?.length) {
 				for (const time of values.awTimes) {
@@ -104,11 +106,13 @@ export const approveBeerLocationSubmission =
 				});
 			}
 		}
-		if (values.districtId) {
-			await createLocationDistrict(apiClient)(
-				values.districtId,
-				locationData.id,
-			);
+		if (values.districtIds) {
+			for (const districtId of values.districtIds) {
+				await createLocationDistrictSubmission(apiClient)(
+					Number(districtId),
+					locationData.id,
+				);
+			}
 		}
 	};
 

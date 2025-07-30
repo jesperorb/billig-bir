@@ -1,13 +1,5 @@
-import {
-	ActionIcon,
-	Table,
-	TextInput,
-	ThemeIcon,
-	Space,
-	Grid,
-	Flex,
-} from "@mantine/core";
-import { IconSearch, IconCheck, IconX } from "@tabler/icons-react";
+import { ActionIcon, Table, TextInput, Grid, Flex, Stack } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 import {
 	getCoreRowModel,
 	getSortedRowModel,
@@ -19,6 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { useMemo, useState, useEffect } from "react";
 
+import { BooleanCell } from "@common/components/table/boolean-cell";
 import { ColumnVisibilityMenu } from "@common/components/table/column-visibility-menu";
 import { TableHead } from "@common/components/table/table-head";
 import { TableRows } from "@common/components/table/table-rows";
@@ -79,16 +72,7 @@ export const DistrictsTable = ({
 			columnHelper.accessor("insideTolls", {
 				header: "Innanför tullarna",
 				enableSorting: true,
-				cell: ({ getValue }) =>
-					getValue() ? (
-						<ThemeIcon size="xs">
-							<IconCheck />
-						</ThemeIcon>
-					) : (
-						<ThemeIcon color="red" size="xs">
-							<IconX />
-						</ThemeIcon>
-					),
+				cell: ({ getValue }) => <BooleanCell value={getValue()} />,
 			}),
 		],
 		[actionColumn],
@@ -132,34 +116,40 @@ export const DistrictsTable = ({
 	});
 
 	return (
-		<>
-			<Grid px="sm">
-				<Grid.Col>
-					<TextInput
-						label="Sök"
-						placeholder="Sök efter namn"
-						leftSection={<IconSearch size={16} />}
-						value={globalFilter}
-						onChange={(event) => {
-							setGlobalFilter(event.currentTarget.value);
-						}}
+		<Flex direction="column" style={{ height: "100%" }}>
+			<Stack gap="xs" mb="xs">
+				<Grid px="sm">
+					<Grid.Col>
+						<TextInput
+							label="Sök"
+							placeholder="Sök efter namn"
+							leftSection={<IconSearch size={16} />}
+							value={globalFilter}
+							onChange={(event) => {
+								setGlobalFilter(event.currentTarget.value);
+							}}
+						/>
+					</Grid.Col>
+				</Grid>
+				<Flex px="sm" justify="flex-end">
+					<ColumnVisibilityMenu
+						columns={columns as ColumnDef<District>[]}
+						columnVisibility={columnVisibility}
+						onToggleColumnVisibility={toggleColumnVisiblity}
 					/>
-				</Grid.Col>
-			</Grid>
-			<Space h="sm" />
-			<Flex px="sm" justify="flex-end">
-				<ColumnVisibilityMenu
-					columns={columns as ColumnDef<District>[]}
-					columnVisibility={columnVisibility}
-					onToggleColumnVisibility={toggleColumnVisiblity}
-				/>
-			</Flex>
-			<Space h="lg" />
-			<Table.ScrollContainer minWidth={390}>
+				</Flex>
+			</Stack>
+			<Table.ScrollContainer
+				minWidth={360}
+				style={{
+					flex: 1,
+					minHeight: 0,
+					overflow: "auto",
+				}}
+			>
 				<Table
 					stickyHeader
 					striped
-					highlightOnHover
 					tabularNums
 					withColumnBorders
 					width={table.getTotalSize()}
@@ -174,7 +164,6 @@ export const DistrictsTable = ({
 					</Table.Tbody>
 				</Table>
 			</Table.ScrollContainer>
-			<Space h="xl" />
-		</>
+		</Flex>
 	);
 };

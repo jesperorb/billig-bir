@@ -4,6 +4,7 @@ import { useBeerLocations, useDistricts } from "@common/api/queries";
 import { BeerLocationTable } from "@common/components/beer-location-table/table";
 import InformationActionsMobile from "@common/components/information-actions.mobile";
 import Layout from "@common/components/layout";
+import { TableWrapper } from "@common/components/table/table-wrapper";
 
 const ViewBeerLocationsTable = () => {
 	const { data, isLoading } = useBeerLocations();
@@ -13,15 +14,14 @@ const ViewBeerLocationsTable = () => {
 		<Layout collapseMenuOnDesktop>
 			<AppShell.Main>
 				<Container fluid>
-					<Group justify="space-between" py="sm">
-						<Title order={2}>Platser</Title>
-					</Group>
-					<BeerLocationTable
-						data={data ?? undefined}
-						districts={districts}
-						isLoading={isLoading || isLoadingDistricts}
-						filterPadding={0}
-					/>
+					<TableWrapper header={<Title order={2}>Platser</Title>}>
+						<BeerLocationTable
+							data={data ?? undefined}
+							districts={districts}
+							isLoading={isLoading || isLoadingDistricts}
+							filterPadding={0}
+						/>
+					</TableWrapper>
 				</Container>
 			</AppShell.Main>
 			<AppShell.Navbar>

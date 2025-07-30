@@ -3,9 +3,9 @@ import {
 	Table,
 	TextInput,
 	Select,
-	Space,
 	Grid,
 	Flex,
+	Stack,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import {
@@ -240,69 +240,74 @@ export const BeerLocationTable = ({
 	};
 
 	return (
-		<>
-			<Grid
-				type="container"
-				px={filterPadding}
-				breakpoints={{
-					xs: "15em",
-					sm: "26em",
-					md: "40em",
-					lg: "40em",
-					xl: "55em",
+		<Flex direction="column" style={{ height: "100%" }}>
+			<Stack gap="xs" mb="xs">
+				<Grid
+					type="container"
+					px={filterPadding}
+					breakpoints={{
+						xs: "15em",
+						sm: "26em",
+						md: "40em",
+						lg: "40em",
+						xl: "55em",
+					}}
+				>
+					<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+						<TextInput
+							label="Sök"
+							placeholder="Sök efter namn"
+							leftSection={<IconSearch size={16} />}
+							value={getStringFilterValue(
+								columnFilters.find(getFilter<ColumnKeys>("name")),
+							)}
+							onChange={(event) => {
+								setColumnFilters(updateFilterValue("name", event.target.value));
+							}}
+							style={{ flexGrow: 1, minWidth: 200 }}
+						/>
+					</Grid.Col>
+					<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+						<DistrictSelect
+							districts={districts ?? []}
+							value={getStringArrayFilterValue(
+								columnFilters.find(getFilter<ColumnKeys>("districts")),
+							)}
+							onChange={handleDistrictsChange}
+						/>
+					</Grid.Col>
+					<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+						<Select
+							label="Pristyp (kr/cl)"
+							data={AVAILABLE_SORTABLE_PRICE_TYPES}
+							value={selectedPriceType}
+							onChange={togglePricePerClColumn}
+							style={{ flexGrow: 1, minWidth: 200 }}
+						/>
+					</Grid.Col>
+				</Grid>
+				<Flex px="sm" justify="flex-end">
+					<ColumnVisibilityMenu
+						columns={columns as ColumnDef<BeerLocation>[]}
+						columnVisibility={columnVisibility}
+						onToggleColumnVisibility={toggleColumnVisiblity}
+					/>
+				</Flex>
+			</Stack>
+			<Table.ScrollContainer
+				minWidth={360}
+				style={{
+					flex: 1,
+					minHeight: 0,
+					overflow: "auto",
 				}}
 			>
-				<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-					<TextInput
-						label="Sök"
-						placeholder="Sök efter namn"
-						leftSection={<IconSearch size={16} />}
-						value={getStringFilterValue(
-							columnFilters.find(getFilter<ColumnKeys>("name")),
-						)}
-						onChange={(event) => {
-							setColumnFilters(updateFilterValue("name", event.target.value));
-						}}
-						style={{ flexGrow: 1, minWidth: 200 }}
-					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-					<DistrictSelect
-						districts={districts ?? []}
-						value={getStringArrayFilterValue(
-							columnFilters.find(getFilter<ColumnKeys>("districts")),
-						)}
-						onChange={handleDistrictsChange}
-					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-					<Select
-						label="Pristyp (kr/cl)"
-						data={AVAILABLE_SORTABLE_PRICE_TYPES}
-						value={selectedPriceType}
-						onChange={togglePricePerClColumn}
-						style={{ flexGrow: 1, minWidth: 200 }}
-					/>
-				</Grid.Col>
-			</Grid>
-			<Space h="sm" />
-			<Flex px="sm" justify="flex-end">
-				<ColumnVisibilityMenu
-					columns={columns as ColumnDef<BeerLocation>[]}
-					columnVisibility={columnVisibility}
-					onToggleColumnVisibility={toggleColumnVisiblity}
-				/>
-			</Flex>
-			<Space h="lg" />
-			<Table.ScrollContainer minWidth={500}>
 				<Table
 					stickyHeader
 					striped
 					tabularNums
 					withColumnBorders
-					style={{
-						width: table.getTotalSize(),
-					}}
+					w={table.getTotalSize()}
 				>
 					<TableHead headerGroups={table.getHeaderGroups()} />
 					<Table.Tbody>
@@ -314,7 +319,6 @@ export const BeerLocationTable = ({
 					</Table.Tbody>
 				</Table>
 			</Table.ScrollContainer>
-			<Space h="xl" />
-		</>
+		</Flex>
 	);
 };
