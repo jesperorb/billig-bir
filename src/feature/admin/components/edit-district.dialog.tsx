@@ -1,4 +1,4 @@
-import { Modal, Group, Button, Drawer } from "@mantine/core";
+import { Group, Button, Drawer } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 
 import type { District } from "@common/types/district";
