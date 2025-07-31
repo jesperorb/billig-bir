@@ -530,7 +530,7 @@ export const BeerLocationForm = ({
 						{showClearButton && (
 							<Button
 								variant="outline"
-								color="red"
+								color="red.8"
 								onClick={() => {
 									reset();
 								}}
@@ -539,7 +539,7 @@ export const BeerLocationForm = ({
 								Rensa formulär
 							</Button>
 						)}
-						<Button type="submit" loading={loading}>
+						<Button type="submit" color="hops.7" loading={loading}>
 							{submitButtonText ?? "Spara"}
 						</Button>
 					</Group>

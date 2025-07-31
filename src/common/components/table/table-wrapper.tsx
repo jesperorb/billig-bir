@@ -8,6 +8,7 @@ interface Props extends PropsWithChildren {
 export const TableWrapper = ({ header, children }: Props) => {
 	return (
 		<Box
+			mt="sm"
 			style={{
 				display: "flex",
 				flexDirection: "column",

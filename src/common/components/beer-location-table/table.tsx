@@ -6,8 +6,9 @@ import {
 	Grid,
 	Flex,
 	Stack,
+	Accordion,
 } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import { IconFilter2, IconSearch } from "@tabler/icons-react";
 import {
 	getCoreRowModel,
 	getSortedRowModel,
@@ -53,7 +54,6 @@ export const BeerLocationTable = ({
 	districts,
 	isLoading = false,
 	actionColumn,
-	filterPadding = "sm",
 }: BeerLocationTableProps) => {
 	const [sorting, setSorting] = useState<SortingState>(() =>
 		beerLocationTableSortingStorage.get(),
@@ -241,59 +241,67 @@ export const BeerLocationTable = ({
 
 	return (
 		<Flex direction="column" style={{ height: "100%" }}>
-			<Stack gap="xs" mb="xs">
-				<Grid
-					type="container"
-					px={filterPadding}
-					breakpoints={{
-						xs: "15em",
-						sm: "26em",
-						md: "40em",
-						lg: "40em",
-						xl: "55em",
-					}}
-				>
-					<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-						<TextInput
-							label="Sök"
-							placeholder="Sök efter namn"
-							leftSection={<IconSearch size={16} />}
-							value={getStringFilterValue(
-								columnFilters.find(getFilter<ColumnKeys>("name")),
-							)}
-							onChange={(event) => {
-								setColumnFilters(updateFilterValue("name", event.target.value));
-							}}
-							style={{ flexGrow: 1, minWidth: 200 }}
-						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-						<DistrictSelect
-							districts={districts ?? []}
-							value={getStringArrayFilterValue(
-								columnFilters.find(getFilter<ColumnKeys>("districts")),
-							)}
-							onChange={handleDistrictsChange}
-						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-						<Select
-							label="Pristyp (kr/cl)"
-							data={AVAILABLE_SORTABLE_PRICE_TYPES}
-							value={selectedPriceType}
-							onChange={togglePricePerClColumn}
-							style={{ flexGrow: 1, minWidth: 200 }}
-						/>
-					</Grid.Col>
-				</Grid>
-				<Flex px="sm" justify="flex-end">
-					<ColumnVisibilityMenu
-						columns={columns as ColumnDef<BeerLocation>[]}
-						columnVisibility={columnVisibility}
-						onToggleColumnVisibility={toggleColumnVisiblity}
-					/>
-				</Flex>
-			</Stack>
+			<Accordion>
+				<Accordion.Item value="filters">
+					<Accordion.Control icon={<IconFilter2 />}>Filter</Accordion.Control>
+					<Accordion.Panel>
+						<Stack gap="xs" mb="xs">
+							<Grid
+								type="container"
+								breakpoints={{
+									xs: "15em",
+									sm: "26em",
+									md: "40em",
+									lg: "40em",
+									xl: "55em",
+								}}
+							>
+								<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+									<TextInput
+										label="Sök"
+										placeholder="Sök efter namn"
+										leftSection={<IconSearch size={16} />}
+										value={getStringFilterValue(
+											columnFilters.find(getFilter<ColumnKeys>("name")),
+										)}
+										onChange={(event) => {
+											setColumnFilters(
+												updateFilterValue("name", event.target.value),
+											);
+										}}
+										style={{ flexGrow: 1, minWidth: 200 }}
+									/>
+								</Grid.Col>
+								<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+									<DistrictSelect
+										districts={districts ?? []}
+										value={getStringArrayFilterValue(
+											columnFilters.find(getFilter<ColumnKeys>("districts")),
+										)}
+										onChange={handleDistrictsChange}
+									/>
+								</Grid.Col>
+								<Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+									<Select
+										label="Pristyp (kr/cl)"
+										data={AVAILABLE_SORTABLE_PRICE_TYPES}
+										value={selectedPriceType}
+										onChange={togglePricePerClColumn}
+										style={{ flexGrow: 1, minWidth: 200 }}
+									/>
+								</Grid.Col>
+							</Grid>
+							<Flex justify="flex-end">
+								<ColumnVisibilityMenu
+									columns={columns as ColumnDef<BeerLocation>[]}
+									columnVisibility={columnVisibility}
+									onToggleColumnVisibility={toggleColumnVisiblity}
+								/>
+							</Flex>
+						</Stack>
+					</Accordion.Panel>
+				</Accordion.Item>
+			</Accordion>
 			<Table.ScrollContainer
 				minWidth={360}
 				style={{

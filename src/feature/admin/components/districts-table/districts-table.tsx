@@ -1,5 +1,13 @@
-import { ActionIcon, Table, TextInput, Grid, Flex, Stack } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import {
+	ActionIcon,
+	Table,
+	TextInput,
+	Grid,
+	Flex,
+	Stack,
+	Accordion,
+} from "@mantine/core";
+import { IconFilter2, IconSearch } from "@tabler/icons-react";
 import {
 	getCoreRowModel,
 	getSortedRowModel,
@@ -117,28 +125,35 @@ export const DistrictsTable = ({
 
 	return (
 		<Flex direction="column" style={{ height: "100%" }}>
-			<Stack gap="xs" mb="xs">
-				<Grid px="sm">
-					<Grid.Col>
-						<TextInput
-							label="Sök"
-							placeholder="Sök efter namn"
-							leftSection={<IconSearch size={16} />}
-							value={globalFilter}
-							onChange={(event) => {
-								setGlobalFilter(event.currentTarget.value);
-							}}
-						/>
-					</Grid.Col>
-				</Grid>
-				<Flex px="sm" justify="flex-end">
-					<ColumnVisibilityMenu
-						columns={columns as ColumnDef<District>[]}
-						columnVisibility={columnVisibility}
-						onToggleColumnVisibility={toggleColumnVisiblity}
-					/>
-				</Flex>
-			</Stack>
+			<Accordion>
+				<Accordion.Item value="filters">
+					<Accordion.Control icon={<IconFilter2 />}>Filter</Accordion.Control>
+					<Accordion.Panel>
+						<Stack gap="xs" mb="xs">
+							<Grid px="sm">
+								<Grid.Col>
+									<TextInput
+										label="Sök"
+										placeholder="Sök efter namn"
+										leftSection={<IconSearch size={16} />}
+										value={globalFilter}
+										onChange={(event) => {
+											setGlobalFilter(event.currentTarget.value);
+										}}
+									/>
+								</Grid.Col>
+							</Grid>
+							<Flex px="sm" justify="flex-end">
+								<ColumnVisibilityMenu
+									columns={columns as ColumnDef<District>[]}
+									columnVisibility={columnVisibility}
+									onToggleColumnVisibility={toggleColumnVisiblity}
+								/>
+							</Flex>
+						</Stack>
+					</Accordion.Panel>
+				</Accordion.Item>
+			</Accordion>
 			<Table.ScrollContainer
 				minWidth={360}
 				style={{
