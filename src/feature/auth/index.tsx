@@ -1,12 +1,11 @@
 import { AppShell, Button, Container, Space, TextInput } from "@mantine/core";
 import { IconAt } from "@tabler/icons-react";
-import { useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { useForm, Controller } from "react-hook-form";
 
-import { useApiClient } from "@common/api/api-client-context";
-import { useSession } from "@common/api/use-session";
 import Layout from "@common/components/layout";
+import { loginFn } from "src/routes/admin";
 
 interface LoginFormData {
 	email: string;
@@ -14,9 +13,17 @@ interface LoginFormData {
 }
 
 const Login = () => {
-	const apiClient = useApiClient();
-	const navigate = useNavigate();
-	const session = useSession();
+	const router = useRouter();
+	const loginMutation = useMutation({
+		mutationFn: loginFn,
+		onSuccess: async (ctx) => {
+			if (!ctx?.error) {
+				await router.invalidate();
+				router.navigate({ to: "/admin/view-beer-locations" });
+				return;
+			}
+		},
+	});
 
 	const { control, handleSubmit } = useForm<LoginFormData>({
 		defaultValues: {
@@ -26,17 +33,13 @@ const Login = () => {
 	});
 
 	const onSubmit = async ({ email, password }: LoginFormData) => {
-		await apiClient.auth.signInWithPassword({
-			email,
-			password,
+		await loginMutation.mutateAsync({
+			data: {
+				email,
+				password,
+			},
 		});
 	};
-
-	useEffect(() => {
-		if (session.data?.user) {
-			navigate({ to: "/admin" });
-		}
-	}, [session, navigate]);
 
 	return (
 		<Layout>

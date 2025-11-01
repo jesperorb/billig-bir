@@ -27,7 +27,6 @@ export const AdminNavigation = () => {
 						onClick={async () => {
 							await apiClient.auth.signOut();
 							navigate({ to: "/" });
-							close();
 						}}
 					>
 						Logga ut

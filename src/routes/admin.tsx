@@ -1,7 +1,36 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { getSupabaseServerClient } from '@common/api/api-client';
+import Login from '@feature/auth';
+import { createFileRoute } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/react-start'
 
-import AdminPage from "@feature/admin";
+export const loginFn = createServerFn({ method: 'POST' })
+  .inputValidator((d: { email: string; password: string }) => d)
+  .handler(async ({ data }) => {
+    const supabase = getSupabaseServerClient()
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    })
 
-export const Route = createFileRoute("/admin")({
-	component: AdminPage,
-});
+    if (error) {
+      return {
+        error: true,
+        message: error.message,
+      }
+    }
+  })
+
+export const Route = createFileRoute('/admin')({
+  beforeLoad: ({ context }) => {
+    if (!context.user) {
+      throw new Error('Not authenticated')
+    }
+  },
+  errorComponent: ({ error }) => {
+    if (error.message === 'Not authenticated') {
+      return <Login />
+    }
+
+    throw error
+  },
+})

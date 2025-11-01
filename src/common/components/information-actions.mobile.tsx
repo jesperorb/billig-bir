@@ -52,7 +52,6 @@ const InformationActionsMobile = () => {
 				href="https://github.com/jesperorb/billig-bir"
 				leftSection={<IconBrandGithub />}
 				rightSection={<IconExternalLink />}
-				onClick={close}
 			>
 				GitHub
 			</Button>
