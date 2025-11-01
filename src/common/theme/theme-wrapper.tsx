@@ -3,8 +3,6 @@ import { PropsWithChildren } from "react";
 
 import { theme } from "@common/theme";
 
-import "@mantine/core/styles.css";
-
 const ThemeWrapper = ({ children }: PropsWithChildren) => {
 	return (
 		<>
