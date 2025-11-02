@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as ApiDistrictsRouteImport } from './routes/api/districts'
 import { Route as AdminViewDistrictsRouteImport } from './routes/admin/view-districts'
 import { Route as AdminViewBeerLocationsRouteImport } from './routes/admin/view-beer-locations'
 import { Route as AdminViewBeerLocationSubmissionsRouteImport } from './routes/admin/view-beer-location-submissions'
@@ -49,6 +50,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiDistrictsRoute = ApiDistrictsRouteImport.update({
+  id: '/api/districts',
+  path: '/api/districts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminViewDistrictsRoute = AdminViewDistrictsRouteImport.update({
   id: '/view-districts',
   path: '/view-districts',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
+  '/api/districts': typeof ApiDistrictsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
+  '/api/districts': typeof ApiDistrictsRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/admin/view-beer-location-submissions': typeof AdminViewBeerLocationSubmissionsRoute
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
+  '/api/districts': typeof ApiDistrictsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
+    | '/api/districts'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
+    | '/api/districts'
     | '/admin'
   id:
     | '__root__'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/admin/view-beer-location-submissions'
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
+    | '/api/districts'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MapRoute: typeof MapRoute
   TableRoute: typeof TableRoute
+  ApiDistrictsRoute: typeof ApiDistrictsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/api/districts': {
+      id: '/api/districts'
+      path: '/api/districts'
+      fullPath: '/api/districts'
+      preLoaderRoute: typeof ApiDistrictsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/view-districts': {
       id: '/admin/view-districts'
@@ -232,6 +252,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MapRoute: MapRoute,
   TableRoute: TableRoute,
+  ApiDistrictsRoute: ApiDistrictsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

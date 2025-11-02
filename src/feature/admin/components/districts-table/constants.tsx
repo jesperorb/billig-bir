@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-table";
 
 import { District } from "@common/types/district";
-import { createLocalStorageManager } from "@common/utils/local-storage";
+import { createLocalStorageManagerClient } from "@common/utils/local-storage-client";
 
 export const DISTRICTS_DEFAULT_VISIBLE_COLUMNS: Record<
 	keyof District,
@@ -24,7 +24,7 @@ export const DISTRICTS_DEFAULT_SORTING: ColumnSort = {
 export const DISTRICTS_TABLE_STORAGE_KEY = "districts-table-visibility";
 export const columnHelper = createColumnHelper<District>();
 export const columnVisibilityStorage =
-	createLocalStorageManager<VisibilityState>(
+	createLocalStorageManagerClient<VisibilityState>(
 		DISTRICTS_TABLE_STORAGE_KEY,
 		DISTRICTS_DEFAULT_VISIBLE_COLUMNS,
 	);

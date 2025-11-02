@@ -8,7 +8,7 @@ import {
 
 import type { BeerLocation } from "@common/types/beer-location";
 import { PriceType } from "@common/types/common";
-import { createLocalStorageManager } from "@common/utils/local-storage";
+import { createLocalStorageManagerClient } from "@common/utils/local-storage-client";
 import { getNotFilter } from "@common/utils/table";
 
 import {
@@ -21,13 +21,13 @@ import { ColumnKeys } from "./types";
 
 export const columnHelper = createColumnHelper<BeerLocation>();
 export const beerLocationTableColumnVisibilityStorage =
-	createLocalStorageManager<VisibilityState>(
+	createLocalStorageManagerClient<VisibilityState>(
 		BEER_LOCATION_TABLE_VISIBILITY_STORAGE_KEY,
 		BEER_LOCATION_DEFAULT_VISIBLE_COLUMNS,
 	);
 
 export const beerLocationTableSortingStorage =
-	createLocalStorageManager<SortingState>(
+	createLocalStorageManagerClient<SortingState>(
 		BEER_LOCATION_TABLE_SORTING_STORAGE_KEY,
 		[BEER_LOCATION_DEFAULT_SORTING],
 	);
