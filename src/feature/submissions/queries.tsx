@@ -1,7 +1,6 @@
 import { type SupabaseClient } from "@supabase/supabase-js";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { useApiClient } from "@common/api/api-client-context";
 import { getBeerLocationsSelectQuery } from "@common/api/queries";
 import { type Database } from "@common/api/types";
 import { BeerLocation } from "@common/types/beer-location";
@@ -286,36 +285,86 @@ export const getBeerLocationSubmissions = async (
 };
 
 export const useBeerLocationSubmissions = () => {
-	const apiClient = useApiClient();
 	return useQuery({
 		queryKey: createBeerLocationSubmissionQueryKeys.getBeerLocationSubmissions,
-		queryFn: () =>
-			getBeerLocationSubmissions(apiClient).then((data) => data.data),
+		queryFn: async () => {
+			const response = await fetch("/api/submissions/locations");
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(
+					error.error || "Failed to get beer location submissions",
+				);
+			}
+			return response.json();
+		},
 		staleTime: 60 * 60 * 5,
 	});
 };
 
 export const useCreateBeerLocationSubmission = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, BeerLocationFormData>({
-		mutationKey: createBeerLocationSubmissionQueryKeys.createAwTimeSubmission,
-		mutationFn: createBeerLocationSubmission(apiClient),
+		mutationKey:
+			createBeerLocationSubmissionQueryKeys.createBeerLocationSubmission,
+		mutationFn: async (values) => {
+			const response = await fetch("/api/submissions/locations", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to create submission");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useDeleteBeerLocationSubmission = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, BeerLocationFormData>({
 		mutationKey: createBeerLocationSubmissionQueryKeys.deleteAwTimeSubmission,
-		mutationFn: deleteBeerLocationSubmission(apiClient),
+		mutationFn: async (values) => {
+			const response = await fetch("/api/submissions/locations", {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to delete submission");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useApproveBeerLocationSubmission = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, BeerLocationFormData>({
 		mutationKey:
 			createBeerLocationSubmissionQueryKeys.approveBeerLocationSubmission,
-		mutationFn: approveBeerLocationSubmission(apiClient),
+		mutationFn: async (values) => {
+			const response = await fetch("/api/submissions/approve", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to approve submission");
+			}
+
+			return response.json();
+		},
 	});
 };

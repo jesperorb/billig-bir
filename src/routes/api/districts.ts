@@ -1,13 +1,31 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getDistricts } from "@common/api/queries";
+import { getSupabaseServerClient } from "@common/api/api-client";
 
 export const Route = createFileRoute("/api/districts")({
 	server: {
 		handlers: {
 			GET: async () => {
-				const districts = await getDistricts();
-				return new Response(JSON.stringify(districts));
+				const supabase = getSupabaseServerClient();
+
+				const { data, error } = await supabase
+					.from("district")
+					.select("id, name, insideTolls:inside_tolls");
+
+				if (error) {
+					return new Response(JSON.stringify([]), {
+						status: 500,
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+				}
+
+				return new Response(JSON.stringify(data), {
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
 			},
 		},
 	},

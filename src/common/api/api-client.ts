@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { getCookies, setCookie } from "@tanstack/react-start/server";
@@ -14,7 +10,7 @@ const client = createClient<Database>(
 );
 
 export function getSupabaseServerClient() {
-	return createServerClient(
+	return createServerClient<Database>(
 		import.meta.env.VITE_SUPABASE_URL,
 		import.meta.env.VITE_SUPABASE_ANON_KEY,
 		{

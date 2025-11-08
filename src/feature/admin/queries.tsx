@@ -1,7 +1,6 @@
 import { type SupabaseClient } from "@supabase/supabase-js";
 import { useMutation } from "@tanstack/react-query";
 
-import { useApiClient } from "@common/api/api-client-context";
 import { type Database } from "@common/api/types";
 import type {
 	AWStartAndEndTimesFormData,
@@ -298,69 +297,181 @@ export const deleteDistrict =
 	};
 
 export const useCreateBeerLocation = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, BeerLocationFormData>({
 		mutationKey: createBeerLocationQueryKeys.createBeerLocation,
-		mutationFn: createBeerLocation(apiClient),
+		mutationFn: async (values) => {
+			const response = await fetch("/api/admin/locations", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to create beer location");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useUpdateBeerLocation = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, BeerLocationFormData>({
-		mutationKey: createBeerLocationQueryKeys.createBeerLocation,
-		mutationFn: updateBeerLocation(apiClient),
+		mutationKey: createBeerLocationQueryKeys.updateBeerLocation,
+		mutationFn: async (values) => {
+			const response = await fetch("/api/admin/locations", {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to update beer location");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useDeleteBeerLocation = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, BeerLocationFormData>({
 		mutationKey: createBeerLocationQueryKeys.deleteBeerLocation,
-		mutationFn: deleteBeerLocation(apiClient),
+		mutationFn: async (values) => {
+			const response = await fetch("/api/admin/locations", {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to delete beer location");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useDeleteAwTime = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, AWStartAndEndTimesFormData>({
 		mutationKey: createBeerLocationQueryKeys.deleteAwTime,
-		mutationFn: deleteAwTime(apiClient),
+		mutationFn: async (values) => {
+			const response = await fetch("/api/admin/aw-times", {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to delete AW time");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useCreateAwTime = () => {
-	const apiClient = useApiClient();
 	return useMutation<
 		unknown,
 		unknown,
 		{ value: AWStartAndEndTimesFormData; locationId: number }
 	>({
-		mutationKey: createBeerLocationQueryKeys.deleteAwTime,
-		mutationFn: createAwTime(apiClient),
+		mutationKey: createBeerLocationQueryKeys.createAwTime,
+		mutationFn: async (values) => {
+			const response = await fetch("/api/admin/aw-times", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to create AW time");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useUpdateDistrict = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, District>({
 		mutationKey: createBeerLocationQueryKeys.updateDistrict,
-		mutationFn: updateDistrict(apiClient),
+		mutationFn: async (values) => {
+			const response = await fetch("/api/admin/districts", {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to update district");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useCreateDistrict = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, District>({
 		mutationKey: createBeerLocationQueryKeys.createDistrict,
-		mutationFn: createDistrict(apiClient),
+		mutationFn: async (values) => {
+			const response = await fetch("/api/admin/districts", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to create district");
+			}
+
+			return response.json();
+		},
 	});
 };
 
 export const useDeleteDistrict = () => {
-	const apiClient = useApiClient();
 	return useMutation<unknown, unknown, number>({
 		mutationKey: createBeerLocationQueryKeys.deleteDistrict,
-		mutationFn: deleteDistrict(apiClient),
+		mutationFn: async (id) => {
+			const response = await fetch("/api/admin/districts", {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ id }),
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || "Failed to delete district");
+			}
+
+			return response.json();
+		},
 	});
 };

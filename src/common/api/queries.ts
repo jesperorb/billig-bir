@@ -14,21 +14,8 @@ export const commonQueryKeys = {
 	getBeerLocations: [commonBaseQueryKeys.getBeerLocations],
 };
 
-export const districtsSelectQuery = `
-	id,
-	name,
-	insideTolls:inside_tolls
-`;
-
 export const getDistricts = async (): Promise<District[]> => {
-	const response = await fetch(
-		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/district?select=${districtsSelectQuery}`,
-		{
-			headers: {
-				apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-			},
-		},
-	);
+	const response = await fetch("/api/districts");
 	if (response.ok) {
 		return response.json();
 	}
@@ -67,14 +54,7 @@ export const getBeerLocationsSelectQuery = (
 `;
 
 export const getLocations = async (): Promise<BeerLocation[]> => {
-	const response = await fetch(
-		`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/location?select=${getBeerLocationsSelectQuery()}`,
-		{
-			headers: {
-				apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-			},
-		},
-	);
+	const response = await fetch("/api/locations");
 	if (response.ok) {
 		return response.json();
 	}

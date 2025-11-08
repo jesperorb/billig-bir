@@ -15,10 +15,16 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as ApiLocationsRouteImport } from './routes/api/locations'
 import { Route as ApiDistrictsRouteImport } from './routes/api/districts'
 import { Route as AdminViewDistrictsRouteImport } from './routes/admin/view-districts'
 import { Route as AdminViewBeerLocationsRouteImport } from './routes/admin/view-beer-locations'
 import { Route as AdminViewBeerLocationSubmissionsRouteImport } from './routes/admin/view-beer-location-submissions'
+import { Route as ApiSubmissionsLocationsRouteImport } from './routes/api/submissions/locations'
+import { Route as ApiSubmissionsApproveRouteImport } from './routes/api/submissions/approve'
+import { Route as ApiAdminLocationsRouteImport } from './routes/api/admin/locations'
+import { Route as ApiAdminDistrictsRouteImport } from './routes/api/admin/districts'
+import { Route as ApiAdminAwTimesRouteImport } from './routes/api/admin/aw-times'
 
 const TableRoute = TableRouteImport.update({
   id: '/table',
@@ -50,6 +56,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiLocationsRoute = ApiLocationsRouteImport.update({
+  id: '/api/locations',
+  path: '/api/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiDistrictsRoute = ApiDistrictsRouteImport.update({
   id: '/api/districts',
   path: '/api/districts',
@@ -71,6 +82,31 @@ const AdminViewBeerLocationSubmissionsRoute =
     path: '/view-beer-location-submissions',
     getParentRoute: () => AdminRoute,
   } as any)
+const ApiSubmissionsLocationsRoute = ApiSubmissionsLocationsRouteImport.update({
+  id: '/api/submissions/locations',
+  path: '/api/submissions/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSubmissionsApproveRoute = ApiSubmissionsApproveRouteImport.update({
+  id: '/api/submissions/approve',
+  path: '/api/submissions/approve',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminLocationsRoute = ApiAdminLocationsRouteImport.update({
+  id: '/api/admin/locations',
+  path: '/api/admin/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminDistrictsRoute = ApiAdminDistrictsRouteImport.update({
+  id: '/api/admin/districts',
+  path: '/api/admin/districts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminAwTimesRoute = ApiAdminAwTimesRouteImport.update({
+  id: '/api/admin/aw-times',
+  path: '/api/admin/aw-times',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,7 +118,13 @@ export interface FileRoutesByFullPath {
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
   '/api/districts': typeof ApiDistrictsRoute
+  '/api/locations': typeof ApiLocationsRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/admin/aw-times': typeof ApiAdminAwTimesRoute
+  '/api/admin/districts': typeof ApiAdminDistrictsRoute
+  '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/submissions/approve': typeof ApiSubmissionsApproveRoute
+  '/api/submissions/locations': typeof ApiSubmissionsLocationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,7 +135,13 @@ export interface FileRoutesByTo {
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
   '/api/districts': typeof ApiDistrictsRoute
+  '/api/locations': typeof ApiLocationsRoute
   '/admin': typeof AdminIndexRoute
+  '/api/admin/aw-times': typeof ApiAdminAwTimesRoute
+  '/api/admin/districts': typeof ApiAdminDistrictsRoute
+  '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/submissions/approve': typeof ApiSubmissionsApproveRoute
+  '/api/submissions/locations': typeof ApiSubmissionsLocationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,7 +154,13 @@ export interface FileRoutesById {
   '/admin/view-beer-locations': typeof AdminViewBeerLocationsRoute
   '/admin/view-districts': typeof AdminViewDistrictsRoute
   '/api/districts': typeof ApiDistrictsRoute
+  '/api/locations': typeof ApiLocationsRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/admin/aw-times': typeof ApiAdminAwTimesRoute
+  '/api/admin/districts': typeof ApiAdminDistrictsRoute
+  '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/submissions/approve': typeof ApiSubmissionsApproveRoute
+  '/api/submissions/locations': typeof ApiSubmissionsLocationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,7 +174,13 @@ export interface FileRouteTypes {
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
     | '/api/districts'
+    | '/api/locations'
     | '/admin/'
+    | '/api/admin/aw-times'
+    | '/api/admin/districts'
+    | '/api/admin/locations'
+    | '/api/submissions/approve'
+    | '/api/submissions/locations'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -131,7 +191,13 @@ export interface FileRouteTypes {
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
     | '/api/districts'
+    | '/api/locations'
     | '/admin'
+    | '/api/admin/aw-times'
+    | '/api/admin/districts'
+    | '/api/admin/locations'
+    | '/api/submissions/approve'
+    | '/api/submissions/locations'
   id:
     | '__root__'
     | '/'
@@ -143,7 +209,13 @@ export interface FileRouteTypes {
     | '/admin/view-beer-locations'
     | '/admin/view-districts'
     | '/api/districts'
+    | '/api/locations'
     | '/admin/'
+    | '/api/admin/aw-times'
+    | '/api/admin/districts'
+    | '/api/admin/locations'
+    | '/api/submissions/approve'
+    | '/api/submissions/locations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -153,6 +225,12 @@ export interface RootRouteChildren {
   MapRoute: typeof MapRoute
   TableRoute: typeof TableRoute
   ApiDistrictsRoute: typeof ApiDistrictsRoute
+  ApiLocationsRoute: typeof ApiLocationsRoute
+  ApiAdminAwTimesRoute: typeof ApiAdminAwTimesRoute
+  ApiAdminDistrictsRoute: typeof ApiAdminDistrictsRoute
+  ApiAdminLocationsRoute: typeof ApiAdminLocationsRoute
+  ApiSubmissionsApproveRoute: typeof ApiSubmissionsApproveRoute
+  ApiSubmissionsLocationsRoute: typeof ApiSubmissionsLocationsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -199,6 +277,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/locations': {
+      id: '/api/locations'
+      path: '/api/locations'
+      fullPath: '/api/locations'
+      preLoaderRoute: typeof ApiLocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/districts': {
       id: '/api/districts'
       path: '/api/districts'
@@ -227,6 +312,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminViewBeerLocationSubmissionsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/submissions/locations': {
+      id: '/api/submissions/locations'
+      path: '/api/submissions/locations'
+      fullPath: '/api/submissions/locations'
+      preLoaderRoute: typeof ApiSubmissionsLocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/submissions/approve': {
+      id: '/api/submissions/approve'
+      path: '/api/submissions/approve'
+      fullPath: '/api/submissions/approve'
+      preLoaderRoute: typeof ApiSubmissionsApproveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/locations': {
+      id: '/api/admin/locations'
+      path: '/api/admin/locations'
+      fullPath: '/api/admin/locations'
+      preLoaderRoute: typeof ApiAdminLocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/districts': {
+      id: '/api/admin/districts'
+      path: '/api/admin/districts'
+      fullPath: '/api/admin/districts'
+      preLoaderRoute: typeof ApiAdminDistrictsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/aw-times': {
+      id: '/api/admin/aw-times'
+      path: '/api/admin/aw-times'
+      fullPath: '/api/admin/aw-times'
+      preLoaderRoute: typeof ApiAdminAwTimesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -253,6 +373,12 @@ const rootRouteChildren: RootRouteChildren = {
   MapRoute: MapRoute,
   TableRoute: TableRoute,
   ApiDistrictsRoute: ApiDistrictsRoute,
+  ApiLocationsRoute: ApiLocationsRoute,
+  ApiAdminAwTimesRoute: ApiAdminAwTimesRoute,
+  ApiAdminDistrictsRoute: ApiAdminDistrictsRoute,
+  ApiAdminLocationsRoute: ApiAdminLocationsRoute,
+  ApiSubmissionsApproveRoute: ApiSubmissionsApproveRoute,
+  ApiSubmissionsLocationsRoute: ApiSubmissionsLocationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
