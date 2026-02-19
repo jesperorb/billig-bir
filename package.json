@@ -1,10 +1,10 @@
 {
   "name": "billig.beer",
-	"description": "Find the cheapest beer in Stockholm",
-	"author": {
-		"name": "Jesper Orb",
-		"email": "github@jesperorb.com"
-	},
+  "description": "Find the cheapest beer in Stockholm",
+  "author": {
+    "name": "Jesper Orb",
+    "email": "github@jesperorb.com"
+  },
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,8 +12,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-		"lint:fix": "eslint --fix .",
-    "preview": "vite preview"
+    "lint:fix": "eslint --fix .",
+    "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@mantine/core": "^7.17.5",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@playwright/test": "^1.58.2",
     "@tanstack/router-plugin": "^1.121.27",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

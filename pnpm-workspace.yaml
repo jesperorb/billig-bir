@@ -4,3 +4,6 @@ ignoredBuiltDependencies:
 onlyBuiltDependencies:
   - supabase
   - unrs-resolver
+
+packages:
+  - .
