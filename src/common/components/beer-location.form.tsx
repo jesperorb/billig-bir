@@ -350,6 +350,7 @@ export const BeerLocationForm = ({
 						name="districtIds"
 						control={control}
 						defaultValue={defaultValues.districts?.map((d) => d.id.toString())}
+						rules={{ required: "Välj stadsdel" }}
 						render={({ field, fieldState }) => (
 							<DistrictSelect
 								placeholder="Välj stadsdelar"
